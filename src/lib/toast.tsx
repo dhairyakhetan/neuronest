@@ -22,7 +22,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         {toasts.map((t) => (
           <div
             key={t.id}
-            className="pointer-events-auto flex max-w-md animate-fade-up items-start gap-3 rounded-2xl bg-navy px-4 py-3 text-sm text-white shadow-lift"
+            className="pointer-events-auto flex max-w-md animate-fade-up items-start gap-3 rounded-xl bg-navy px-4 py-3 text-sm text-white shadow-lift"
           >
             {t.tone === 'success' ? (
               <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-mint-light" />

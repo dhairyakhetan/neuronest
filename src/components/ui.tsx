@@ -63,24 +63,24 @@ export function Wave({ className = '', subtle = false }: { className?: string; s
 
 /* ------------------------------------------------------------- Pieces */
 
-export function IconBadge({ icon: Icon, tone = 'purple', size = 'md' }: { icon: LucideIcon; tone?: Tone; size?: 'sm' | 'md' | 'lg' }) {
-  const s = size === 'sm' ? 'h-9 w-9 rounded-xl' : size === 'lg' ? 'h-14 w-14 rounded-2xl' : 'h-11 w-11 rounded-2xl';
+/** Icon tile. Neutral by default; `colored` is reserved for the moments (Development Check areas, Rewards). */
+export function IconBadge({ icon: Icon, tone = 'purple', size = 'md', colored = false }: { icon: LucideIcon; tone?: Tone; size?: 'sm' | 'md' | 'lg'; colored?: boolean }) {
+  const s = size === 'sm' ? 'h-9 w-9 rounded-xl' : size === 'lg' ? 'h-14 w-14 rounded-xl' : 'h-11 w-11 rounded-xl';
   const i = size === 'sm' ? 'h-4 w-4' : size === 'lg' ? 'h-6 w-6' : 'h-5 w-5';
   return (
-    <span className={`group-icon inline-flex shrink-0 items-center justify-center ${s} ${TONE[tone].bg}`}>
-      <Icon className={`${i} ${TONE[tone].icon}`} />
+    <span className={`group-icon inline-flex shrink-0 items-center justify-center ${s} ${colored ? TONE[tone].bg : 'bg-soft'}`}>
+      <Icon className={`${i} ${colored ? TONE[tone].icon : 'text-muted'}`} />
     </span>
   );
 }
 
 export function NewBadge({ className = '' }: { className?: string }) {
-  return <span className={`tag bg-coral text-navy ${className}`}>New</span>;
+  return <span className={`tag bg-soft text-muted ${className}`}>New</span>;
 }
 
-export function Eyebrow({ icon: Icon, children }: { icon?: LucideIcon; children: ReactNode }) {
+export function Eyebrow({ children }: { icon?: LucideIcon; children: ReactNode }) {
   return (
     <span className="eyebrow">
-      {Icon && <Icon className="h-3.5 w-3.5" />}
       {children}
     </span>
   );
@@ -91,7 +91,6 @@ export function PageHero({
 }: { eyebrow: string; icon?: LucideIcon; title: ReactNode; lead?: ReactNode; children?: ReactNode; center?: boolean }) {
   return (
     <section className="relative overflow-hidden">
-      <Wave className="absolute inset-x-0 top-14 h-16 w-full sm:top-16" />
       <div className={`container-nn relative pb-10 pt-12 sm:pb-14 sm:pt-16 ${center ? 'text-center' : ''}`}>
         <div className="animate-fade-up">
           <Eyebrow icon={icon}>{eyebrow}</Eyebrow>
@@ -117,7 +116,7 @@ export function SectionHeading({ eyebrow, icon, title, lead, center = true }: { 
 export function PrototypeNote({ children, className = '' }: { children: ReactNode; className?: string }) {
   return (
     <div className={`notice flex items-start gap-3 ${className}`}>
-      <Info className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
+      <Info className="mt-0.5 h-4 w-4 shrink-0 text-muted" />
       <p>{children}</p>
     </div>
   );
@@ -125,11 +124,11 @@ export function PrototypeNote({ children, className = '' }: { children: ReactNod
 
 export function ResponsibleAI({ title = 'Responsible AI', link = false }: { title?: string; link?: boolean }) {
   return (
-    <section className="bg-butter/50 py-16">
+    <section className="py-16">
       <div className="container-nn">
         <div className="card mx-auto max-w-3xl p-8 text-center sm:p-10">
-          <span className="mx-auto mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-mintsoft">
-            <HeartHandshake className="h-6 w-6 text-mint" />
+          <span className="mx-auto mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-soft">
+            <HeartHandshake className="h-6 w-6 text-muted" />
           </span>
           <h2 className="text-2xl text-ink sm:text-3xl">{title}</h2>
           <p className="lead mt-4">{DISCLAIMER}</p>
@@ -147,7 +146,6 @@ export function ResponsibleAI({ title = 'Responsible AI', link = false }: { titl
 export function CTABand({ title, text, children }: { title?: string; text: string; children: ReactNode }) {
   return (
     <section className="relative overflow-hidden bg-navy py-20 text-white">
-      <Wave className="absolute inset-x-0 top-4 h-12 w-full" subtle />
       <div className="container-nn relative text-center">
         {title && <h2 className="mx-auto max-w-2xl text-3xl text-white sm:text-4xl">{title}</h2>}
         <p className="mx-auto mt-4 max-w-2xl text-lg text-white/80">{text}</p>
@@ -177,7 +175,7 @@ export function Avatar({ name, tone = 'purple', size = 'md' }: { name: string; t
     .map((p) => p[0]!.toUpperCase())
     .join('');
   return (
-    <span className={`inline-flex shrink-0 items-center justify-center rounded-full font-bold ${s} ${TONE[tone].bg} ${TONE[tone].text}`} aria-hidden>
+    <span className={`inline-flex shrink-0 items-center justify-center rounded-full bg-soft font-semibold text-ink ${s}`} data-tone={tone} aria-hidden>
       {letters}
     </span>
   );
@@ -209,7 +207,7 @@ export function Modal({
       <div
         ref={panel}
         tabIndex={-1}
-        className={`relative flex max-h-[92vh] w-full animate-pop-in flex-col overflow-hidden rounded-t-3xl bg-surface shadow-lift outline-none sm:rounded-3xl ${wide ? 'sm:max-w-3xl' : 'sm:max-w-lg'}`}
+        className={`relative flex max-h-[92vh] w-full animate-pop-in flex-col overflow-hidden rounded-t-3xl bg-surface shadow-lift outline-none sm:rounded-2xl ${wide ? 'sm:max-w-3xl' : 'sm:max-w-lg'}`}
       >
         <div className="flex items-start justify-between gap-4 border-b border-line px-6 py-5">
           <div className="font-display text-xl text-ink">{title}</div>

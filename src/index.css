@@ -6,7 +6,7 @@
   :root {
     --bg: 252 250 245;
     --surface: 255 255 255;
-    --soft: 248 247 254;
+    --soft: 245 242 235;
     --ink: 24 36 58;
     --muted: 91 100 120;
     --line: 231 235 242;
@@ -22,7 +22,7 @@
   .dark {
     --bg: 15 24 40;
     --surface: 24 36 58;
-    --soft: 19 30 50;
+    --soft: 21 31 49;
     --ink: 236 239 246;
     --muted: 163 173 194;
     --line: 44 58 84;
@@ -33,6 +33,15 @@
     --butter-line: 110 96 50;
     color-scheme: dark;
   }
+  .dark .app-shell {
+    --bg: 20 20 21;
+    --surface: 25 25 27;
+    --soft: 35 35 37;
+    --ink: 237 237 237;
+    --muted: 161 161 166;
+    --line: 44 44 47;
+    --lav: 44 42 66;
+  }
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -40,7 +49,10 @@
   }
   body {
     @apply bg-bg font-sans text-ink;
+    font-variant-numeric: tabular-nums;
   }
+  /* one icon stroke everywhere */
+  svg.lucide { stroke-width: 1.5; }
   h1, h2, h3, h4 {
     @apply font-display;
     font-optical-sizing: auto;
@@ -68,22 +80,20 @@
     @apply mx-auto w-full max-w-[1280px] px-4 sm:px-8;
   }
   .btn {
-    @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full px-6 py-3 text-[15px] font-semibold transition duration-300 hover:-translate-y-0.5 active:translate-y-0 active:scale-[.97] disabled:pointer-events-none disabled:opacity-50;
-    transition-timing-function: cubic-bezier(.2, .8, .2, 1);
+    @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full px-6 py-3 text-[15px] font-medium transition-[background-color,border-color,color,box-shadow,transform] duration-200 active:scale-[.97] disabled:pointer-events-none disabled:opacity-50;
+    transition-timing-function: cubic-bezier(.22, 1, .36, 1);
   }
-  .btn svg { @apply transition-transform duration-300; }
-  .btn:hover svg:last-child:not(:first-child) { transform: translateX(3px); }
   .btn-sm {
     @apply px-4 py-2 text-sm;
   }
   .btn-coral {
-    @apply bg-coral text-navy shadow-[0_8px_20px_-8px_rgba(255,138,114,0.7)] hover:bg-coral-dark hover:shadow-[0_14px_28px_-10px_rgba(255,138,114,0.85)];
+    @apply bg-purple text-white shadow-[0_1px_2px_rgba(24,36,58,0.08)] hover:bg-purple-dark;
   }
   .btn-navy {
     @apply bg-navy text-white hover:bg-navy-deep dark:bg-purple dark:hover:bg-purple-dark;
   }
   .btn-purple {
-    @apply bg-purple text-white hover:bg-purple-dark hover:shadow-glow;
+    @apply bg-purple text-white hover:bg-purple-dark;
   }
   .btn-ghost {
     @apply border border-line bg-surface text-ink hover:border-purple/40 hover:bg-lav;
@@ -92,41 +102,44 @@
     @apply border border-white/25 text-white hover:bg-white/10;
   }
   .eyebrow {
-    @apply inline-flex items-center gap-2 rounded-full bg-lav px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-purple-dark dark:text-purple-light;
+    @apply inline-flex items-center gap-2 text-sm font-medium text-purple-dark dark:text-purple-light;
   }
   .card {
-    @apply rounded-3xl border border-line bg-surface shadow-soft transition-[box-shadow,border-color,transform] duration-300 hover:border-purple/20 hover:shadow-lift;
-    transition-timing-function: cubic-bezier(.2, .8, .2, 1);
+    @apply rounded-2xl border border-line bg-surface shadow-soft transition-[box-shadow,border-color,transform] duration-300;
+    transition-timing-function: cubic-bezier(.22, 1, .36, 1);
   }
   /* interactive cards: lift + glow, icons inside animate (use with `group`) */
+  /* interactive cards: a gentle lift, a deeper neutral shadow and a firmer border */
   .card-hover {
-    @apply hover:-translate-y-1.5 hover:border-purple/30 hover:shadow-[0_2px_4px_rgba(24,36,58,0.05),0_24px_48px_-20px_rgba(108,99,217,0.35)] active:translate-y-0;
+    @apply hover:-translate-y-[3px] hover:border-ink/15 hover:shadow-[0_2px_4px_rgba(24,36,58,0.04),0_18px_36px_-18px_rgba(24,36,58,0.28)] active:translate-y-0 active:scale-[.99];
   }
+  /* icon tiles warm to the accent on hover */
   .group-icon {
-    @apply transition-transform duration-500;
-    transition-timing-function: cubic-bezier(.34, 1.56, .64, 1);
+    @apply transition-[background-color,color,transform] duration-300;
+    transition-timing-function: cubic-bezier(.22, 1, .36, 1);
   }
-  .group:hover .group-icon { transform: scale(1.12) rotate(-8deg); }
+  .group:hover .group-icon { transform: translateY(-2px); background-color: rgb(var(--lav)); }
+  .group:hover .group-icon svg { color: #6C63D9; }
   .link {
-    @apply inline-flex items-center gap-1 font-semibold text-purple transition hover:gap-2 hover:text-purple-dark dark:text-purple-light;
+    @apply inline-flex items-center gap-1 font-medium text-purple transition-colors hover:text-purple-dark dark:text-purple-light;
   }
   .input {
-    @apply w-full rounded-2xl border border-line bg-surface px-4 py-3 text-[15px] text-ink placeholder:text-muted/70 transition focus:border-purple focus:outline-none focus:ring-4 focus:ring-purple/15;
+    @apply w-full rounded-[10px] border border-line bg-surface px-4 py-3 text-[15px] text-ink placeholder:text-muted/70 transition focus:border-purple focus:outline-none focus:ring-4 focus:ring-purple/15;
   }
   .label {
     @apply mb-1.5 block text-sm font-semibold text-ink;
   }
   .chip {
-    @apply inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-sm font-medium text-ink transition duration-300 hover:-translate-y-0.5 hover:border-purple/40 hover:shadow-soft active:translate-y-0 active:scale-[.97];
+    @apply inline-flex items-center gap-2 rounded-[10px] border border-line bg-surface px-4 py-2 text-sm font-medium text-ink transition-colors duration-200 hover:border-ink/25 hover:bg-soft active:scale-[.98];
   }
   .chip-active {
-    @apply border-navy bg-navy text-white shadow-lift hover:border-navy dark:border-purple dark:bg-purple;
+    @apply border-purple bg-purple text-white hover:border-purple hover:bg-purple-dark;
   }
   .tag {
-    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold;
+    @apply inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium;
   }
   .notice {
-    @apply rounded-2xl border border-butterline bg-butter px-4 py-3 text-sm text-ink;
+    @apply rounded-xl border border-line bg-soft px-4 py-3 text-sm text-ink;
   }
   .section {
     @apply py-16 sm:py-24;
@@ -139,16 +152,13 @@
   }
 }
 
-.text-gradient-hero {
-  background: linear-gradient(90deg, #6C63D9 0%, #4FC29A 55%, #FF8A72 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.dotted-bg {
-  background-image: radial-gradient(rgb(var(--line)) 1px, transparent 1px);
-  background-size: 28px 28px;
+/* signature: pencil height marks (like a doorframe growth chart) on progress tracks */
+.ticks { position: relative; }
+.ticks::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
+  background-image: repeating-linear-gradient(90deg, transparent 0 calc(10% - 1px), rgb(var(--ink) / 0.22) calc(10% - 1px) 10%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0 35%, #000 35%);
+  mask-image: linear-gradient(to bottom, transparent 0 35%, #000 35%);
 }
 
 /* hide scrollbars on rows that scroll sideways (touch-friendly, no ugly bar) */
@@ -156,7 +166,7 @@
 .no-scrollbar::-webkit-scrollbar { display: none; }
 
 /* staggered entrance for grids and lists */
-.stagger > * { animation: nn-rise .55s cubic-bezier(.2, .8, .2, 1) both; }
+.stagger > * { animation: nn-rise .45s cubic-bezier(.22, 1, .36, 1) both; }
 .stagger > *:nth-child(2) { animation-delay: 50ms; }
 .stagger > *:nth-child(3) { animation-delay: 100ms; }
 .stagger > *:nth-child(4) { animation-delay: 150ms; }
@@ -165,7 +175,7 @@
 .stagger > *:nth-child(7) { animation-delay: 300ms; }
 .stagger > *:nth-child(8) { animation-delay: 350ms; }
 .stagger > *:nth-child(n + 9) { animation-delay: 400ms; }
-@keyframes nn-rise { from { opacity: 0; transform: translateY(14px) scale(.985); } to { opacity: 1; transform: none; } }
+@keyframes nn-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
 @media print {
   .no-print { display: none !important; }

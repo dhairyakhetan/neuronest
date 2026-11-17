@@ -22,8 +22,8 @@ export function DevelopmentCheckPage() {
             { icon: ListChecks, t: 'Answer milestone questions', d: '4 areas, matched to their age' },
             { icon: TrendingUp, t: 'See how they’re doing', d: 'On-par score, flags and next steps' },
           ].map((s, i) => (
-            <div key={s.t} className="flex items-start gap-3 rounded-2xl border border-line bg-surface p-4">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lav text-sm font-bold text-purple">{i + 1}</span>
+            <div key={s.t} className="flex items-start gap-3 rounded-xl border border-line bg-surface p-4">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lav text-sm font-medium text-purple">{i + 1}</span>
               <div><p className="text-sm font-semibold text-ink">{s.t}</p><p className="text-xs text-muted">{s.d}</p></div>
             </div>
           ))}

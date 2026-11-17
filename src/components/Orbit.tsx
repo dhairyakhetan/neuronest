@@ -17,7 +17,6 @@ export function Orbit({ interactive = false, size = 360 }: { interactive?: boole
   return (
     <div className="flex flex-col items-center">
       <div className="nn-orbit relative" style={{ width: size, height: size }}>
-        <div className="absolute inset-[18%] rounded-full bg-[radial-gradient(circle,rgba(108,99,217,0.16),transparent_70%)]" />
 
         {/* rotating ring: spokes + nodes */}
         <div className="nn-spin absolute inset-0">
@@ -45,7 +44,7 @@ export function Orbit({ interactive = false, size = 360 }: { interactive?: boole
             const y = size / 2 + Math.sin(a) * r - NODE / 2;
             const Icon = n.icon;
             const isActive = i === active;
-            const tile = `flex h-11 w-11 items-center justify-center rounded-2xl border bg-surface shadow-soft transition duration-300 ${
+            const tile = `flex h-11 w-11 items-center justify-center rounded-xl border bg-surface shadow-soft transition duration-300 ${
               isActive ? 'scale-110 border-purple shadow-glow' : 'border-line hover:scale-110 hover:border-purple/50'
             }`;
             return (

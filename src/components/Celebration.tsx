@@ -49,7 +49,7 @@ export function Celebration() {
           <Star className="h-5 w-5 fill-white text-white" />
         </span>
         <div>
-          <p className="font-display text-xl font-semibold">{burst.points > 0 ? `+${burst.points} Nest Stars` : 'Reward unlocked!'}</p>
+          <p className="font-display text-xl font-semibold">{burst.points > 0 ? `+${burst.points} Nest Stars` : 'Reward unlocked'}</p>
           <p className="text-xs text-white/70">{burst.label}</p>
         </div>
       </div>

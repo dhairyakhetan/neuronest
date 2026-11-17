@@ -53,7 +53,7 @@ export function ResourceLibrary() {
       <Modal open={!!open} onClose={() => setOpen(null)} title={open?.title}>
         <span className="tag bg-lav text-purple-dark dark:text-purple-light">{open?.category}</span>
         <p className="mt-4 text-ink">{open?.desc}</p>
-        <p className="mt-4 rounded-2xl bg-butter p-4 text-sm text-ink">This is a Resource Library Preview. Full content will be available as the product develops. This content is not clinically reviewed and does not constitute medical advice.</p>
+        <p className="mt-4 rounded-xl bg-butter p-4 text-sm text-ink">This is a Resource Library Preview. Full content will be available as the product develops. This content is not clinically reviewed and does not constitute medical advice.</p>
       </Modal>
     </div>
   );

@@ -30,7 +30,7 @@ export default {
       boxShadow: {
         soft: '0 1px 2px rgba(24,36,58,0.04), 0 8px 24px -12px rgba(24,36,58,0.10)',
         lift: '0 2px 4px rgba(24,36,58,0.05), 0 18px 40px -16px rgba(24,36,58,0.22)',
-        glow: '0 10px 30px -8px rgba(108,99,217,0.55)',
+        glow: '0 8px 24px -10px rgba(24,36,58,0.35)',
       },
       keyframes: {
         'fade-up': { '0%': { opacity: 0, transform: 'translateY(8px)' }, '100%': { opacity: 1, transform: 'none' } },

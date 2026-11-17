@@ -80,11 +80,11 @@ export function CareNetwork() {
         <h2 className="flex items-center gap-2 text-2xl text-ink"><Lock className="h-5 w-5 text-purple" /> Sharing preferences</h2>
         <p className="mt-1 text-muted">You choose what to share, with whom, and for how long — and you can revoke access at any time.</p>
         {shares.length === 0 ? (
-          <p className="mt-5 rounded-2xl bg-soft p-4 text-sm text-muted">You aren’t sharing anything right now.</p>
+          <p className="mt-5 rounded-xl bg-soft p-4 text-sm text-muted">You aren’t sharing anything right now.</p>
         ) : (
           <ul className="mt-5 space-y-2">
             {shares.map((r) => (
-              <li key={r.id} className="flex items-center justify-between rounded-2xl bg-soft p-4 text-sm">
+              <li key={r.id} className="flex items-center justify-between rounded-xl bg-soft p-4 text-sm">
                 <span className="text-ink"><b>{THERAPISTS.find((t) => t.id === r.therapistId)?.name}</b> can see {[r.shareCheckId && 'your Development Check', r.shareObservations && 'your observations'].filter(Boolean).join(' and ')}</span>
                 <Link to="/dashboard/therapists" className="font-semibold text-purple">Manage</Link>
               </li>
@@ -111,9 +111,9 @@ export function Profile() {
   return (
     <div>
       <DashHeader icon={UserRound} tone="purple" title="Profile" lead="Manage your account information and preferences." />
-      <div className="card max-w-3xl p-7">
+      <div className="card max-w-3xl p-6">
         <div className="flex items-center gap-4">
-          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-mintsoft text-2xl font-bold text-mint-dark">{f.name[0]?.toUpperCase()}</span>
+          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-mintsoft text-2xl font-semibold text-mint-dark">{f.name[0]?.toUpperCase()}</span>
           <div>
             <p className="font-display text-xl text-ink">{user!.name}</p>
             <p className="text-sm text-muted">{user!.email} · {isMember ? 'NeuroNest member' : 'Demo experience'}</p>
@@ -138,7 +138,7 @@ export function Profile() {
             <p className="label">Experience Preference</p>
             <div className="grid gap-3 sm:grid-cols-2">
               {([['simple', 'Simple and Guided', 'Fewer options, gentle step-by-step guidance.'], ['detailed', 'Detailed and Exploratory', 'More detail and everything at a glance.']] as const).map(([v, t, d]) => (
-                <button type="button" key={v} onClick={() => setF({ ...f, experience: v })} className={`rounded-2xl border p-4 text-left transition ${f.experience === v ? 'border-purple bg-lav' : 'border-line hover:border-purple/40'}`}>
+                <button type="button" key={v} onClick={() => setF({ ...f, experience: v })} className={`rounded-xl border p-4 text-left transition ${f.experience === v ? 'border-purple bg-lav' : 'border-line hover:border-purple/40'}`}>
                   <p className="font-semibold text-ink">{t}</p><p className="text-sm text-muted">{d}</p>
                 </button>
               ))}
@@ -146,7 +146,7 @@ export function Profile() {
           </div>
 
           {isMember && (
-            <div className="space-y-4 rounded-3xl bg-soft p-5">
+            <div className="space-y-4 rounded-2xl bg-soft p-5">
               <div>
                 <p className="flex items-center gap-2 font-display text-lg text-ink"><MessagesSquare className="h-5 w-5 text-purple" /> Community profile</p>
                 <p className="text-sm text-muted">Visible to other signed-in members. Never include your child’s name or school.</p>
@@ -187,18 +187,18 @@ export function Settings() {
   return (
     <div className="max-w-2xl space-y-6">
       <DashHeader icon={SettingsIcon} tone="mint" title="Settings" lead="Manage your account, preferences, and appearance." />
-      <div className="card p-7">
+      <div className="card p-6">
         <h2 className="text-xl text-ink">Appearance</h2>
         <p className="mt-1 text-sm text-muted">Choose how NeuroNest looks. System follows your device setting.</p>
         <div className="mt-5 grid grid-cols-3 gap-3">
           {opts.map((o) => (
-            <button key={o.v} onClick={() => setTheme(o.v)} className={`flex flex-col items-center gap-2 rounded-2xl border p-4 transition ${theme === o.v ? 'border-purple bg-lav' : 'border-line hover:border-purple/40'}`} aria-pressed={theme === o.v}>
+            <button key={o.v} onClick={() => setTheme(o.v)} className={`flex flex-col items-center gap-2 rounded-xl border p-4 transition ${theme === o.v ? 'border-purple bg-lav' : 'border-line hover:border-purple/40'}`} aria-pressed={theme === o.v}>
               <o.icon className="h-5 w-5 text-purple" /><span className="text-sm font-semibold text-ink">{o.l}</span>
             </button>
           ))}
         </div>
       </div>
-      <div className="card p-7">
+      <div className="card p-6">
         <h2 className="text-xl text-ink">Interests</h2>
         <p className="mt-1 text-sm text-muted">What you’d like to explore. You can change these anytime.</p>
         <div className="mt-5 flex flex-wrap gap-2">

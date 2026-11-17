@@ -7,7 +7,6 @@ import {
 import {
   CITIES, SPECIALTIES, THERAPISTS, THERAPIST_LANGUAGES, formatFee, formatSlot, specialty, upcomingSlots, type Therapist,
 } from '../data/therapists';
-import { TONE } from '../data/content';
 import { ageLabel, type CheckRecord } from '../data/milestones';
 import { useStore, uid } from '../lib/storage';
 import { useToast } from '../lib/toast';
@@ -115,7 +114,7 @@ export function TherapistConnect({ embedded = false }: { embedded?: boolean }) {
                     <span className="tag bg-butter text-amber-700 dark:text-amber-300">Awaiting confirmation</span>
                   </div>
                   <p className="mt-4 flex items-center gap-2 text-sm text-ink"><CalendarClock className="h-4 w-4 text-purple" /> {formatSlot(r.slotTs)} · {r.mode}</p>
-                  <div className="mt-3 rounded-2xl bg-soft p-3 text-sm">
+                  <div className="mt-3 rounded-xl bg-soft p-3 text-sm">
                     <p className="flex items-center gap-1.5 font-semibold text-ink"><Lock className="h-3.5 w-3.5" /> Shared with consent</p>
                     <ul className="mt-1 space-y-0.5 text-muted">
                       {r.shareCheckId && <li>• Development Check summary</li>}
@@ -191,7 +190,7 @@ export function TherapistConnect({ embedded = false }: { embedded?: boolean }) {
           </div>
         </div>
         {filtersOn && (
-          <button className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-purple" onClick={() => { setQ(''); setMode('Any'); setLang('Any'); setCity('Any'); }}>
+          <button className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-purple" onClick={() => { setQ(''); setMode('Any'); setLang('Any'); setCity('Any'); }}>
             <X className="h-4 w-4" /> Clear filters
           </button>
         )}
@@ -212,7 +211,7 @@ export function TherapistConnect({ embedded = false }: { embedded?: boolean }) {
                   </button>
                 </div>
                 <div className="mt-4 flex flex-wrap gap-1.5">
-                  {t.specialties.map((s) => <span key={s} className={`tag ${TONE[specialty(s).tone].bg} ${TONE[specialty(s).tone].text}`}>{specialty(s).short}</span>)}
+                  {t.specialties.map((s) => <span key={s} className="tag bg-lav text-purple-dark dark:text-purple-light">{specialty(s).short}</span>)}
                   {t.focus.slice(0, 2).map((f) => <span key={f} className="tag bg-soft text-muted">{f}</span>)}
                 </div>
                 <dl className="mt-4 space-y-1.5 text-sm text-ink">
@@ -240,10 +239,10 @@ export function TherapistConnect({ embedded = false }: { embedded?: boolean }) {
       </section>
 
       {/* therapist CTA */}
-      <section className="overflow-hidden rounded-3xl bg-navy p-8 text-white sm:p-12">
+      <section className="overflow-hidden rounded-2xl bg-navy p-8 text-white sm:p-12">
         <div className="grid items-center gap-8 md:grid-cols-[1.4fr_1fr]">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.1em] text-mint-light">For therapists and schools</p>
+            <p className="text-sm font-medium text-mint-light">For therapists and schools</p>
             <h2 className="mt-2 text-3xl text-white">Everyone stays connected.</h2>
             <p className="mt-3 text-white/75">
               A secure portal for therapists and teachers to share goals, notes, assignments and progress — enabling collaborative, coordinated care with every family’s consent.
@@ -278,7 +277,7 @@ function ProfileModal({ t, onClose, onRequest }: { t: Therapist; onClose: () => 
     <Modal open onClose={onClose} wide title={<span className="flex items-center gap-3"><Avatar name={t.name} tone={specialty(t.specialties[0]!).tone} />{t.name}</span>} footer={
       <div className="flex justify-end gap-2"><button className="btn btn-ghost btn-sm" onClick={onClose}>Close</button><button className="btn btn-purple btn-sm" onClick={onRequest}>Request consultation</button></div>
     }>
-      <p className="text-sm font-semibold text-muted">{t.credentials} · Sample profile</p>
+      <p className="text-sm font-medium text-muted">{t.credentials} · Sample profile</p>
       <p className="mt-4 text-ink">{t.bio}</p>
       <div className="mt-5 grid gap-4 sm:grid-cols-2">
         <Info label="Approach">{t.approach}</Info>
@@ -298,8 +297,8 @@ function ProfileModal({ t, onClose, onRequest }: { t: Therapist; onClose: () => 
 
 function Info({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="rounded-2xl bg-soft p-4">
-      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-muted">{label}</p>
+    <div className="rounded-xl bg-soft p-4">
+      <p className="text-xs font-medium text-muted">{label}</p>
       <p className="mt-1 text-sm text-ink">{children}</p>
     </div>
   );
@@ -382,7 +381,7 @@ function RequestModal({ t, onClose, onSubmit, embedded }: { t: Therapist; onClos
         <div className="space-y-5">
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Child’s nickname (optional)"><input className="input" maxLength={30} value={childName} onChange={(e) => setChildName(e.target.value)} /></Field>
-            <div className="rounded-2xl bg-soft p-4 text-sm text-ink">
+            <div className="rounded-xl bg-soft p-4 text-sm text-ink">
               <p className="flex items-center gap-2"><CalendarClock className="h-4 w-4 text-purple" />{slotTs && formatSlot(slotTs)}</p>
               <p className="mt-1 flex items-center gap-2"><Stethoscope className="h-4 w-4 text-purple" />{mode} · {formatFee(t.fee)}</p>
             </div>
@@ -393,7 +392,7 @@ function RequestModal({ t, onClose, onSubmit, embedded }: { t: Therapist; onClos
           <div>
             <p className="label">Choose what to share <span className="font-normal text-muted">(optional)</span></p>
             <div className="space-y-2">
-              <label className={`flex items-start gap-3 rounded-2xl border p-4 ${latest ? 'cursor-pointer border-line' : 'border-dashed border-line opacity-70'}`}>
+              <label className={`flex items-start gap-3 rounded-xl border p-4 ${latest ? 'cursor-pointer border-line' : 'border-dashed border-line opacity-70'}`}>
                 <input type="checkbox" className="mt-1 h-4 w-4 accent-purple" disabled={!latest} checked={shareCheck} onChange={(e) => setShareCheck(e.target.checked)} />
                 <span className="text-sm">
                   <span className="flex items-center gap-1.5 font-semibold text-ink"><ClipboardCheck className="h-4 w-4 text-coral" /> Latest Development Check</span>
@@ -404,7 +403,7 @@ function RequestModal({ t, onClose, onSubmit, embedded }: { t: Therapist; onClos
                   )}
                 </span>
               </label>
-              <label className={`flex items-start gap-3 rounded-2xl border p-4 ${observations.length ? 'cursor-pointer border-line' : 'border-dashed border-line opacity-70'}`}>
+              <label className={`flex items-start gap-3 rounded-xl border p-4 ${observations.length ? 'cursor-pointer border-line' : 'border-dashed border-line opacity-70'}`}>
                 <input type="checkbox" className="mt-1 h-4 w-4 accent-purple" disabled={!observations.length} checked={shareObs} onChange={(e) => setShareObs(e.target.checked)} />
                 <span className="text-sm">
                   <span className="flex items-center gap-1.5 font-semibold text-ink"><NotebookPen className="h-4 w-4 text-mint" /> Recorded observations</span>
@@ -413,7 +412,7 @@ function RequestModal({ t, onClose, onSubmit, embedded }: { t: Therapist; onClos
               </label>
             </div>
           </div>
-          <label className="flex cursor-pointer items-start gap-3 rounded-2xl bg-lav p-4 text-sm text-ink">
+          <label className="flex cursor-pointer items-start gap-3 rounded-xl bg-lav p-4 text-sm text-ink">
             <input type="checkbox" className="mt-0.5 h-4 w-4 accent-purple" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
             <span>
               <b>I consent</b> to share my request{shareCheck || shareObs ? ' and the information selected above' : ''} with {t.name} for this consultation. I can revoke access at any time from My care team.
@@ -442,7 +441,7 @@ function JoinModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [form, setForm] = useState({ name: '', specialty: SPECIALTIES[0]!.id, city: '', email: '' });
   const close = () => { onClose(); setTimeout(() => setDone(false), 300); };
   return (
-    <Modal open={open} onClose={close} title={done ? 'Thank you!' : 'Join the NeuroNest care network'}>
+    <Modal open={open} onClose={close} title={done ? 'Thank you' : 'Join the NeuroNest care network'}>
       {done ? (
         <p className="text-muted">Thanks for your interest — we’ll be in touch as the therapist portal opens. (Prototype: your details are stored only in this browser.)</p>
       ) : (

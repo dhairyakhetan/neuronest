@@ -1,11 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import {
-  Bookmark, BookmarkCheck, Check, Flag, Heart, Home, Loader2, Lock, MapPin, MessageCircle, MoreHorizontal, RefreshCw, Search, Send,
-  Crown, EyeOff, ShieldCheck, Sparkles, Stethoscope, Trash2, UserCheck, UserPlus, UserRoundPen, Users, UsersRound, VenetianMask, X,
-} from 'lucide-react';
+import { Bookmark, BookmarkCheck, Check, Flag, Heart, Home, Loader2, Lock, MapPin, MessageCircle, MoreHorizontal, RefreshCw, Search, Send, Crown, EyeOff, ShieldCheck, Stethoscope, Trash2, UserCheck, UserPlus, UserRoundPen, Users, UsersRound, VenetianMask, X } from 'lucide-react';
 import { GUIDELINES, REPORT_REASONS, TOPICS, TOPIC_TONE, type Topic } from '../data/community';
-import { TONE, type Tone } from '../data/content';
+import type { Tone } from '../data/content';
 import { useAuth, type User } from '../lib/auth';
 import { timeAgo, useStore } from '../lib/storage';
 import { useToast } from '../lib/toast';
@@ -51,10 +48,10 @@ function CommunityGate({ demo, embedded }: { demo: boolean; embedded: boolean })
 
   return (
     <div className="space-y-8">
-      <div className="overflow-hidden rounded-3xl bg-navy text-white">
+      <div className="overflow-hidden rounded-2xl bg-navy text-white">
         <div className="grid gap-8 p-8 sm:p-12 lg:grid-cols-[1.3fr_1fr] lg:items-center">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-mint-light">
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-mint-light">
               <Lock className="h-3.5 w-3.5" /> Members-only
             </span>
             <h2 className="mt-4 text-3xl text-white sm:text-4xl">A private space for families like yours</h2>
@@ -62,7 +59,7 @@ function CommunityGate({ demo, embedded }: { demo: boolean; embedded: boolean })
               To protect children’s privacy, posts are only visible to signed-in members. Create a free account to share wins, ask questions, join circles and connect with other parents.
             </p>
             {demo && (
-              <p className="mt-4 rounded-2xl bg-white/10 px-4 py-3 text-sm text-white/85">
+              <p className="mt-4 rounded-xl bg-white/10 px-4 py-3 text-sm text-white/85">
                 You’re in the demo experience. The community is real, so posting needs a free NeuroNest account — it takes about 30 seconds.
               </p>
             )}
@@ -77,7 +74,7 @@ function CommunityGate({ demo, embedded }: { demo: boolean; embedded: boolean })
               { n: stats?.posts, l: 'posts' },
               { n: stats?.circles.length, l: 'circles' },
             ].map((s) => (
-              <div key={s.l} className="rounded-2xl bg-white/10 px-3 py-5">
+              <div key={s.l} className="rounded-xl bg-white/10 px-3 py-5">
                 <p className="font-display text-3xl font-semibold">{s.n ?? '–'}</p>
                 <p className="text-xs text-white/70">{s.l}</p>
               </div>
@@ -93,7 +90,6 @@ function CommunityGate({ demo, embedded }: { demo: boolean; embedded: boolean })
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             {(stats?.circles ?? []).map((c) => (
               <div key={c.id} className="card card-hover group p-5">
-                <div className={`mb-4 h-2 w-12 rounded-full transition-all duration-500 group-hover:w-20 ${TONE[c.tone].solid}`} />
                 <p className="font-display text-lg leading-snug text-ink">{c.name}</p>
                 <p className="mt-1 text-sm text-muted">{c.description}</p>
                 <p className="mt-3 text-xs text-muted">{c.member_count} member{c.member_count === 1 ? '' : 's'}</p>
@@ -286,7 +282,7 @@ function MemberCommunity({ me, embedded }: { me: User & { id: string }; embedded
         {/* left */}
         <aside className={`hidden space-y-4 ${embedded ? 'xl:block' : 'lg:block'}`}>
           <div className="card p-5 text-center">
-            <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-mintsoft text-xl font-bold text-mint-dark">{me.name[0]?.toUpperCase()}</span>
+            <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-mintsoft text-xl font-semibold text-mint-dark">{me.name[0]?.toUpperCase()}</span>
             <p className="mt-3 font-display text-lg text-ink">{me.name}</p>
             <p className="text-xs text-muted">{me.context || me.role}</p>
             {me.city && <p className="mt-1 flex items-center justify-center gap-1 text-xs text-muted"><MapPin className="h-3 w-3" />{me.city}</p>}
@@ -306,11 +302,11 @@ function MemberCommunity({ me, embedded }: { me: User & { id: string }; embedded
           </div>
           {myCircles.length > 0 && (
             <div className="card p-4">
-              <p className="px-1 text-xs font-semibold uppercase tracking-[0.1em] text-muted">Your circles</p>
+              <p className="px-1 text-xs font-medium text-muted">Your circles</p>
               <div className="mt-2 space-y-1">
                 {circles.filter((c) => myCircles.includes(c.id)).map((c) => (
                   <button key={c.id} onClick={() => showCircle(c.id)} className={`flex w-full items-center gap-2 rounded-xl px-2 py-2 text-left text-sm ${circleId === c.id && tab === 'feed' ? 'bg-lav' : 'hover:bg-soft'}`}>
-                    <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${TONE[c.tone].solid}`} />
+                    <span className="h-2 w-2 shrink-0 rounded-full bg-muted/50" />
                     <span className="truncate text-ink">{c.name}</span>
                   </button>
                 ))}
@@ -324,15 +320,15 @@ function MemberCommunity({ me, embedded }: { me: User & { id: string }; embedded
           {tab === 'feed' && (
             <>
               {!welcomeHidden && !circleId && !savedOnly && (
-                <div className="relative rounded-3xl bg-lav p-5 pr-12">
+                <div className="relative rounded-2xl bg-lav p-5 pr-12">
                   <button onClick={() => setWelcomeHidden(true)} className="absolute right-4 top-4 text-muted hover:text-ink" aria-label="Dismiss welcome"><X className="h-4 w-4" /></button>
-                  <p className="flex items-center gap-2 font-semibold text-purple-dark dark:text-purple-light"><Sparkles className="h-4 w-4" /> Welcome to the NeuroNest community, {me.name.split(' ')[0]}!</p>
+                  <p className="flex items-center gap-2 font-semibold text-purple-dark dark:text-purple-light"><MessageCircle className="h-4 w-4" /> Getting started in the community</p>
                   <p className="mt-1 text-sm text-ink/80">Introduce yourself, join a circle or two, and remember: share experiences, not medical advice — and keep your child’s details private. You can post anonymously anytime.</p>
                 </div>
               )}
               <Composer me={me} circles={circles.filter((c) => myCircles.includes(c.id))} defaultCircle={circleId && myCircles.includes(circleId) ? circleId : ''} onPosted={() => { loadFeed(); setMyPosts((n) => n + 1); }} />
               {(circleId || savedOnly) && (
-                <div className="flex items-center justify-between gap-3 rounded-2xl bg-soft px-4 py-3 text-sm">
+                <div className="flex items-center justify-between gap-3 rounded-xl bg-soft px-4 py-3 text-sm">
                   <span className="font-semibold text-ink">{savedOnly ? 'Your saved posts' : circles.find((c) => c.id === circleId)?.name}</span>
                   <div className="flex items-center gap-3">
                     {circleId && !myCircles.includes(circleId) && <button className="font-semibold text-purple" onClick={() => { const c = circles.find((x) => x.id === circleId); if (c) toggleCircle(c); }}>Join circle</button>}
@@ -380,7 +376,6 @@ function MemberCommunity({ me, embedded }: { me: User & { id: string }; embedded
                   const on = myCircles.includes(c.id);
                   return (
                     <div key={c.id} className="card card-hover group flex flex-col p-5">
-                      <div className={`mb-4 h-2 w-12 rounded-full transition-all duration-500 group-hover:w-20 ${TONE[c.tone].solid}`} />
                       <p className="font-display text-lg leading-snug text-ink">{c.name}</p>
                       <p className="mt-1 flex-1 text-sm text-muted">{c.description}</p>
                       <p className="mt-3 text-xs text-muted">{c.member_count} member{c.member_count === 1 ? '' : 's'}</p>
@@ -432,7 +427,7 @@ function MemberCommunity({ me, embedded }: { me: User & { id: string }; embedded
             <button className="link mt-4 text-sm" onClick={() => setTab('people')}>See all parents</button>
           </div>
           <Guidelines />
-          <div className="rounded-3xl bg-navy p-5 text-white">
+          <div className="rounded-2xl bg-navy p-5 text-white">
             <Stethoscope className="h-6 w-6 text-mint-light" />
             <p className="mt-3 font-display text-lg">Need professional advice?</p>
             <p className="mt-1 text-sm text-white/75">Peers share experience — specialists can assess and guide.</p>
@@ -491,7 +486,7 @@ function Composer({ me, circles, defaultCircle, onPosted }: { me: User; circles:
   return (
     <div className="card p-5">
       <div className="flex gap-3">
-        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-mintsoft font-bold text-mint-dark">{anon ? <VenetianMask className="h-5 w-5" /> : me.name[0]?.toUpperCase()}</span>
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-mintsoft font-semibold text-mint-dark">{anon ? <VenetianMask className="h-5 w-5" /> : me.name[0]?.toUpperCase()}</span>
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -589,7 +584,7 @@ function PostCard({ post, canModerate, onHide, onSupport, onSave, onDelete, onAu
         <div className="relative">
           <button onClick={() => setMenu((m) => !m)} className="rounded-full p-1.5 text-muted hover:bg-soft" aria-label="Post options"><MoreHorizontal className="h-5 w-5" /></button>
           {menu && (
-            <div className="absolute right-0 top-9 z-10 w-44 animate-pop-in rounded-2xl border border-line bg-surface p-1.5 shadow-lift" onMouseLeave={() => setMenu(false)}>
+            <div className="absolute right-0 top-9 z-10 w-44 animate-pop-in rounded-xl border border-line bg-surface p-1.5 shadow-lift" onMouseLeave={() => setMenu(false)}>
               {post.is_mine ? (
                 <button onClick={() => { setMenu(false); setConfirmDelete(true); }} className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-coral-dark hover:bg-soft"><Trash2 className="h-4 w-4" /> Delete post</button>
               ) : (
@@ -607,7 +602,7 @@ function PostCard({ post, canModerate, onHide, onSupport, onSave, onDelete, onAu
           )}
         </div>
       </header>
-      <span className={`tag mt-4 ${TONE[tone].bg} ${TONE[tone].text}`}>{post.topic}</span>
+      <span className="tag mt-4 bg-soft text-muted" data-tone={tone}>{post.topic}</span>
       <p className="mt-3 whitespace-pre-line break-words text-[15px] leading-relaxed text-ink">{post.body}</p>
       <div className="mt-4 flex items-center justify-between text-xs text-muted">
         <span>{post.support_count > 0 && `${post.support_count} ${post.support_count === 1 ? 'parent' : 'parents'} sent support`}</span>
@@ -617,7 +612,7 @@ function PostCard({ post, canModerate, onHide, onSupport, onSave, onDelete, onAu
         <button onClick={onSupport} className={`flex items-center justify-center gap-2 rounded-xl py-2 text-sm font-semibold transition hover:bg-soft ${post.supported_by_me ? 'text-coral' : 'text-muted'}`} aria-pressed={post.supported_by_me}>
           <Heart className={`h-4 w-4 ${post.supported_by_me ? 'fill-coral' : ''}`} /> Support
         </button>
-        <button onClick={() => setOpen((o) => !o)} className="flex items-center justify-center gap-2 rounded-xl py-2 text-sm font-semibold text-muted transition hover:bg-soft">
+        <button onClick={() => setOpen((o) => !o)} className="flex items-center justify-center gap-2 rounded-xl py-2 text-sm font-medium text-muted transition hover:bg-soft">
           <MessageCircle className="h-4 w-4" /> Comment
         </button>
         <button onClick={onSave} className={`flex items-center justify-center gap-2 rounded-xl py-2 text-sm font-semibold transition hover:bg-soft ${post.saved_by_me ? 'text-purple' : 'text-muted'}`} aria-pressed={post.saved_by_me}>
@@ -634,7 +629,7 @@ function PostCard({ post, canModerate, onHide, onSupport, onSave, onDelete, onAu
               ) : (
                 <Avatar name={c.author_name} tone={toneFor(c.author_id)} size="sm" />
               )}
-              <div className="min-w-0 rounded-2xl bg-soft px-3.5 py-2.5">
+              <div className="min-w-0 rounded-xl bg-soft px-3.5 py-2.5">
                 <p className="text-sm font-semibold text-ink">{c.author_name}{c.author_is_admin && <AdminBadge />}{c.is_mine && <span className="font-normal text-muted"> (you)</span>} <span className="font-normal text-muted">· {timeAgo(new Date(c.created_at).getTime())}</span></p>
                 <p className="whitespace-pre-line break-words text-sm text-ink">{c.body}</p>
               </div>
@@ -688,7 +683,7 @@ function ReportModal({ postId, onClose }: { postId: string; onClose: () => void 
       <p className="text-sm text-muted">Reports are private — the author won’t know who reported them.</p>
       <div className="mt-4 space-y-2">
         {REPORT_REASONS.map((r) => (
-          <label key={r} className={`flex cursor-pointer items-center gap-3 rounded-2xl border p-3 text-sm ${reason === r ? 'border-purple bg-lav' : 'border-line'}`}>
+          <label key={r} className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3 text-sm ${reason === r ? 'border-purple bg-lav' : 'border-line'}`}>
             <input type="radio" name="reason" className="accent-purple" checked={reason === r} onChange={() => setReason(r)} /> {r}
           </label>
         ))}
@@ -732,11 +727,11 @@ function People({ members, incoming, onSearch, onConnect, onView }: {
       <p className="mt-1 text-muted">Connect with families by city, language, or the journey you share.</p>
 
       {incoming.length > 0 && (
-        <div className="mt-5 rounded-3xl bg-lav p-5">
+        <div className="mt-5 rounded-2xl bg-lav p-5">
           <p className="font-semibold text-ink">Connection requests ({incoming.length})</p>
           <div className="mt-3 space-y-3">
             {incoming.map((m) => (
-              <div key={m.id} className="flex flex-wrap items-center gap-3 rounded-2xl bg-surface p-3">
+              <div key={m.id} className="flex flex-wrap items-center gap-3 rounded-xl bg-surface p-3">
                 <Avatar name={m.display_name} tone={toneFor(m.id)} size="sm" />
                 <button onClick={() => onView(m.id)} className="min-w-0 flex-1 text-left">
                   <p className="text-sm font-semibold text-ink">{m.display_name}</p>
@@ -779,7 +774,7 @@ function People({ members, incoming, onSearch, onConnect, onView }: {
       </div>
       {list.length === 0 && (
         <div className="card mt-5 p-10 text-center text-muted">
-          {filter === 'connected' ? 'No connections yet — say hello to someone!' : q ? 'No parents match that search.' : 'You’re one of the first members here. Invite other parents to join!'}
+          {filter === 'connected' ? 'No connections yet — say hello to someone' : q ? 'No parents match that search.' : 'You’re one of the first members here. Invite other parents to join'}
         </div>
       )}
     </div>
@@ -810,7 +805,7 @@ function MemberModal({ id, member, onClose, onConnect }: { id: string; member?: 
             {posts === null && <p className="text-sm text-muted">Loading…</p>}
             {posts?.length === 0 && <p className="text-sm text-muted">No public posts yet.</p>}
             {posts?.map((x) => (
-              <div key={x.id} className="rounded-2xl bg-soft p-3">
+              <div key={x.id} className="rounded-xl bg-soft p-3">
                 <p className="text-xs text-muted">{x.topic} · {timeAgo(new Date(x.created_at).getTime())}</p>
                 <p className="mt-1 line-clamp-3 text-sm text-ink">{x.body}</p>
               </div>

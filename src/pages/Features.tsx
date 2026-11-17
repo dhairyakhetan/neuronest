@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { ArrowRight, Sparkles } from 'lucide-react';
-import { FEATURE_CATEGORIES, TONE, type Feature } from '../data/content';
-import { IconBadge, Modal, NewBadge, PageHero } from '../components/ui';
+import { ArrowRight, LayoutGrid } from 'lucide-react';
+import { FEATURE_CATEGORIES, type Feature } from '../data/content';
+import { IconBadge, Modal, PageHero } from '../components/ui';
 
 export function Features() {
   const [params, setParams] = useSearchParams();
@@ -12,7 +12,7 @@ export function Features() {
 
   return (
     <>
-      <PageHero eyebrow="NeuroNest features" icon={Sparkles} title={<>Five connected ways<br className="hidden sm:block" /> to explore support</>} lead="NeuroNest organises its tools into five interactive categories. Select a category to see its features, then open any feature for a closer look." />
+      <PageHero eyebrow="NeuroNest features" icon={LayoutGrid} title={<>Five connected ways<br className="hidden sm:block" /> to explore support</>} lead="NeuroNest organises its tools into five interactive categories. Select a category to see its features, then open any feature for a closer look." />
       <section className="container-nn pb-24">
         <div className="flex flex-wrap gap-2">
           {FEATURE_CATEGORIES.map((c) => (
@@ -27,7 +27,6 @@ export function Features() {
               <div key={f.title} className="card card-hover group flex cursor-pointer flex-col p-6" onClick={() => setDetail(f)}>
                 <div className="flex items-start justify-between">
                   <IconBadge icon={f.icon} tone={f.tone} />
-                  {f.isNew && <NewBadge />}
                 </div>
                 <h3 className="mt-5 font-display text-lg font-semibold text-ink">{f.title}</h3>
                 <p className="mt-2 flex-1 text-[15px] text-muted">{f.short}</p>
@@ -35,18 +34,17 @@ export function Features() {
               </div>
             ))}
           </div>
-          <aside className={`h-fit rounded-3xl border border-line p-7 ${TONE[cat.tone].bg}`}>
-            <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-surface shadow-soft">
-              <cat.icon className={`h-6 w-6 ${TONE[cat.tone].icon}`} />
+          <aside className="h-fit rounded-2xl border border-line bg-soft p-6">
+            <span className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-surface shadow-soft">
+              <cat.icon className="h-6 w-6 text-muted" />
             </span>
             <h2 className="mt-5 text-3xl text-ink">{cat.name}</h2>
             <p className="mt-1 text-muted">{cat.features.length} features in this category</p>
             <div className="mt-6 space-y-2">
               {cat.features.map((f) => (
-                <button key={f.title} onClick={() => setDetail(f)} className="group flex w-full items-center gap-3 rounded-2xl bg-surface/80 px-3 py-3 text-left text-[15px] text-ink transition duration-300 hover:translate-x-1 hover:bg-surface hover:shadow-soft">
+                <button key={f.title} onClick={() => setDetail(f)} className="group flex w-full items-center gap-3 rounded-xl bg-surface/80 px-3 py-3 text-left text-[15px] text-ink transition-colors hover:bg-surface">
                   <IconBadge icon={f.icon} tone={f.tone} size="sm" />
                   <span className="flex-1">{f.title}</span>
-                  {f.isNew && <NewBadge />}
                 </button>
               ))}
             </div>
@@ -62,7 +60,7 @@ export function Features() {
       >
         <p className="font-semibold text-ink">{detail?.short}</p>
         <p className="mt-3 leading-relaxed text-muted">{detail?.detail}</p>
-        <p className="mt-5 rounded-2xl bg-soft p-3 text-xs text-muted">Interactive product preview. NeuroNest does not provide medical diagnoses or replace qualified professionals.</p>
+        <p className="mt-5 rounded-xl bg-soft p-3 text-xs text-muted">Interactive product preview. NeuroNest does not provide medical diagnoses or replace qualified professionals.</p>
       </Modal>
     </>
   );

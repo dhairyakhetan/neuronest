@@ -1,9 +1,9 @@
 import { useState, type ReactNode } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { ArrowRight, Check, Eye, EyeOff, Loader2, ShieldCheck, Sparkles } from 'lucide-react';
+import { ArrowRight, Check, Eye, EyeOff, Loader2, ShieldCheck } from 'lucide-react';
 import { DISCLAIMER, EMAIL, INTERESTS, LANGUAGES, ROLES } from '../data/content';
 import { useAuth, type Role } from '../lib/auth';
-import { Field, LogoMark, Wave } from '../components/ui';
+import { Field, LogoMark } from '../components/ui';
 
 /* Where to go after sign-up/onboarding (e.g. back to the community). */
 const NEXT_KEY = 'nn:next';
@@ -13,12 +13,11 @@ const takeNext = () => { try { const v = localStorage.getItem(NEXT_KEY); localSt
 function Shell({ children, wide = false }: { children: ReactNode; wide?: boolean }) {
   return (
     <section className="relative overflow-hidden pb-20">
-      <Wave className="absolute inset-x-0 top-6 h-14 w-full" />
       <div className={`relative mx-auto px-4 pt-12 ${wide ? 'max-w-2xl' : 'max-w-md'}`}>
         <div className="flex flex-col items-center">
           <span className="flex items-center gap-2 font-display text-xl text-ink"><LogoMark /> NeuroNest</span>
         </div>
-        <div className="card mt-6 animate-fade-up p-7 sm:p-8">{children}</div>
+        <div className="card mt-6 animate-fade-up p-6 sm:p-8">{children}</div>
         <p className="mt-6 text-center text-xs text-muted">{DISCLAIMER}</p>
       </div>
     </section>
@@ -75,11 +74,11 @@ export function SignIn() {
         <Field label="Email Address"><input type="email" required autoComplete="email" className="input" value={email} onChange={(e) => setEmail(e.target.value)} /></Field>
         <Password label="Password" value={pw} onChange={setPw} />
         <p className="text-right text-xs text-muted">Forgot your password? Email <a href={`mailto:${EMAIL}`} className="font-semibold text-purple">{EMAIL}</a></p>
-        {error && <p className="rounded-2xl bg-peach p-3 text-sm text-ink" role="alert">{error}</p>}
+        {error && <p className="rounded-xl bg-peach p-3 text-sm text-ink" role="alert">{error}</p>}
         <button className="btn btn-coral w-full" disabled={busy}>{busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null} Sign In <ArrowRight className="h-4 w-4" /></button>
       </form>
       <div className="my-6 flex items-center gap-3 text-xs text-muted"><span className="h-px flex-1 bg-line" />OR<span className="h-px flex-1 bg-line" /></div>
-      <button className="btn btn-navy w-full" onClick={() => { enterDemo(); nav(from.startsWith('/dashboard') ? from : '/dashboard'); }}><Sparkles className="h-4 w-4" /> Enter Demo Experience</button>
+      <button className="btn btn-navy w-full" onClick={() => { enterDemo(); nav(from.startsWith('/dashboard') ? from : '/dashboard'); }}><Check className="h-4 w-4" /> Enter Demo Experience</button>
       <p className="mt-2 text-center text-xs text-muted">No account needed — explore the dashboard with data kept in this browser.</p>
       <p className="mt-6 text-center text-sm text-muted">New to NeuroNest? <Link to="/sign-up" state={loc.state} className="font-semibold text-purple">Create an Account</Link></p>
     </Shell>
@@ -102,7 +101,7 @@ export function SignUp() {
     <Shell>
       <h1 className="text-2xl text-ink">Create Your NeuroNest Account</h1>
       <p className="mt-1 text-muted">Free, and it takes about 30 seconds.</p>
-      <p className="mt-5 flex gap-2 rounded-2xl bg-mintsoft p-3 text-sm text-ink"><ShieldCheck className="h-4 w-4 shrink-0 text-mint" />You don’t need to share any medical or developmental information to sign up.</p>
+      <p className="mt-5 flex gap-2 rounded-xl bg-mintsoft p-3 text-sm text-ink"><ShieldCheck className="h-4 w-4 shrink-0 text-mint" />You don’t need to share any medical or developmental information to sign up.</p>
       <form
         className="mt-6 space-y-4"
         onSubmit={async (e) => {
@@ -132,7 +131,7 @@ export function SignUp() {
           <input type="checkbox" className="mt-0.5 h-4 w-4 accent-purple" checked={f.agree} onChange={(e) => setF({ ...f, agree: e.target.checked })} />
           <span>I agree to the <Link to="/terms" className="font-semibold text-purple">Terms of Use</Link> and <Link to="/privacy" className="font-semibold text-purple">Privacy Policy</Link>.</span>
         </label>
-        {error && <p className="rounded-2xl bg-peach p-3 text-sm text-ink" role="alert">{error}</p>}
+        {error && <p className="rounded-xl bg-peach p-3 text-sm text-ink" role="alert">{error}</p>}
         <button className="btn btn-coral w-full" disabled={busy}>{busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null} Create My Account <ArrowRight className="h-4 w-4" /></button>
       </form>
       <p className="mt-6 text-center text-sm text-muted">Already have an account? <Link to="/sign-in" state={loc.state} className="font-semibold text-purple">Sign In</Link></p>
@@ -174,11 +173,11 @@ export function Onboarding() {
       <div className="mb-6 flex gap-2">{Array.from({ length: steps }, (_, i) => <span key={i} className={`h-1.5 flex-1 rounded-full ${i <= step ? 'bg-purple' : 'bg-line'}`} />)}</div>
       {step === 0 && (
         <>
-          <h1 className="text-2xl text-ink">Welcome, {user.name.split(' ')[0]}!</h1>
+          <h1 className="text-2xl text-ink">About you</h1>
           <p className="mt-1 text-muted">Choose the option that best describes you.</p>
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
             {ROLES.map((x) => (
-              <button key={x} onClick={() => setRole(x)} className={`flex items-center gap-3 rounded-2xl border p-4 text-left text-[15px] font-medium transition ${r === x ? 'border-purple bg-lav text-ink' : 'border-line text-ink hover:border-purple/40'}`}>
+              <button key={x} onClick={() => setRole(x)} className={`flex items-center gap-3 rounded-xl border p-4 text-left text-[15px] font-medium transition ${r === x ? 'border-purple bg-lav text-ink' : 'border-line text-ink hover:border-purple/40'}`}>
                 <span className={`flex h-5 w-5 items-center justify-center rounded-full border ${r === x ? 'border-purple bg-purple text-white' : 'border-line'}`}>{r === x && <Check className="h-3 w-3" />}</span>
                 {x}
               </button>
@@ -234,10 +233,10 @@ export function Onboarding() {
       )}
       {step === last && (
         <div className="text-center">
-          <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-mintsoft"><Sparkles className="h-7 w-7 text-mint" /></span>
+          <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-mintsoft"><Check className="h-7 w-7 text-mint" /></span>
           <h1 className="mt-5 text-2xl text-ink">You’re all set</h1>
           <p className="mt-2 text-muted">Your NeuroNest experience is ready to explore. You can update these preferences at any time.</p>
-          {error && <p className="mt-4 rounded-2xl bg-peach p-3 text-sm text-ink" role="alert">{error}</p>}
+          {error && <p className="mt-4 rounded-xl bg-peach p-3 text-sm text-ink" role="alert">{error}</p>}
           <button className="btn btn-coral mt-8" disabled={busy} onClick={finish}>
             {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null} Let’s go <ArrowRight className="h-4 w-4" />
           </button>

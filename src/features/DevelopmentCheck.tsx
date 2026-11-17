@@ -1,9 +1,6 @@
 import { useMemo, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  AlertTriangle, ArrowLeft, ArrowRight, Baby, CheckCircle2, ClipboardCheck, Eye, History, Printer, RotateCcw, Sparkles,
-  Stethoscope, Trash2, TriangleAlert,
-} from 'lucide-react';
+import { AlertTriangle, ArrowLeft, ArrowRight, Baby, CheckCircle2, ClipboardCheck, Eye, History, Printer, RotateCcw, Lightbulb, Stethoscope, Trash2, TriangleAlert } from 'lucide-react';
 import {
   BANDS, CONCERNS, DOMAINS, ageLabel, answerKey, bandFor, evaluate, nextBand, pronouns,
   type Answer, type CheckRecord, type DomainStatus, type Gender,
@@ -99,7 +96,7 @@ export function DevelopmentCheck({ embedded = false }: { embedded?: boolean }) {
       {step < 6 && (
         <div className="card overflow-hidden">
           <div className="h-1.5 bg-soft">
-            <div className="h-full bg-gradient-to-r from-purple via-mint to-coral transition-all duration-500" style={{ width: `${progress}%` }} />
+            <div className="h-full bg-purple transition-[width] duration-500" style={{ width: `${progress}%` }} />
           </div>
           <div className="p-6 sm:p-10">
             {/* ---------------- Step 0: child */}
@@ -115,7 +112,7 @@ export function DevelopmentCheck({ embedded = false }: { embedded?: boolean }) {
                     <span className="label">Gender</span>
                     <div className="grid grid-cols-3 gap-2">
                       {([['girl', 'Girl'], ['boy', 'Boy'], ['unspecified', 'Prefer not to say']] as const).map(([v, l]) => (
-                        <button key={v} onClick={() => set('gender', v)} className={`rounded-2xl border px-3 py-3 text-sm font-medium transition ${draft.gender === v ? 'border-purple bg-lav text-purple-dark dark:text-purple-light' : 'border-line bg-surface text-ink hover:border-purple/40'}`} aria-pressed={draft.gender === v}>
+                        <button key={v} onClick={() => set('gender', v)} className={`rounded-xl border px-3 py-3 text-sm font-medium transition ${draft.gender === v ? 'border-purple bg-lav text-purple-dark dark:text-purple-light' : 'border-line bg-surface text-ink hover:border-purple/40'}`} aria-pressed={draft.gender === v}>
                           {l}
                         </button>
                       ))}
@@ -134,7 +131,7 @@ export function DevelopmentCheck({ embedded = false }: { embedded?: boolean }) {
                   </div>
                   <div>
                     <span className="label">Born early?</span>
-                    <label className="flex cursor-pointer items-center gap-3 rounded-2xl border border-line bg-surface px-4 py-3">
+                    <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-line bg-surface px-4 py-3">
                       <input type="checkbox" className="h-4 w-4 accent-purple" checked={draft.preterm} onChange={(e) => set('preterm', e.target.checked)} />
                       <span className="text-sm text-ink">Born 3 or more weeks before the due date</span>
                     </label>
@@ -146,7 +143,7 @@ export function DevelopmentCheck({ embedded = false }: { embedded?: boolean }) {
                   </div>
                 </div>
 
-                <div className="mt-8 rounded-2xl bg-soft p-4 text-sm">
+                <div className="mt-8 rounded-xl bg-soft p-4 text-sm">
                   {band ? (
                     <p className="text-ink">
                       <Baby className="mr-1.5 inline h-4 w-4 text-purple" />
@@ -196,7 +193,7 @@ export function DevelopmentCheck({ embedded = false }: { embedded?: boolean }) {
                   </button>
                 </div>
                 {draft.concerns.includes('regression') && (
-                  <div className="mt-5 flex gap-3 rounded-2xl border border-coral/40 bg-peach p-4 text-sm text-ink">
+                  <div className="mt-5 flex gap-3 rounded-xl border border-coral/40 bg-peach p-4 text-sm text-ink">
                     <TriangleAlert className="h-5 w-5 shrink-0 text-coral" />
                     <p>Losing skills a child once had — at any age — is a reason to talk to a doctor soon. You can still complete the check to bring a summary along.</p>
                   </div>
@@ -215,7 +212,7 @@ export function DevelopmentCheck({ embedded = false }: { embedded?: boolean }) {
                 <div className="flex flex-wrap items-center gap-4">
                   <IconBadge icon={domain.icon} tone={domain.tone} size="lg" />
                   <div>
-                    <p className="text-sm font-semibold text-muted">Area {domainIdx + 1} of 4 · {band.label} milestones</p>
+                    <p className="text-sm font-medium text-muted">Area {domainIdx + 1} of 4 · {band.label} milestones</p>
                     <h3 className="text-2xl text-ink sm:text-3xl">{domain.title}</h3>
                   </div>
                 </div>
@@ -226,7 +223,7 @@ export function DevelopmentCheck({ embedded = false }: { embedded?: boolean }) {
                   {band.items[domain.id].map((item, i) => {
                     const k = answerKey(domain.id, i);
                     return (
-                      <li key={k} className="flex flex-col gap-3 rounded-2xl border border-line bg-soft/60 p-4 sm:flex-row sm:items-center">
+                      <li key={k} className="flex flex-col gap-3 rounded-xl border border-line bg-soft/60 p-4 sm:flex-row sm:items-center">
                         <span className="flex-1 text-[15px] text-ink">
                           <span className="mr-2 font-semibold text-muted">{i + 1}.</span>
                           {item}
@@ -294,7 +291,7 @@ export function DevelopmentCheck({ embedded = false }: { embedded?: boolean }) {
 function StepTitle({ n, title, sub }: { n: number; title: string; sub: string }) {
   return (
     <div>
-      <p className="text-sm font-semibold uppercase tracking-[0.1em] text-purple">Step {n}</p>
+      <p className="text-sm font-medium text-purple">Step {n}</p>
       <h3 className="mt-1 text-2xl text-ink sm:text-3xl">{title}</h3>
       <p className="mt-2 max-w-2xl text-muted">{sub}</p>
     </div>
@@ -352,13 +349,13 @@ function Results({ rec, onRestart, embedded }: { rec: CheckRecord; onRestart: ()
 
   return (
     <div className="animate-fade-up space-y-6">
-      <div className={`rounded-3xl border p-6 sm:p-10 ${o.cls}`}>
+      <div className={`rounded-2xl border p-6 sm:p-10 ${o.cls}`}>
         <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
-          <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-surface shadow-soft">
+          <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-surface shadow-soft">
             <o.icon className={`h-7 w-7 ${o.iconCls}`} />
           </span>
           <div className="flex-1">
-            <p className="text-sm font-semibold uppercase tracking-[0.1em] text-muted">Development Check results</p>
+            <p className="text-sm font-medium text-muted">Development Check results</p>
             <h2 className="mt-1 text-3xl text-ink sm:text-4xl">{headline}</h2>
             <p className="mt-3 max-w-3xl text-[17px] leading-relaxed text-ink/80">{summary}</p>
             <p className="mt-4 text-sm text-muted">
@@ -374,7 +371,7 @@ function Results({ rec, onRestart, embedded }: { rec: CheckRecord; onRestart: ()
             const d = DOMAINS.find((x) => x.id === r.id)!;
             const s = STATUS[r.status];
             return (
-              <div key={r.id} className="rounded-2xl bg-surface p-4 shadow-soft">
+              <div key={r.id} className="rounded-xl bg-surface p-4 shadow-soft">
                 <div className="flex items-center gap-2">
                   <d.icon className={`h-4 w-4 ${TONE[d.tone].icon}`} />
                   <p className="text-sm font-semibold text-ink">{d.title}</p>
@@ -383,7 +380,7 @@ function Results({ rec, onRestart, embedded }: { rec: CheckRecord; onRestart: ()
                   <span className="font-display text-3xl font-semibold text-ink">{r.score}%</span>
                   <span className={`tag ${s.cls}`}>{s.label}</span>
                 </div>
-                <div className="mt-2 h-2 overflow-hidden rounded-full bg-soft">
+                <div className="ticks mt-2 h-2 overflow-hidden rounded-full bg-soft">
                   <div className={`h-full rounded-full ${s.bar}`} style={{ width: `${r.score}%` }} />
                 </div>
                 <p className="mt-2 text-xs text-muted">{r.yes} yes · {r.sometimes} sometimes · {r.no} not yet</p>
@@ -423,8 +420,8 @@ function Results({ rec, onRestart, embedded }: { rec: CheckRecord; onRestart: ()
                   </ul>
                 </div>
               )}
-              {r.status === 'onpar' && <p className="mt-4 text-sm text-muted">All {r.yes} milestones for this age are in place. Lovely!</p>}
-              <p className="mt-4 rounded-2xl bg-soft p-3 text-sm text-muted"><Sparkles className="mr-1 inline h-4 w-4 text-purple" />{d.tip}</p>
+              {r.status === 'onpar' && <p className="mt-4 text-sm text-muted">All {r.yes} milestones for this age are in place</p>}
+              <p className="mt-4 rounded-xl bg-soft p-3 text-sm text-muted"><Lightbulb className="mr-1 inline h-4 w-4 text-purple" />{d.tip}</p>
               <div className="no-print mt-4 flex flex-wrap gap-2">
                 {r.status === 'flag' && (
                   <Link to={`${therapistsBase}?specialty=${d.specialists[0]}`} className="btn btn-purple btn-sm">
@@ -469,7 +466,7 @@ function Results({ rec, onRestart, embedded }: { rec: CheckRecord; onRestart: ()
         {concernNotes.length > 0 && (
           <div className="mt-6 space-y-2">
             {concernNotes.map((n) => (
-              <p key={n} className="flex gap-2 rounded-2xl bg-lav p-3 text-sm text-ink"><Eye className="mt-0.5 h-4 w-4 shrink-0 text-purple" />{n}</p>
+              <p key={n} className="flex gap-2 rounded-xl bg-lav p-3 text-sm text-ink"><Eye className="mt-0.5 h-4 w-4 shrink-0 text-purple" />{n}</p>
             ))}
           </div>
         )}
@@ -491,7 +488,7 @@ function Results({ rec, onRestart, embedded }: { rec: CheckRecord; onRestart: ()
 function NextStep({ n, title, children }: { n: number; title: string; children: ReactNode }) {
   return (
     <li className="flex gap-4">
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lav text-sm font-bold text-purple-dark dark:text-purple-light">{n}</span>
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lav text-sm font-medium text-purple-dark dark:text-purple-light">{n}</span>
       <div>
         <p className="font-semibold text-ink">{title}</p>
         <div className="mt-0.5 text-[15px] text-muted">{children}</div>

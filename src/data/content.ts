@@ -48,10 +48,10 @@ export const FEATURE_CATEGORIES: FeatureCategory[] = [
     tone: 'purple',
     summary: 'AI Care Companion, Learning Plans, Daily Routines, Smart Reminders',
     features: [
-      { title: 'AI Care Companion', icon: Sparkles, tone: 'purple', to: '/companion', short: 'A companion that helps you plan, organise, and discover relevant tools.', detail: 'The NeuroNest Companion offers guidance across daily routines, learning, and resources — an interactive product experience you can explore throughout this site.' },
-      { title: 'AI Learning Plans', icon: Brain, tone: 'mint', to: '/dashboard/learning', short: 'Personalised learning plans adapted to interests and routines.', detail: 'Learning plans suggest activities across communication, focus, and routines, adapting as you explore and save activities.' },
-      { title: 'Daily Routine Planner', icon: CalendarDays, tone: 'coral', to: '/dashboard/today', short: 'Organise activities and routines for the day in a calm, simple view.', detail: "Today's Plan lets you add, reorder, time, and complete activities across categories like Guidance, Learning, Routine, and Speech." },
-      { title: 'Smart Reminders', icon: Bell, tone: 'purple', short: 'Gentle reminders to help keep routines and activities on track.', detail: 'Reminders help you view and organise upcoming activities and important tasks without feeling pressured.' },
+      { title: 'AI Care Companion', icon: Sparkles, tone: 'purple', to: '/companion', short: 'A companion that helps you plan, organise, and discover relevant tools', detail: 'The NeuroNest Companion offers guidance across daily routines, learning, and resources — an interactive product experience you can explore throughout this site.' },
+      { title: 'AI Learning Plans', icon: Brain, tone: 'mint', to: '/dashboard/learning', short: 'Personalised learning plans adapted to interests and routines', detail: 'Learning plans suggest activities across communication, focus, and routines, adapting as you explore and save activities.' },
+      { title: 'Daily Routine Planner', icon: CalendarDays, tone: 'coral', to: '/dashboard/today', short: 'Organise activities and routines for the day in a calm, simple view', detail: "Today's Plan lets you add, reorder, time, and complete activities across categories like Guidance, Learning, Routine, and Speech." },
+      { title: 'Smart Reminders', icon: Bell, tone: 'purple', short: 'Gentle reminders to help keep routines and activities on track', detail: 'Reminders help you view and organise upcoming activities and important tasks without feeling pressured.' },
     ],
   },
   {
@@ -61,11 +61,11 @@ export const FEATURE_CATEGORIES: FeatureCategory[] = [
     tone: 'mint',
     summary: 'Milestone Intelligence, Development Check, Behaviour Tracking, Progress, Child Profile',
     features: [
-      { title: 'Milestone Intelligence', icon: Target, tone: 'mint', to: '/dashboard/milestones', short: 'Record and organise observations and milestones in one place.', detail: 'Milestone Intelligence helps you capture meaningful moments with categories, dates, and notes — organised for conversations with qualified professionals.' },
-      { title: 'Development Check', icon: ClipboardCheck, tone: 'coral', to: '/development-check', isNew: true, short: 'An age-based milestone check that flags possible delays early.', detail: 'Answer simple questions about what your child does today across social, language, learning and movement skills. NeuroNest flags areas worth discussing with a professional and recommends next steps and the right specialists. It screens — it does not diagnose.' },
-      { title: 'Behaviour Tracking', icon: Activity, tone: 'purple', to: '/dashboard/milestones', short: 'Track routines and behaviours over time, gently.', detail: 'Observations can be filtered by category — Communication, Learning, Routine, Social Interaction, Motor Skills, Sleep, Food Preferences, and more.' },
-      { title: 'Progress', icon: TrendingUp, tone: 'mint', to: '/dashboard/progress', short: 'See genuine activity history and recorded observations.', detail: 'Progress shows only information you genuinely enter — recorded observations, completed activities, and routine history. No fake charts or predictions.' },
-      { title: 'Child Profile', icon: UserRound, tone: 'coral', to: '/dashboard/profile', short: 'A profile that adapts as you explore activities and routines.', detail: 'Your profile holds your role, preferred language, and experience preference — no sensitive medical or developmental information required.' },
+      { title: 'Milestone Intelligence', icon: Target, tone: 'mint', to: '/dashboard/milestones', short: 'Record and organise observations and milestones in one place', detail: 'Milestone Intelligence helps you capture meaningful moments with categories, dates, and notes — organised for conversations with qualified professionals.' },
+      { title: 'Development Check', icon: ClipboardCheck, tone: 'coral', to: '/development-check', isNew: true, short: 'An age-based milestone check that flags possible delays early', detail: 'Answer simple questions about what your child does today across social, language, learning and movement skills. NeuroNest flags areas worth discussing with a professional and recommends next steps and the right specialists. It screens — it does not diagnose.' },
+      { title: 'Behaviour Tracking', icon: Activity, tone: 'purple', to: '/dashboard/milestones', short: 'Track routines and behaviours over time, gently', detail: 'Observations can be filtered by category — Communication, Learning, Routine, Social Interaction, Motor Skills, Sleep, Food Preferences, and more.' },
+      { title: 'Progress', icon: TrendingUp, tone: 'mint', to: '/dashboard/progress', short: 'See genuine activity history and recorded observations', detail: 'Progress shows only information you genuinely enter — recorded observations, completed activities, and routine history. No fake charts or predictions.' },
+      { title: 'Child Profile', icon: UserRound, tone: 'coral', to: '/dashboard/profile', short: 'A profile that adapts as you explore activities and routines', detail: 'Your profile holds your role, preferred language, and experience preference — no sensitive medical or developmental information required.' },
     ],
   },
   {
@@ -75,10 +75,10 @@ export const FEATURE_CATEGORIES: FeatureCategory[] = [
     tone: 'coral',
     summary: 'Adaptive Activities, Speech Coach, Activity Library, Rewards & Streaks',
     features: [
-      { title: 'Adaptive Activities', icon: Puzzle, tone: 'coral', to: '/dashboard/learning', short: 'Practical activities across communication, focus, and routines.', detail: 'Browse activities by category, open instructions, save for later, and mark as completed — without comparisons or fake completion percentages.' },
-      { title: 'Speech Coach', icon: Mic, tone: 'purple', to: '/dashboard/speech', short: 'Guided speech-practice activities with visual instructions.', detail: 'The Speech Coach offers guided practice activities. Voice-based practice is a future product capability — this prototype shows the experience without clinical assessment.' },
-      { title: 'Rewards & Streaks', icon: Trophy, tone: 'butter', to: '/dashboard/rewards', isNew: true, short: 'Earn Nest Stars, badges and streaks for daily activities and lessons.', detail: 'Every completed plan item, learning activity and speech lesson earns Nest Stars. Keep a daily streak, level up from Hatchling to Sky Guardian, unlock badges, and set real-world reward goals together — celebrating effort, never comparing children.' },
-      { title: 'Activity Library', icon: Library, tone: 'mint', to: '/dashboard/learning', short: 'A growing library of activities you can save and organise.', detail: 'Save activities to your library and mark them as completed. Your library is yours — no fake data, no comparisons between children.' },
+      { title: 'Adaptive Activities', icon: Puzzle, tone: 'coral', to: '/dashboard/learning', short: 'Practical activities across communication, focus, and routines', detail: 'Browse activities by category, open instructions, save for later, and mark as completed — without comparisons or fake completion percentages.' },
+      { title: 'Speech Coach', icon: Mic, tone: 'purple', to: '/dashboard/speech', short: 'Guided speech-practice activities with visual instructions', detail: 'The Speech Coach offers guided practice activities. Voice-based practice is a future product capability — this prototype shows the experience without clinical assessment.' },
+      { title: 'Rewards & Streaks', icon: Trophy, tone: 'butter', to: '/dashboard/rewards', isNew: true, short: 'Earn Nest Stars, badges and streaks for daily activities and lessons', detail: 'Every completed plan item, learning activity and speech lesson earns Nest Stars. Keep a daily streak, level up from Hatchling to Sky Guardian, unlock badges, and set real-world reward goals together — celebrating effort, never comparing children.' },
+      { title: 'Activity Library', icon: Library, tone: 'mint', to: '/dashboard/learning', short: 'A growing library of activities you can save and organise', detail: 'Save activities to your library and mark them as completed. Your library is yours — no fake data, no comparisons between children.' },
     ],
   },
   {
@@ -88,10 +88,10 @@ export const FEATURE_CATEGORIES: FeatureCategory[] = [
     tone: 'purple',
     summary: 'Therapist Connect, Parent Community, Therapy Companion, Shared Care Circle',
     features: [
-      { title: 'Therapist Connect', icon: Stethoscope, tone: 'purple', to: '/therapists', isNew: true, short: 'Find specialists, request consultations, and share progress with consent.', detail: 'Browse speech, occupational, behaviour and other child-development specialists by language, city and session type. Request a consultation and choose exactly what to share — consent comes first, every time.' },
-      { title: 'Parent Community', icon: MessagesSquare, tone: 'coral', to: '/community', isNew: true, short: 'Connect with parents who understand the journey.', detail: 'Share wins, ask questions, join circles of parents walking a similar path, and build connections — a moderated, inclusive space to belong.' },
-      { title: 'Therapy Companion', icon: NotebookPen, tone: 'mint', short: 'Tools to help organise and reflect on therapy sessions.', detail: 'A future companion designed to help families prepare for and reflect on sessions with qualified professionals.' },
-      { title: 'Shared Care Circle', icon: Share2, tone: 'purple', to: '/dashboard/care-network', short: 'Explore sharing preferences for a connected support circle.', detail: 'The Shared Care Circle is a future capability for coordinating support among parents, caregivers, teachers, and therapists.' },
+      { title: 'Therapist Connect', icon: Stethoscope, tone: 'purple', to: '/therapists', isNew: true, short: 'Find specialists, request consultations, and share progress with consent', detail: 'Browse speech, occupational, behaviour and other child-development specialists by language, city and session type. Request a consultation and choose exactly what to share — consent comes first, every time.' },
+      { title: 'Parent Community', icon: MessagesSquare, tone: 'coral', to: '/community', isNew: true, short: 'Connect with parents who understand the journey', detail: 'Share wins, ask questions, join circles of parents walking a similar path, and build connections — a moderated, inclusive space to belong.' },
+      { title: 'Therapy Companion', icon: NotebookPen, tone: 'mint', short: 'Tools to help organise and reflect on therapy sessions', detail: 'A future companion designed to help families prepare for and reflect on sessions with qualified professionals.' },
+      { title: 'Shared Care Circle', icon: Share2, tone: 'purple', to: '/dashboard/care-network', short: 'Explore sharing preferences for a connected support circle', detail: 'The Shared Care Circle is a future capability for coordinating support among parents, caregivers, teachers, and therapists.' },
     ],
   },
   {
@@ -101,9 +101,9 @@ export const FEATURE_CATEGORIES: FeatureCategory[] = [
     tone: 'butter',
     summary: 'Multilingual, Resource Hub, AI Video Observation',
     features: [
-      { title: 'Multilingual', icon: Globe, tone: 'coral', short: 'Designed to support families across languages.', detail: 'NeuroNest is being designed with multilingual support in mind, so more families can access guidance in their preferred language.' },
-      { title: 'Resource Hub', icon: FolderOpen, tone: 'purple', to: '/resources', short: 'Guides, activities, and support topics for families.', detail: 'The Resource Library Preview covers Daily Routines, Learning Activities, Communication and Speech, Caregiver Support, Inclusive Education, and more.' },
-      { title: 'AI Video Observation', icon: Video, tone: 'mint', short: 'Organise video observations for informed conversations.', detail: 'Video observations are designed to help users organise observations and support informed conversations with qualified professionals. They do not provide medical diagnoses.' },
+      { title: 'Multilingual', icon: Globe, tone: 'coral', short: 'Designed to support families across languages', detail: 'NeuroNest is being designed with multilingual support in mind, so more families can access guidance in their preferred language.' },
+      { title: 'Resource Hub', icon: FolderOpen, tone: 'purple', to: '/resources', short: 'Guides, activities, and support topics for families', detail: 'The Resource Library Preview covers Daily Routines, Learning Activities, Communication and Speech, Caregiver Support, Inclusive Education, and more.' },
+      { title: 'AI Video Observation', icon: Video, tone: 'mint', short: 'Organise video observations for informed conversations', detail: 'Video observations are designed to help users organise observations and support informed conversations with qualified professionals. They do not provide medical diagnoses.' },
     ],
   },
 ];
@@ -111,26 +111,26 @@ export const FEATURE_CATEGORIES: FeatureCategory[] = [
 /* ------------------------------------------------------------- ecosystem */
 
 export const ECOSYSTEM: { title: string; desc: string; icon: LucideIcon; tone: Tone; to: string }[] = [
-  { title: 'AI Care Companion', desc: 'A companion that helps plan, organise, and discover.', icon: Sparkles, tone: 'mint', to: '/companion' },
-  { title: 'Progress', desc: 'See genuine activity history and recorded observations.', icon: TrendingUp, tone: 'mint', to: '/features' },
-  { title: 'Multilingual', desc: 'Designed to support families across languages.', icon: Globe, tone: 'coral', to: '/features' },
-  { title: 'Parent Community', desc: 'Meet parents who understand the journey — share, ask, and belong.', icon: Users, tone: 'purple', to: '/community' },
-  { title: 'Development Check', desc: 'Flag possible delays early with age-based milestone checks.', icon: ClipboardCheck, tone: 'mint', to: '/development-check' },
-  { title: 'Learning Activities', desc: 'Adaptive activities across communication, focus, and routines.', icon: BookOpen, tone: 'coral', to: '/features' },
-  { title: 'Speech Coach', desc: 'Guided speech-practice activities for everyday moments.', icon: Mic, tone: 'purple', to: '/features' },
-  { title: 'Milestones', desc: 'Organise observations and milestones in one calm space.', icon: Target, tone: 'mint', to: '/features' },
-  { title: 'Inclusive Education', desc: 'Tools to support inclusive education and collaboration.', icon: GraduationCap, tone: 'coral', to: '/features' },
-  { title: 'Therapist Connect', desc: 'Find specialists and share progress with consent.', icon: Stethoscope, tone: 'purple', to: '/therapists' },
+  { title: 'AI Care Companion', desc: 'A companion that helps plan, organise, and discover', icon: Sparkles, tone: 'mint', to: '/companion' },
+  { title: 'Progress', desc: 'See genuine activity history and recorded observations', icon: TrendingUp, tone: 'mint', to: '/features' },
+  { title: 'Multilingual', desc: 'Designed to support families across languages', icon: Globe, tone: 'coral', to: '/features' },
+  { title: 'Parent Community', desc: 'Meet parents who understand the journey — share, ask, and belong', icon: Users, tone: 'purple', to: '/community' },
+  { title: 'Development Check', desc: 'Flag possible delays early with age-based milestone checks', icon: ClipboardCheck, tone: 'mint', to: '/development-check' },
+  { title: 'Learning Activities', desc: 'Adaptive activities across communication, focus, and routines', icon: BookOpen, tone: 'coral', to: '/features' },
+  { title: 'Speech Coach', desc: 'Guided speech-practice activities for everyday moments', icon: Mic, tone: 'purple', to: '/features' },
+  { title: 'Milestones', desc: 'Organise observations and milestones in one calm space', icon: Target, tone: 'mint', to: '/features' },
+  { title: 'Inclusive Education', desc: 'Tools to support inclusive education and collaboration', icon: GraduationCap, tone: 'coral', to: '/features' },
+  { title: 'Therapist Connect', desc: 'Find specialists and share progress with consent', icon: Stethoscope, tone: 'purple', to: '/therapists' },
 ];
 
 /* -------------------------------------------------------------- journey */
 
 export const JOURNEY = [
-  { title: 'Create Your Account', short: 'Choose how you plan to use NeuroNest.', detail: 'Sign up as a Parent or Caregiver, Teacher or Educator, Therapist or Specialist, or School or Organisation. You can explore NeuroNest and personalise your experience without entering sensitive information during sign-up.' },
-  { title: 'Personalise Your Experience', short: 'Select the tools and support areas to explore.', detail: 'Choose your interests — Daily Guidance, Learning Activities, Routine Planning, Milestone Tracking, Development Check, Speech Support, Therapist Connect, Parent Community, Resources, and Multilingual Support. You can update these preferences at any time.' },
-  { title: 'Explore Guidance and Activities', short: 'Use the companion, activities, routines, and resources.', detail: 'Open the NeuroNest Companion for guidance, browse the learning activity library, plan your day, and discover resources — all connected in one ecosystem.' },
-  { title: 'Organise Observations and Progress', short: 'Record observations and run a Development Check.', detail: 'Add observations with categories and dates, run an age-based Development Check that flags areas worth a closer look, complete activities, and review your genuine progress over time. Checks and observations support conversations with qualified professionals — they do not provide a diagnosis.' },
-  { title: 'Build Your Support Ecosystem', short: 'Connect with therapists and other parents.', detail: 'Find specialists through Therapist Connect and share progress with consent, meet families on similar journeys in the Parent Community, and explore future collaboration with educators and support services.' },
+  { title: 'Create Your Account', short: 'Choose how you plan to use NeuroNest', detail: 'Sign up as a Parent or Caregiver, Teacher or Educator, Therapist or Specialist, or School or Organisation. You can explore NeuroNest and personalise your experience without entering sensitive information during sign-up.' },
+  { title: 'Personalise Your Experience', short: 'Select the tools and support areas to explore', detail: 'Choose your interests — Daily Guidance, Learning Activities, Routine Planning, Milestone Tracking, Development Check, Speech Support, Therapist Connect, Parent Community, Resources, and Multilingual Support. You can update these preferences at any time.' },
+  { title: 'Explore Guidance and Activities', short: 'Use the companion, activities, routines, and resources', detail: 'Open the NeuroNest Companion for guidance, browse the learning activity library, plan your day, and discover resources — all connected in one ecosystem.' },
+  { title: 'Organise Observations and Progress', short: 'Record observations and run a Development Check', detail: 'Add observations with categories and dates, run an age-based Development Check that flags areas worth a closer look, complete activities, and review your genuine progress over time. Checks and observations support conversations with qualified professionals — they do not provide a diagnosis.' },
+  { title: 'Build Your Support Ecosystem', short: 'Connect with therapists and other parents', detail: 'Find specialists through Therapist Connect and share progress with consent, meet families on similar journeys in the Parent Community, and explore future collaboration with educators and support services.' },
 ];
 
 /* ------------------------------------------------------------------ faqs */
@@ -161,20 +161,20 @@ export const FAQS: { q: string; a: string }[] = [
 export const RESOURCE_CATEGORIES = ['Daily Routines', 'Learning Activities', 'Communication and Speech', 'Caregiver Support', 'Inclusive Education', 'Understanding Neurodiversity', 'Professional Support'];
 
 export const RESOURCES = [
-  { id: 'r1', category: 'Daily Routines', title: 'Building Gentle Morning Routines', desc: 'Practical ideas for creating calm, predictable morning routines that work for your family.', mins: 4 },
-  { id: 'r2', category: 'Daily Routines', title: 'Transition Strategies for Everyday Moments', desc: 'Simple transition techniques to help move between activities with less stress.', mins: 5 },
-  { id: 'r3', category: 'Learning Activities', title: 'Sensory-Friendly Activity Ideas', desc: 'A collection of adaptable activities that engage different senses and learning styles.', mins: 6 },
-  { id: 'r4', category: 'Learning Activities', title: 'Attention and Focus Activities', desc: 'Activities designed to gently support attention and focus through play.', mins: 5 },
-  { id: 'r5', category: 'Communication and Speech', title: 'Encouraging Communication at Home', desc: 'Everyday strategies to support communication in natural family moments.', mins: 4 },
-  { id: 'r6', category: 'Communication and Speech', title: 'Speech Practice Through Play', desc: 'Playful speech-practice ideas that fit into daily routines.', mins: 5 },
-  { id: 'r7', category: 'Caregiver Support', title: 'Self-Care for Caregivers', desc: 'Gentle reminders and practices for caregiver wellbeing.', mins: 4 },
-  { id: 'r8', category: 'Caregiver Support', title: 'Finding Support Networks', desc: 'How to identify and build a support network that works for your family.', mins: 5 },
-  { id: 'r9', category: 'Inclusive Education', title: 'Inclusive Classroom Strategies', desc: 'Approaches for creating inclusive learning environments.', mins: 6 },
-  { id: 'r10', category: 'Inclusive Education', title: 'Supporting Diverse Learners', desc: 'Tools and mindsets for supporting diverse learning needs in group settings.', mins: 5 },
-  { id: 'r11', category: 'Understanding Neurodiversity', title: 'Understanding Neurodiversity', desc: 'A welcoming introduction to neurodiversity and what it means for families.', mins: 7 },
-  { id: 'r12', category: 'Understanding Neurodiversity', title: 'Language Around Neurodiversity', desc: 'Inclusive language tips for everyday conversations.', mins: 4 },
-  { id: 'r13', category: 'Professional Support', title: 'Working with Therapists', desc: 'How to prepare for and make the most of sessions with qualified professionals.', mins: 5 },
-  { id: 'r14', category: 'Professional Support', title: 'Questions to Ask Professionals', desc: 'A helpful list of questions to guide conversations with specialists.', mins: 4 },
+  { id: 'r1', category: 'Daily Routines', title: 'Building Gentle Morning Routines', desc: 'Practical ideas for creating calm, predictable morning routines that work for your family', mins: 4 },
+  { id: 'r2', category: 'Daily Routines', title: 'Transition Strategies for Everyday Moments', desc: 'Simple transition techniques to help move between activities with less stress', mins: 5 },
+  { id: 'r3', category: 'Learning Activities', title: 'Sensory-Friendly Activity Ideas', desc: 'A collection of adaptable activities that engage different senses and learning styles', mins: 6 },
+  { id: 'r4', category: 'Learning Activities', title: 'Attention and Focus Activities', desc: 'Activities designed to gently support attention and focus through play', mins: 5 },
+  { id: 'r5', category: 'Communication and Speech', title: 'Encouraging Communication at Home', desc: 'Everyday strategies to support communication in natural family moments', mins: 4 },
+  { id: 'r6', category: 'Communication and Speech', title: 'Speech Practice Through Play', desc: 'Playful speech-practice ideas that fit into daily routines', mins: 5 },
+  { id: 'r7', category: 'Caregiver Support', title: 'Self-Care for Caregivers', desc: 'Gentle reminders and practices for caregiver wellbeing', mins: 4 },
+  { id: 'r8', category: 'Caregiver Support', title: 'Finding Support Networks', desc: 'How to identify and build a support network that works for your family', mins: 5 },
+  { id: 'r9', category: 'Inclusive Education', title: 'Inclusive Classroom Strategies', desc: 'Approaches for creating inclusive learning environments', mins: 6 },
+  { id: 'r10', category: 'Inclusive Education', title: 'Supporting Diverse Learners', desc: 'Tools and mindsets for supporting diverse learning needs in group settings', mins: 5 },
+  { id: 'r11', category: 'Understanding Neurodiversity', title: 'Understanding Neurodiversity', desc: 'A welcoming introduction to neurodiversity and what it means for families', mins: 7 },
+  { id: 'r12', category: 'Understanding Neurodiversity', title: 'Language Around Neurodiversity', desc: 'Inclusive language tips for everyday conversations', mins: 4 },
+  { id: 'r13', category: 'Professional Support', title: 'Working with Therapists', desc: 'How to prepare for and make the most of sessions with qualified professionals', mins: 5 },
+  { id: 'r14', category: 'Professional Support', title: 'Questions to Ask Professionals', desc: 'A helpful list of questions to guide conversations with specialists', mins: 4 },
 ];
 
 /* ------------------------------------------------------------ activities */
@@ -226,13 +226,13 @@ export const COMPANION_PROMPTS: { label: string; reply: string; to: string; cta:
 ];
 
 export const COMPANION_DEMOS = [
-  { label: 'Daily Guidance', icon: Compass, desc: 'Get a gentle plan for the day with suggested activities and routines.', reply: 'Good morning! Here are a few activities you might explore today: a 10-minute communication game, a calming routine check-in, and a speech-practice activity. Would you like to add any to your plan?' },
-  { label: 'Learning Plans', icon: Brain, desc: 'Personalised learning plans adapted to interests and routines.', reply: 'Based on your interests, here’s a suggested learning path: start with a communication activity, then try a focus exercise, and finish with a creative learning task. You can save any activity to your library.' },
-  { label: 'Routine Support', icon: CalendarDays, desc: 'Organise activities and routines for the day.', reply: 'Your day has 3 activities planned: Morning routine at 8:00, Learning activity at 10:30, and Speech practice at 4:00. You can reorder, edit, or mark them as complete anytime.' },
-  { label: 'Observation Organisation', icon: NotebookPen, desc: 'Record and organise meaningful observations.', reply: 'You can add an observation with a category like Communication, Learning, or Social Interaction, add a date, and an optional note. These help organise information for conversations with qualified professionals.' },
-  { label: 'Delay Flagging', icon: ClipboardCheck, desc: 'See how a Development Check surfaces areas worth a closer look.', reply: 'Your last Development Check flagged Language and Communication for follow-up. A good next step is a conversation with a speech-language therapist — shall I show you therapists who speak your preferred language? You can share the check summary with them, with your consent.' },
-  { label: 'Resource Discovery', icon: FolderOpen, desc: 'Find practical guides, activities, and support topics.', reply: 'Here are some resource categories you can explore: Daily Routines, Learning Activities, Communication and Speech, Caregiver Support, Inclusive Education, and Understanding Neurodiversity.' },
-  { label: 'Care Connections', icon: Users, desc: 'Connect with therapists and other families.', reply: 'Therapist Connect helps you find specialists and request consultations, and the Parent Community lets you meet families on similar journeys. In this prototype, profiles and posts are illustrative samples.' },
+  { label: 'Daily Guidance', icon: Compass, desc: 'Get a gentle plan for the day with suggested activities and routines', reply: 'Good morning! Here are a few activities you might explore today: a 10-minute communication game, a calming routine check-in, and a speech-practice activity. Would you like to add any to your plan?' },
+  { label: 'Learning Plans', icon: Brain, desc: 'Personalised learning plans adapted to interests and routines', reply: 'Based on your interests, here’s a suggested learning path: start with a communication activity, then try a focus exercise, and finish with a creative learning task. You can save any activity to your library.' },
+  { label: 'Routine Support', icon: CalendarDays, desc: 'Organise activities and routines for the day', reply: 'Your day has 3 activities planned: Morning routine at 8:00, Learning activity at 10:30, and Speech practice at 4:00. You can reorder, edit, or mark them as complete anytime.' },
+  { label: 'Observation Organisation', icon: NotebookPen, desc: 'Record and organise meaningful observations', reply: 'You can add an observation with a category like Communication, Learning, or Social Interaction, add a date, and an optional note. These help organise information for conversations with qualified professionals.' },
+  { label: 'Delay Flagging', icon: ClipboardCheck, desc: 'See how a Development Check surfaces areas worth a closer look', reply: 'Your last Development Check flagged Language and Communication for follow-up. A good next step is a conversation with a speech-language therapist — shall I show you therapists who speak your preferred language? You can share the check summary with them, with your consent.' },
+  { label: 'Resource Discovery', icon: FolderOpen, desc: 'Find practical guides, activities, and support topics', reply: 'Here are some resource categories you can explore: Daily Routines, Learning Activities, Communication and Speech, Caregiver Support, Inclusive Education, and Understanding Neurodiversity.' },
+  { label: 'Care Connections', icon: Users, desc: 'Connect with therapists and other families', reply: 'Therapist Connect helps you find specialists and request consultations, and the Parent Community lets you meet families on similar journeys. In this prototype, profiles and posts are illustrative samples.' },
 ];
 
 /* --------------------------------------------------------------- account */
@@ -246,7 +246,7 @@ export const LANGUAGES = ['English', 'Hindi', 'Tamil', 'Telugu', 'Bengali', 'Mar
 /* ---------------------------------------------------------------- pricing */
 
 export const PLANS = [
-  { name: 'Family', tone: 'purple' as Tone, desc: 'For parents and caregivers exploring personalised guidance, routines, learning activities, resources, and progress organisation.', items: ['AI Care Companion', 'Daily routine planner', 'Learning activities', 'Milestone tracking', 'Development Check', 'Rewards and streaks', 'Parent community', 'Resource library'] },
-  { name: 'School', tone: 'mint' as Tone, desc: 'For educational institutions exploring tools for collaboration, learning support, and inclusive education.', items: ['Collaboration tools', 'Learning support', 'Inclusive education', 'Activity library', 'Progress views', 'Care network'] },
-  { name: 'Care Network', tone: 'coral' as Tone, desc: 'For therapy centres and professional support organisations exploring better coordination and family engagement.', items: ['Therapist portal', 'Coordination tools', 'Family engagement', 'Session companion', 'Consent-based progress sharing', 'Resource hub'] },
+  { name: 'Family', tone: 'purple' as Tone, desc: 'For parents and caregivers exploring personalised guidance, routines, learning activities, resources, and progress organisation', items: ['AI Care Companion', 'Daily routine planner', 'Learning activities', 'Milestone tracking', 'Development Check', 'Rewards and streaks', 'Parent community', 'Resource library'] },
+  { name: 'School', tone: 'mint' as Tone, desc: 'For educational institutions exploring tools for collaboration, learning support, and inclusive education', items: ['Collaboration tools', 'Learning support', 'Inclusive education', 'Activity library', 'Progress views', 'Care network'] },
+  { name: 'Care Network', tone: 'coral' as Tone, desc: 'For therapy centres and professional support organisations exploring better coordination and family engagement', items: ['Therapist portal', 'Coordination tools', 'Family engagement', 'Session companion', 'Consent-based progress sharing', 'Resource hub'] },
 ];

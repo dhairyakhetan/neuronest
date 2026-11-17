@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, MessageSquare, Minus, Send, Sparkles, Trash2, X } from 'lucide-react';
+import { ArrowRight, MessageSquare, Minus, Send, MessageCircle, Trash2, X } from 'lucide-react';
 import { COMPANION_FALLBACK, COMPANION_GREETING, COMPANION_PROMPTS } from '../data/content';
 import { useStore } from '../lib/storage';
 
@@ -49,7 +49,7 @@ export function CompanionChat({ compact = false, onNavigate }: { compact?: boole
       <div className="flex-1 space-y-3 overflow-y-auto bg-soft p-4" aria-live="polite">
         {msgs.map((m, i) => (
           <div key={i} className={`flex ${m.from === 'me' ? 'justify-end' : 'justify-start'}`}>
-            <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${m.from === 'me' ? 'rounded-br-md bg-purple text-white' : 'rounded-bl-md bg-surface text-ink shadow-soft'}`}>
+            <div className={`max-w-[85%] rounded-xl px-4 py-2.5 text-sm leading-relaxed ${m.from === 'me' ? 'rounded-br-md bg-purple text-white' : 'rounded-bl-md bg-surface text-ink shadow-soft'}`}>
               {m.text}
               {m.to && (
                 <Link to={m.to} onClick={onNavigate} className="mt-2 flex items-center gap-1 text-[13px] font-semibold text-purple dark:text-purple-light">
@@ -60,7 +60,7 @@ export function CompanionChat({ compact = false, onNavigate }: { compact?: boole
           </div>
         ))}
         {typing && (
-          <div className="flex gap-1 rounded-2xl bg-surface px-4 py-3 shadow-soft" style={{ width: 64 }}>
+          <div className="flex gap-1 rounded-xl bg-surface px-4 py-3 shadow-soft" style={{ width: 64 }}>
             {[0, 1, 2].map((d) => (
               <span key={d} className="h-2 w-2 animate-bounce rounded-full bg-purple/60" style={{ animationDelay: `${d * 120}ms` }} />
             ))}
@@ -100,7 +100,7 @@ export function CompanionHeader({ onMin, onClose }: { onMin?: () => void; onClos
   return (
     <div className="flex items-center gap-3 bg-navy px-4 py-3 text-white">
       <span className="flex h-9 w-9 items-center justify-center rounded-full bg-purple">
-        <Sparkles className="h-4 w-4" />
+        <MessageCircle className="h-4 w-4" />
       </span>
       <div className="flex-1">
         <p className="text-sm font-semibold">NeuroNest Companion</p>
@@ -117,7 +117,7 @@ export function CompanionFab() {
   return (
     <div className="no-print">
       {open && (
-        <div className="fixed inset-x-3 bottom-24 z-[55] flex h-[min(620px,calc(100vh-8rem))] animate-pop-in flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-lift sm:inset-x-auto sm:right-6 sm:w-[400px]">
+        <div className="fixed inset-x-3 bottom-24 z-[55] flex h-[min(620px,calc(100vh-8rem))] animate-pop-in flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-lift sm:inset-x-auto sm:right-6 sm:w-[400px]">
           <CompanionHeader onMin={() => setOpen(false)} onClose={() => setOpen(false)} />
           <CompanionChat compact onNavigate={() => setOpen(false)} />
         </div>
@@ -127,8 +127,7 @@ export function CompanionFab() {
         className="fixed bottom-6 right-6 z-[55] flex h-14 w-14 items-center justify-center rounded-full bg-purple text-white shadow-glow transition hover:scale-105 hover:bg-purple-dark"
         aria-label={open ? 'Close NeuroNest Companion' : 'Open NeuroNest Companion'}
       >
-        {open ? <X className="h-6 w-6" /> : <Sparkles className="h-6 w-6" />}
-        {!open && <span className="absolute -right-0.5 -top-0.5 h-4 w-4 rounded-full border-2 border-white bg-mint-light" />}
+        {open ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
       </button>
     </div>
   );

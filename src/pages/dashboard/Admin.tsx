@@ -54,19 +54,19 @@ export function AdminPanel() {
 
   return (
     <div className="space-y-8">
-      <div className="relative overflow-hidden rounded-3xl bg-navy p-7 text-white sm:p-10">
+      <div className="relative overflow-hidden rounded-2xl bg-navy p-7 text-white sm:p-10">
         <div className="absolute -right-12 -top-12 h-56 w-56 rounded-full bg-purple/30 blur-2xl" />
         <div className="relative flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.12em] text-amber-300"><Crown className="h-4 w-4" /> Admin panel</p>
-            <h1 className="mt-2 text-3xl text-white sm:text-4xl">Welcome back, {user?.name.split(' ')[0]}</h1>
-            <p className="mt-1 text-white/70">Keep the NeuroNest community safe, kind and growing.</p>
+            <p className="flex items-center gap-2 text-sm font-medium text-amber-300"><Crown className="h-4 w-4" /> Admin panel</p>
+            <h1 className="mt-2 text-3xl text-white sm:text-4xl">Community overview</h1>
+            <p className="mt-1 text-white/70">Signed in as {user?.name} · keep the community safe and kind</p>
           </div>
           <button onClick={load} className="btn btn-light btn-sm" disabled={loading}><RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} /> Refresh</button>
         </div>
         <div className="relative mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
           {tiles.map((t) => (
-            <div key={t.l} className="rounded-2xl bg-white/10 p-4">
+            <div key={t.l} className="rounded-xl bg-white/10 p-4">
               <t.icon className="h-4 w-4 text-mint-light" />
               <p className="mt-2 font-display text-3xl font-semibold">{t.n ?? '–'}</p>
               <p className="text-xs text-white/70">{t.l}</p>
@@ -137,7 +137,7 @@ export function AdminPanel() {
         </div>
         <div className="card mt-4 overflow-x-auto">
           <table className="w-full min-w-[720px] text-left text-sm">
-            <thead className="border-b border-line text-xs uppercase tracking-[0.08em] text-muted">
+            <thead className="border-b border-line text-xs text-muted">
               <tr><th className="px-5 py-3 font-semibold">Member</th><th className="px-5 py-3 font-semibold">Role</th><th className="px-5 py-3 font-semibold">Joined</th><th className="px-5 py-3 font-semibold">Last sign-in</th><th className="px-5 py-3 text-right font-semibold">Posts</th></tr>
             </thead>
             <tbody className="divide-y divide-line">

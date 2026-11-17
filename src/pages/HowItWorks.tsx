@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import { BookOpen, CalendarDays, Check, ClipboardCheck, Compass, FolderOpen, GraduationCap, MessagesSquare, NotebookPen, Sparkles, Stethoscope, UserPlus, Users } from 'lucide-react';
+import { BookOpen, CalendarDays, Check, ClipboardCheck, Compass, FolderOpen, GraduationCap, MessagesSquare, NotebookPen, MessageCircle, Stethoscope, UserPlus, Users } from 'lucide-react';
 import { INTERESTS, JOURNEY, ROLES } from '../data/content';
 import { AccountCTA, CTABand, IconBadge, PageHero } from '../components/ui';
 import { useAuth } from '../lib/auth';
 
 const COLORS = ['bg-purple', 'bg-mint', 'bg-coral', 'bg-purple', 'bg-mint'];
-const ICONS = [UserPlus, Sparkles, BookOpen, NotebookPen, Users];
+const ICONS = [UserPlus, MessageCircle, BookOpen, NotebookPen, Users];
 
 function Preview({ step }: { step: number }) {
   const row = (icon: typeof Check, label: string, tone: 'purple' | 'mint' | 'coral' = 'purple', extra?: string) => (
-    <div key={label} className="flex items-center gap-3 rounded-2xl bg-surface px-4 py-3 shadow-soft">
+    <div key={label} className="flex items-center gap-3 rounded-xl bg-surface px-4 py-3 shadow-soft">
       <IconBadge icon={icon} tone={tone} size="sm" />
       <span className="flex-1 text-[15px] text-ink">{label}</span>
       {extra && <span className="text-xs text-muted">{extra}</span>}
@@ -25,7 +25,7 @@ function Preview({ step }: { step: number }) {
       </div>
     );
   if (step === 2)
-    return <div className="space-y-3">{[row(Sparkles, 'NeuroNest Companion', 'purple'), row(BookOpen, 'Learning Activities', 'coral', '12 activities'), row(CalendarDays, "Today's Plan", 'mint'), row(FolderOpen, 'Resource Library', 'purple')]}</div>;
+    return <div className="space-y-3">{[row(MessageCircle, 'NeuroNest Companion', 'purple'), row(BookOpen, 'Learning Activities', 'coral', '12 activities'), row(CalendarDays, "Today's Plan", 'mint'), row(FolderOpen, 'Resource Library', 'purple')]}</div>;
   if (step === 3)
     return (
       <div className="space-y-3">
@@ -48,8 +48,8 @@ export function HowItWorks() {
       <section className="container-nn pb-24">
         <div className="grid gap-3 md:grid-cols-5">
           {JOURNEY.map((j, i) => (
-            <button key={j.title} onClick={() => setStep(i)} className={`group flex items-center gap-3 rounded-2xl border p-4 text-left transition duration-300 hover:-translate-y-0.5 hover:shadow-soft ${i === step ? 'border-purple/40 bg-lav' : 'border-line bg-surface hover:border-purple/30'}`}>
-              <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white ${COLORS[i]}`}>{i + 1}</span>
+            <button key={j.title} onClick={() => setStep(i)} className={`group flex items-center gap-3 rounded-xl border p-4 text-left transition duration-300 hover:-translate-y-0.5 hover:shadow-soft ${i === step ? 'border-purple/40 bg-lav' : 'border-line bg-surface hover:border-purple/30'}`}>
+              <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-medium text-white ${COLORS[i]}`}>{i + 1}</span>
               <span className="text-sm font-medium text-ink">{j.title}</span>
             </button>
           ))}
@@ -68,8 +68,8 @@ export function HowItWorks() {
               )}
             </div>
           </div>
-          <div className="rounded-3xl border border-line bg-soft p-8">
-            <p className="mb-5 text-sm font-semibold uppercase tracking-[0.1em] text-muted">Preview</p>
+          <div className="rounded-2xl border border-line bg-soft p-8">
+            <p className="mb-5 text-sm font-medium text-muted">Preview</p>
             <Preview step={step} />
           </div>
         </div>

@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate, NavLink, Outlet, useLocation } from 'react-router-dom';
-import {
-  BookOpen, CalendarDays, ClipboardCheck, Crown, Flame, FolderOpen, LayoutGrid, Loader2, LogOut, Menu, MessagesSquare, Mic, Settings,
-  Shield, Sparkles, Star, Stethoscope, Target, TrendingUp, Trophy, UserRound, Users, X,
-} from 'lucide-react';
-import { Logo, Wave } from '../components/ui';
+import { BookOpen, CalendarDays, ClipboardCheck, Crown, Flame, FolderOpen, LayoutGrid, Loader2, LogOut, Menu, MessagesSquare, Mic, Settings, Shield, MessageCircle, Star, Stethoscope, Target, TrendingUp, Trophy, UserRound, Users, X } from 'lucide-react';
+import { Logo } from '../components/ui';
 import { CompanionFab } from '../components/Companion';
 import { useAuth } from '../lib/auth';
 import { useRewards } from '../lib/rewards';
@@ -50,7 +47,7 @@ const GROUPS = [
 function StarWidget() {
   const { balance, streak, level, levelProgress } = useRewards();
   return (
-    <Link to="/dashboard/rewards" className="mx-3 mb-2 block rounded-2xl bg-navy p-4 text-white transition hover:bg-navy-deep">
+    <Link to="/dashboard/rewards" className="mx-3 mb-2 block rounded-xl bg-navy p-4 text-white transition hover:bg-navy-deep">
       <div className="flex items-center justify-between">
         <span className="flex items-center gap-1.5 font-display text-2xl font-semibold">
           <Star className="h-5 w-5 fill-amber-400 text-amber-400" /> {balance}
@@ -61,7 +58,7 @@ function StarWidget() {
       </div>
       <p className="mt-1 text-xs text-white/70">Nest Stars · {level.name}</p>
       <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/15">
-        <div className="h-full rounded-full bg-gradient-to-r from-purple-light via-mint-light to-coral" style={{ width: `${levelProgress}%` }} />
+        <div className="h-full rounded-full bg-purple-light" style={{ width: `${levelProgress}%` }} />
       </div>
     </Link>
   );
@@ -92,8 +89,8 @@ export function DashboardLayout() {
         <StarWidget />
         {groups.map((g) => (
           <div key={g.title} className="mt-3 px-3">
-            <p className="px-3 pb-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">{g.title}</p>
-            {g.items.map(({ to, label, icon: Icon, end, isNew }: { to: string; label: string; icon: typeof Crown; end?: boolean; isNew?: boolean }) => (
+            <p className="px-3 pb-2 text-xs font-medium text-muted">{g.title}</p>
+            {g.items.map(({ to, label, icon: Icon, end }: { to: string; label: string; icon: typeof Crown; end?: boolean }) => (
               <NavLink
                 key={to}
                 to={to}
@@ -104,19 +101,18 @@ export function DashboardLayout() {
               >
                 <Icon className="h-[18px] w-[18px]" />
                 <span className="flex-1">{label}</span>
-                {isNew && <span className="tag bg-coral/90 text-[10px] text-navy">New</span>}
               </NavLink>
             ))}
           </div>
         ))}
       </div>
       <div className="border-t border-line p-3">
-        <div className="mb-3 rounded-2xl bg-lav p-3 text-xs text-ink">
-          <p className="flex items-center gap-1.5 font-semibold text-purple-dark dark:text-purple-light"><Sparkles className="h-3.5 w-3.5" /> Companion</p>
-          <p className="mt-1 text-muted">Tap the sparkles button anytime for guidance.</p>
+        <div className="mb-3 rounded-xl bg-lav p-3 text-xs text-ink">
+          <p className="flex items-center gap-1.5 font-semibold text-purple-dark dark:text-purple-light"><MessageCircle className="h-3.5 w-3.5" /> Companion</p>
+          <p className="mt-1 text-muted">Tap the chat button anytime for guidance.</p>
         </div>
         <div className="flex items-center gap-3 px-2">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-mintsoft font-bold text-mint-dark">{user.name[0]?.toUpperCase()}</span>
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-mintsoft font-semibold text-mint-dark">{user.name[0]?.toUpperCase()}</span>
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-semibold text-ink">{user.name}</p>
             <p className="truncate text-xs text-muted">{user.demo ? 'Demo experience' : isMember ? user.email : user.role}</p>
@@ -130,7 +126,7 @@ export function DashboardLayout() {
   );
 
   return (
-    <div className="min-h-screen bg-bg">
+    <div className="app-shell min-h-screen bg-bg">
       <aside className="no-print fixed inset-y-0 left-0 z-40 hidden w-[280px] border-r border-line bg-bg lg:block">{sidebar}</aside>
       {open && (
         <div className="fixed inset-0 z-50 lg:hidden">
@@ -142,13 +138,12 @@ export function DashboardLayout() {
         <header className="no-print sticky top-0 z-30 flex h-16 items-center justify-between border-b border-line bg-bg/90 px-4 backdrop-blur lg:hidden">
           <button onClick={() => setOpen(true)} aria-label="Open menu" className="rounded-full p-2"><Menu className="h-6 w-6" /></button>
           <Logo />
-          <Link to="/dashboard/rewards" className="flex items-center gap-1 rounded-full bg-navy px-3 py-1.5 text-sm font-semibold text-white">
+          <Link to="/dashboard/rewards" className="flex items-center gap-1 rounded-full bg-navy px-3 py-1.5 text-sm font-medium text-white">
             <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
             <RewardCount />
           </Link>
         </header>
         <main className="relative">
-          <Wave className="absolute inset-x-0 top-0 h-12 w-full opacity-60" subtle />
           <div className="relative mx-auto max-w-6xl px-4 py-8 sm:px-8 lg:py-10">
             <Outlet />
           </div>

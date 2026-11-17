@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MessageSquare, Sparkles } from 'lucide-react';
+import { MessageSquare, MessageCircle } from 'lucide-react';
 import { COMPANION_DEMOS } from '../data/content';
 import { CompanionChat, CompanionHeader } from '../components/Companion';
 import { AccountCTA, IconBadge, PageHero, PrototypeNote, ResponsibleAI } from '../components/ui';
@@ -9,8 +9,8 @@ export function CompanionPage() {
   const demo = COMPANION_DEMOS[active]!;
   return (
     <>
-      <PageHero eyebrow="NeuroNest Companion" icon={Sparkles} title="Meet the NeuroNest Companion" lead="The NeuroNest Companion is the interactive product experience of the AI Care Companion. Explore demonstrations of how guidance, learning, routines, observations, resources, and care connections could work together.">
-        <p className="mt-3 font-display text-xl italic text-ink/80">Support That Fits Into Everyday Life</p>
+      <PageHero eyebrow="NeuroNest Companion" icon={MessageCircle} title="Meet the NeuroNest Companion" lead="The NeuroNest Companion is the interactive product experience of the AI Care Companion. Explore demonstrations of how guidance, learning, routines, observations, resources, and care connections could work together.">
+        <p className="mt-3 font-display text-xl text-ink/80">Support That Fits Into Everyday Life</p>
       </PageHero>
       <section className="bg-soft py-12">
         <div className="container-nn">
@@ -25,16 +25,16 @@ export function CompanionPage() {
             </div>
           </div>
           <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_1.3fr]">
-            <div key={active} className="card h-fit animate-fade-up p-7">
+            <div key={active} className="card h-fit animate-fade-up p-6">
               <IconBadge icon={demo.icon} tone="purple" size="lg" />
               <h2 className="mt-5 text-2xl text-ink">{demo.label}</h2>
               <p className="mt-2 text-muted">{demo.desc}</p>
-              <div className="mt-6 rounded-2xl bg-lav p-4 text-[15px] leading-relaxed text-ink">
-                <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-purple"><Sparkles className="h-3.5 w-3.5" /> Companion says</p>
+              <div className="mt-6 rounded-xl bg-lav p-4 text-[15px] leading-relaxed text-ink">
+                <p className="mb-2 flex items-center gap-1.5 text-xs font-medium text-purple"><MessageCircle className="h-3.5 w-3.5" /> Companion says</p>
                 {demo.reply}
               </div>
             </div>
-            <div className="flex h-[560px] flex-col overflow-hidden rounded-3xl border border-line bg-surface shadow-soft">
+            <div className="flex h-[560px] flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-soft">
               <CompanionHeader />
               <CompanionChat />
             </div>
@@ -43,10 +43,10 @@ export function CompanionPage() {
       </section>
       <section className="section">
         <div className="container-nn">
-          <div className="mx-auto max-w-3xl rounded-3xl bg-mintsoft/60 p-10 text-center">
+          <div className="mx-auto max-w-3xl rounded-2xl bg-mintsoft/60 p-10 text-center">
             <MessageSquare className="mx-auto h-8 w-8 text-mint" />
             <h2 className="mt-4 text-3xl text-ink">The Companion is always one tap away</h2>
-            <p className="lead mt-3">Look for the sparkles button in the bottom-right corner on any page. It opens the companion panel for quick guidance, wherever you are.</p>
+            <p className="lead mt-3">Look for the chat button in the bottom-right corner on any page. It opens the companion panel for quick guidance, wherever you are.</p>
             <div className="mt-7"><AccountCTA /></div>
           </div>
         </div>

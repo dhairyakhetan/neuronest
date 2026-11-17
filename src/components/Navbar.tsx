@@ -62,7 +62,6 @@ export function Navbar() {
           {PRIMARY.map((l) => (
             <NavLink key={l.to} to={l.to} end={l.to === '/'} className={linkCls}>
               {l.label}
-              {l.isNew && <span className="absolute right-1 top-1.5 h-1.5 w-1.5 rounded-full bg-coral" aria-label="new" />}
             </NavLink>
           ))}
           <div className="relative" ref={moreRef}>
@@ -74,7 +73,7 @@ export function Navbar() {
               More <ChevronDown className={`h-4 w-4 transition ${more ? 'rotate-180' : ''}`} />
             </button>
             {more && (
-              <div className="absolute right-0 top-11 w-52 animate-pop-in rounded-2xl border border-line bg-surface p-2 shadow-lift">
+              <div className="absolute right-0 top-11 w-52 animate-pop-in rounded-xl border border-line bg-surface p-2 shadow-lift">
                 {MORE.map((l) => (
                   <NavLink
                     key={l.to}
@@ -115,10 +114,9 @@ export function Navbar() {
                 key={l.to}
                 to={l.to}
                 end={l.to === '/'}
-                className={({ isActive }) => `flex items-center justify-between rounded-2xl px-4 py-3 font-medium ${isActive ? 'bg-lav text-purple-dark dark:text-purple-light' : 'text-ink hover:bg-soft'}`}
+                className={({ isActive }) => `flex items-center justify-between rounded-xl px-4 py-3 font-medium ${isActive ? 'bg-lav text-purple-dark dark:text-purple-light' : 'text-ink hover:bg-soft'}`}
               >
                 {l.label}
-                {(l as { isNew?: boolean }).isNew && <span className="tag bg-coral text-navy">New</span>}
               </NavLink>
             ))}
             <div className="mt-3 grid grid-cols-2 gap-2">

@@ -56,7 +56,7 @@ export function Legal({ doc }: { doc: keyof typeof DOCS }) {
       <section className="container-nn pb-24">
         <div className="mx-auto max-w-3xl space-y-4">
           {d.sections.map(([h, p]) => (
-            <div key={h} className="card p-7">
+            <div key={h} className="card p-6">
               <h2 className="text-xl text-ink">{h}</h2>
               <p className="mt-2 leading-relaxed text-muted">{p}</p>
             </div>

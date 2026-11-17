@@ -1,15 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  ArrowRight, Bell, BookOpen, CalendarDays, Check, ClipboardCheck, Flame, FolderOpen, Gift, Lock, MessagesSquare, Mic, Plus,
-  Sparkles, Star, Stethoscope, Target, Trash2, Trophy, Users,
-} from 'lucide-react';
-import { useAuth } from '../../lib/auth';
+import { ArrowRight, Bell, BookOpen, CalendarDays, Check, ClipboardCheck, Flame, FolderOpen, Gift, Lock, MessagesSquare, Mic, Plus, Star, Stethoscope, Target, Trash2, Trophy, Users } from 'lucide-react';
 import { useStore, uid } from '../../lib/storage';
 import { award, revoke, today, useRewards, EARN_RULES, POINTS, LEVELS } from '../../lib/rewards';
-import { PLAN_CATEGORIES, TONE, type Tone } from '../../data/content';
+import { PLAN_CATEGORIES, type Tone } from '../../data/content';
 import { ageLabel, type CheckRecord } from '../../data/milestones';
-import { EmptyState, Eyebrow, Field, IconBadge, Modal, NewBadge } from '../../components/ui';
+import { EmptyState, Eyebrow, Field, IconBadge, Modal } from '../../components/ui';
 import { DashHeader } from '../NewFeaturePages';
 import { useToast } from '../../lib/toast';
 
@@ -30,7 +26,6 @@ const CARDS: { to: string; title: string; desc: string; cta: string; icon: typeo
 ];
 
 export function Overview() {
-  const { user } = useAuth();
   const { balance, streak, level } = useRewards();
   const [plan] = useStore<PlanItem[]>('plan', []);
   const [checks] = useStore<CheckRecord[]>('checks', []);
@@ -40,7 +35,7 @@ export function Overview() {
   return (
     <div>
       <div className="text-center">
-        <Eyebrow icon={Sparkles}>Welcome{user ? `, ${user.name.split(' ')[0]}` : ''}</Eyebrow>
+        <Eyebrow>Overview</Eyebrow>
         <h1 className="mt-4 text-4xl text-ink sm:text-5xl">Your NeuroNest Journey Starts Here</h1>
         <p className="lead mx-auto mt-3 max-w-2xl">As you explore activities, organise routines, and record observations, your dashboard will become a clearer view of the support tools you use.</p>
         <div className="mt-7 flex flex-wrap justify-center gap-3">
@@ -50,8 +45,8 @@ export function Overview() {
       </div>
 
       <div className="mt-10 grid gap-4 sm:grid-cols-3">
-        <Link to="/dashboard/rewards" className="flex items-center gap-4 rounded-3xl bg-navy p-5 text-white transition hover:-translate-y-0.5">
-          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-400"><Star className="h-6 w-6 fill-white text-white" /></span>
+        <Link to="/dashboard/rewards" className="flex items-center gap-4 rounded-2xl bg-navy p-5 text-white transition hover:-translate-y-0.5">
+          <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-400"><Star className="h-6 w-6 fill-white text-white" /></span>
           <div><p className="font-display text-2xl font-semibold">{balance} stars</p><p className="text-sm text-white/70">{level.name} · <Flame className="inline h-3.5 w-3.5 text-coral" /> {streak}-day streak</p></div>
         </Link>
         <Link to="/dashboard/today" className="card flex items-center gap-4 p-5 transition hover:-translate-y-0.5">
@@ -72,10 +67,9 @@ export function Overview() {
 
       <div className="stagger mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {CARDS.map((c) => (
-          <Link key={c.title} to={c.to} className={`card-hover group rounded-3xl border border-line p-6 transition duration-300 ${TONE[c.tone].bg}`}>
+          <Link key={c.title} to={c.to} className="card card-hover group p-6">
             <div className="flex items-start justify-between">
-              <span className="group-icon inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-surface shadow-soft"><c.icon className={`h-5 w-5 ${TONE[c.tone].icon}`} /></span>
-              {c.isNew && <NewBadge />}
+              <span className="group-icon inline-flex h-11 w-11 items-center justify-center rounded-xl bg-soft"><c.icon className="h-5 w-5 text-muted" /></span>
             </div>
             <p className="mt-5 font-display text-lg font-semibold text-ink">{c.title}</p>
             <p className="mt-1 text-sm text-muted">{c.desc}</p>
@@ -129,7 +123,7 @@ export function TodayPlan() {
       {items.length > 0 && (
         <div className="card mb-6 p-5">
           <div className="flex items-center justify-between text-sm"><span className="font-semibold text-ink">{done} of {items.length} done</span><span className="text-muted">Complete 3 for a Full Nest Day bonus (+{POINTS.bonus})</span></div>
-          <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-soft"><div className="h-full rounded-full bg-gradient-to-r from-mint to-purple transition-all" style={{ width: `${(done / items.length) * 100}%` }} /></div>
+          <div className="ticks mt-3 h-2.5 overflow-hidden rounded-full bg-soft"><div className="h-full rounded-full bg-purple transition-[width] duration-500" style={{ width: `${(done / items.length) * 100}%` }} /></div>
         </div>
       )}
 
@@ -146,7 +140,7 @@ export function TodayPlan() {
               </button>
               <span className="w-14 shrink-0 font-display text-lg text-ink">{it.time}</span>
               <span className={`flex-1 text-[15px] ${it.done ? 'text-muted line-through' : 'text-ink'}`}>{it.title}</span>
-              <span className={`tag hidden sm:inline-flex ${TONE[CAT_TONE[it.category] ?? 'purple'].bg} ${TONE[CAT_TONE[it.category] ?? 'purple'].text}`}>{it.category}</span>
+              <span className="tag hidden bg-soft text-muted sm:inline-flex" data-tone={CAT_TONE[it.category]}>{it.category}</span>
               <button onClick={() => { setPlan((p) => p.filter((x) => x.id !== it.id)); revoke(`plan:${it.id}`); }} className="rounded-full p-2 text-muted hover:text-coral" aria-label="Delete"><Trash2 className="h-4 w-4" /></button>
             </li>
           ))}
@@ -154,7 +148,7 @@ export function TodayPlan() {
       )}
 
       <div className="mt-8">
-        <p className="text-sm font-semibold text-muted">Quick add</p>
+        <p className="text-sm font-medium text-muted">Quick add</p>
         <div className="mt-3 flex flex-wrap gap-2">
           {QUICK.map((q) => <button key={q.title} className="chip" onClick={() => add(q)}><Plus className="h-4 w-4" /> {q.title} · {q.time}</button>)}
         </div>
@@ -189,33 +183,33 @@ export function Rewards() {
     <div className="space-y-8">
       <DashHeader icon={Trophy} tone="butter" title="Rewards" lead="Every activity and lesson earns Nest Stars. Celebrate effort — never compare." />
 
-      <div className="relative overflow-hidden rounded-3xl bg-navy p-7 text-white sm:p-10">
+      <div className="relative overflow-hidden rounded-2xl bg-navy p-7 text-white sm:p-10">
         <div className="absolute -right-10 -top-10 h-48 w-48 rounded-full bg-purple/30 blur-2xl" />
         <div className="relative grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.12em] text-mint-light">Your nest</p>
+            <p className="text-sm font-medium text-mint-light">Your nest</p>
             <p className="mt-2 flex items-center gap-3 font-display text-6xl font-semibold"><Star className="h-12 w-12 fill-amber-400 text-amber-400" />{r.balance}</p>
             <p className="mt-1 text-white/70">Nest Stars to spend · {r.earned} earned all-time</p>
             <div className="mt-6 max-w-md">
-              <div className="flex justify-between text-sm"><span className="font-semibold">{r.level.name}</span><span className="text-white/70">{r.nextLevel ? `${r.nextLevel.min - r.earned} to ${r.nextLevel.name}` : 'Top level reached!'}</span></div>
-              <div className="mt-2 h-3 overflow-hidden rounded-full bg-white/15"><div className="h-full rounded-full bg-gradient-to-r from-purple-light via-mint-light to-coral transition-all" style={{ width: `${r.levelProgress}%` }} /></div>
+              <div className="flex justify-between text-sm"><span className="font-semibold">{r.level.name}</span><span className="text-white/70">{r.nextLevel ? `${r.nextLevel.min - r.earned} to ${r.nextLevel.name}` : 'Top level reached'}</span></div>
+              <div className="ticks mt-2 h-3 overflow-hidden rounded-full bg-white/15"><div className="h-full rounded-full bg-amber-400 transition-[width] duration-500" style={{ width: `${r.levelProgress}%` }} /></div>
               <div className="mt-2 flex gap-1">{LEVELS.map((l, i) => <span key={l.name} className={`h-1 flex-1 rounded-full ${i <= r.levelIdx ? 'bg-amber-400' : 'bg-white/15'}`} title={l.name} />)}</div>
             </div>
           </div>
           <div className="flex gap-3">
-            <div className="rounded-2xl bg-white/10 px-6 py-5 text-center">
+            <div className="rounded-xl bg-white/10 px-6 py-5 text-center">
               <Flame className={`mx-auto h-8 w-8 ${r.activeToday ? 'text-coral' : 'text-white/40'}`} />
               <p className="mt-1 font-display text-3xl font-semibold">{r.streak}</p>
               <p className="text-xs text-white/70">day streak</p>
             </div>
-            <div className="rounded-2xl bg-white/10 px-6 py-5 text-center">
+            <div className="rounded-xl bg-white/10 px-6 py-5 text-center">
               <Trophy className="mx-auto h-8 w-8 text-amber-400" />
               <p className="mt-1 font-display text-3xl font-semibold">{r.badges.filter((b) => b.earned).length}</p>
               <p className="text-xs text-white/70">badges</p>
             </div>
           </div>
         </div>
-        {!r.activeToday && <p className="relative mt-6 rounded-2xl bg-white/10 px-4 py-3 text-sm">Complete one activity today to {r.streak ? 'keep your streak alive' : 'start a streak'}! <Link to="/dashboard/learning" className="font-semibold text-mint-light underline">Pick an activity</Link></p>}
+        {!r.activeToday && <p className="relative mt-6 rounded-xl bg-white/10 px-4 py-3 text-sm">Complete one activity today to {r.streak ? 'keep your streak alive' : 'start a streak'}! <Link to="/dashboard/learning" className="font-semibold text-mint-light underline">Pick an activity</Link></p>}
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -225,7 +219,7 @@ export function Rewards() {
             {r.week.map((d) => (
               <div key={d.key} className="flex flex-1 flex-col items-center gap-2">
                 <span className="text-xs font-semibold text-ink">{d.points || ''}</span>
-                <div className={`w-full rounded-t-xl transition-all ${d.key === today() ? 'bg-purple' : 'bg-purple/30'}`} style={{ height: `${Math.max(4, (d.points / max) * 110)}px` }} />
+                <div className={`w-full rounded-t-md transition-[height] duration-500 ${d.key === today() ? 'bg-purple' : 'bg-ink/15'}`} style={{ height: `${Math.max(4, (d.points / max) * 110)}px` }} />
                 <span className="text-xs text-muted">{d.label}</span>
               </div>
             ))}
@@ -248,7 +242,7 @@ export function Rewards() {
         <h2 className="text-2xl text-ink">Badges</h2>
         <div className="stagger mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {r.badges.map((b) => (
-            <div key={b.id} className={`group rounded-3xl border p-5 text-center transition duration-300 hover:-translate-y-1 hover:shadow-lift ${b.earned ? 'border-amber-300/60 bg-butter' : 'border-line bg-surface opacity-70'}`}>
+            <div key={b.id} className={`group rounded-2xl border p-5 text-center transition duration-300 hover:-translate-y-1 hover:shadow-lift ${b.earned ? 'border-amber-300/60 bg-butter' : 'border-line bg-surface opacity-70'}`}>
               <span className={`group-icon mx-auto flex h-14 w-14 items-center justify-center rounded-full ${b.earned ? 'bg-amber-400 text-white shadow-[0_8px_20px_-8px_rgba(245,196,81,0.9)]' : 'bg-soft text-muted'}`}>
                 {b.earned ? <b.icon className="h-6 w-6" /> : <Lock className="h-5 w-5" />}
               </span>
@@ -274,7 +268,7 @@ export function Rewards() {
             const pct = Math.min(100, Math.round((r.balance / g.cost) * 100));
             const ready = r.balance >= g.cost;
             return (
-              <div key={g.id} className="rounded-2xl border border-line p-4">
+              <div key={g.id} className="rounded-xl border border-line p-4">
                 <div className="flex items-center justify-between gap-2">
                   <p className="font-semibold text-ink">{g.title}</p>
                   <button onClick={() => r.removeGoal(g.id)} className="text-muted hover:text-coral" aria-label="Remove goal"><Trash2 className="h-4 w-4" /></button>
@@ -287,7 +281,7 @@ export function Rewards() {
               </div>
             );
           })}
-          {open.length === 0 && <p className="rounded-2xl bg-soft p-4 text-sm text-muted sm:col-span-2">No reward goals yet. Add one above to give stars a purpose.</p>}
+          {open.length === 0 && <p className="rounded-xl bg-soft p-4 text-sm text-muted sm:col-span-2">No reward goals yet. Add one above to give stars a purpose.</p>}
         </div>
         {redeemed.length > 0 && <p className="mt-5 text-sm text-muted">Redeemed: {redeemed.map((g) => g.title).join(', ')}</p>}
       </div>

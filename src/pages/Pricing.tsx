@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Check, CheckCircle2, Tag } from 'lucide-react';
-import { PLANS, TONE } from '../data/content';
+import { PLANS } from '../data/content';
 import { Field, PageHero, ResponsibleAI } from '../components/ui';
 import { useStore } from '../lib/storage';
 
@@ -15,13 +15,13 @@ export function Pricing() {
         <div className="stagger grid gap-6 lg:grid-cols-3">
           {PLANS.map((p) => (
             <div key={p.name} className="card card-hover group flex flex-col p-8">
-              <span className={`tag w-fit uppercase tracking-[0.1em] ${TONE[p.tone].bg} ${TONE[p.tone].text}`}>{p.name}</span>
+              <span className="tag w-fit bg-soft text-ink">{p.name}</span>
               <p className="mt-5 text-muted">{p.desc}</p>
               <p className="mt-6 font-display text-2xl text-ink">Pricing to be announced</p>
               <ul className="mt-6 space-y-3 border-t border-line pt-6">
                 {p.items.map((i) => (
                   <li key={i} className="flex items-center gap-3 text-[15px] text-ink">
-                    <Check className={`h-4 w-4 ${TONE[p.tone].icon}`} /> {i}
+                    <Check className="h-4 w-4 text-purple" /> {i}
                   </li>
                 ))}
               </ul>

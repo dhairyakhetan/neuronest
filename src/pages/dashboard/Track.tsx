@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import {
-  ArrowRight, Bookmark, BookmarkCheck, BookOpen, CalendarDays, Check, CheckCircle2, ClipboardCheck, Clock, Mic, Plus, RotateCcw, Star,
-  Footprints, HeartHandshake, MessageCircle, Palette, Sparkles, Sun, Target, Trash2, TrendingUp, Trophy, type LucideIcon,
-} from 'lucide-react';
+import { ArrowRight, Bookmark, BookmarkCheck, BookOpen, CalendarDays, Check, CheckCircle2, ClipboardCheck, Clock, Mic, Plus, RotateCcw, Star, Footprints, HeartHandshake, MessageCircle, Palette, Lightbulb, Sun, Target, Trash2, TrendingUp, Trophy, type LucideIcon } from 'lucide-react';
 import { ACTIVITIES, ACTIVITY_CATEGORIES, DISCLAIMER, OBSERVATION_CATEGORIES, SPEECH, TONE, type Tone } from '../../data/content';
 import { DOMAINS, ageLabel, type CheckRecord } from '../../data/milestones';
 import { useStore, uid } from '../../lib/storage';
@@ -41,7 +38,7 @@ export function Milestones() {
       <PrototypeNote className="mb-6">Observations can help organise information and support conversations with qualified professionals. They do not provide a diagnosis.</PrototypeNote>
 
       <Link to="/dashboard/check" className="card mb-6 flex flex-col gap-4 p-5 transition hover:shadow-lift sm:flex-row sm:items-center">
-        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-peach"><ClipboardCheck className="h-6 w-6 text-coral" /></span>
+        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-peach"><ClipboardCheck className="h-6 w-6 text-coral" /></span>
         <div className="flex-1">
           {latest ? (
             <>
@@ -79,7 +76,7 @@ export function Milestones() {
               <div className="card p-5">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-xs font-semibold text-muted">{new Date(o.date + 'T00:00').toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                    <p className="text-xs font-medium text-muted">{new Date(o.date + 'T00:00').toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                     <p className="mt-1 font-semibold text-ink">{o.title}</p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -187,7 +184,7 @@ export function Learning() {
               <div className={`relative h-32 overflow-hidden ${TONE[m.tone].bg}`}>
                 <span className={`absolute -right-8 -top-10 h-32 w-32 rounded-full opacity-20 transition-transform duration-700 ease-out group-hover:-translate-x-3 group-hover:scale-125 ${TONE[m.tone].solid}`} />
                 <span className={`absolute -bottom-12 left-16 h-24 w-24 rounded-full opacity-10 transition-transform duration-700 ease-out group-hover:translate-x-8 ${TONE[m.tone].solid}`} />
-                <span className="group-icon absolute left-5 top-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-surface shadow-soft">
+                <span className="group-icon absolute left-5 top-5 flex h-14 w-14 items-center justify-center rounded-xl bg-surface shadow-soft">
                   <m.icon className={`h-7 w-7 ${TONE[m.tone].icon}`} />
                 </span>
                 <button
@@ -201,15 +198,15 @@ export function Learning() {
                 {done && <span className="tag absolute bottom-4 right-4 animate-pop-in bg-mint text-white"><Check className="h-3 w-3" /> Done today</span>}
               </div>
               <div className="flex flex-1 flex-col p-5">
-                <p className={`text-xs font-semibold uppercase tracking-[0.08em] ${TONE[m.tone].text}`}>{a.category}</p>
+                <p className={`text-xs font-semibold ${TONE[m.tone].text}`}>{a.category}</p>
                 <h3 className="mt-1.5 font-display text-lg font-semibold text-ink">{a.title}</h3>
                 <p className="mt-2 line-clamp-2 flex-1 text-sm text-muted">{a.instructions}</p>
                 <div className="mt-5 flex items-center justify-between border-t border-line pt-4">
                   <span className={`flex items-center gap-1 text-sm font-semibold ${done ? 'text-muted' : 'text-amber-600 dark:text-amber-300'}`}>
                     <Star className={`h-4 w-4 ${done ? '' : 'fill-current'}`} /> {done ? 'Earned today' : `+${POINTS.activity} stars`}
                   </span>
-                  <span className="flex items-center gap-1.5 text-sm font-semibold text-purple dark:text-purple-light">
-                    {done ? 'Open' : 'Start'} <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1.5" />
+                  <span className="flex items-center gap-1.5 text-sm font-medium text-purple dark:text-purple-light">
+                    {done ? 'Open' : 'Start'} <ArrowRight className="h-4 w-4" />
                   </span>
                 </div>
               </div>
@@ -245,7 +242,7 @@ export function Learning() {
           <span className="tag bg-soft text-muted"><Clock className="h-3 w-3" /> {open?.duration}</span>
         </div>
         <p className="mt-5 text-[17px] leading-relaxed text-ink">{open?.instructions}</p>
-        <p className="mt-5 rounded-2xl bg-soft p-4 text-sm text-muted"><Sparkles className="mr-1 inline h-4 w-4 text-purple" />Celebrate the effort, not just the result — every try counts.</p>
+        <p className="mt-5 rounded-xl bg-soft p-4 text-sm text-muted"><Lightbulb className="mr-1 inline h-4 w-4 text-purple" />Celebrate the effort, not just the result — every try counts.</p>
       </Modal>
     </div>
   );
@@ -277,7 +274,7 @@ export function Speech() {
       <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
         <div className="space-y-2">
           {SPEECH.map((s) => (
-            <button key={s.id} onClick={() => pick(s.id)} className={`flex w-full items-center gap-3 rounded-2xl border p-4 text-left transition ${s.id === activeId ? 'border-purple/40 bg-lav' : 'border-line bg-surface hover:border-purple/30'}`}>
+            <button key={s.id} onClick={() => pick(s.id)} className={`flex w-full items-center gap-3 rounded-xl border p-4 text-left transition ${s.id === activeId ? 'border-purple/40 bg-lav' : 'border-line bg-surface hover:border-purple/30'}`}>
               <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: s.color }} />
               <span className="flex-1 font-medium text-ink">{s.title}</span>
               {done[s.id]?.includes(today()) && <CheckCircle2 className="h-4 w-4 text-mint" />}
@@ -290,7 +287,7 @@ export function Speech() {
             {finished ? (
               <div className="py-6 text-center">
                 <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-amber-400"><Star className="h-8 w-8 fill-white text-white" /></span>
-                <p className="mt-4 font-display text-3xl text-ink">Lesson complete!</p>
+                <p className="mt-4 font-display text-3xl text-ink">Lesson complete</p>
                 <p className="mt-2 text-muted">Wonderful effort. Every try counts.</p>
                 <div className="mt-6 flex justify-center gap-3">
                   <button className="btn btn-ghost" onClick={() => { setStep(0); setFinished(false); }}><RotateCcw className="h-4 w-4" /> Practise again</button>
@@ -301,11 +298,11 @@ export function Speech() {
               <>
                 <div className="flex items-center justify-between">
                   <h2 className="text-2xl text-ink">{a.title}</h2>
-                  <button onClick={() => setStep(0)} className="flex items-center gap-1 text-sm font-semibold text-muted hover:text-ink"><RotateCcw className="h-4 w-4" /> Restart</button>
+                  <button onClick={() => setStep(0)} className="flex items-center gap-1 text-sm font-medium text-muted hover:text-ink"><RotateCcw className="h-4 w-4" /> Restart</button>
                 </div>
                 <p className="mt-1 text-sm text-muted">Step {step + 1} of {a.steps.length}{doneToday && ' · completed today'}</p>
                 <div className="mt-4 flex gap-1.5">{a.steps.map((_, i) => <span key={i} className="h-1.5 flex-1 rounded-full" style={{ background: i <= step ? a.color : 'rgb(var(--line))' }} />)}</div>
-                <div key={step} className="mt-8 flex min-h-[140px] animate-fade-up items-center justify-center rounded-3xl bg-soft p-8 text-center">
+                <div key={step} className="mt-8 flex min-h-[140px] animate-fade-up items-center justify-center rounded-2xl bg-soft p-8 text-center">
                   <p className="font-display text-2xl leading-snug text-ink sm:text-3xl">{a.steps[step]}</p>
                 </div>
                 <div className="mt-8 flex justify-between gap-3">
@@ -324,7 +321,7 @@ export function Speech() {
               <span className="flex h-11 w-11 items-center justify-center rounded-full bg-purple text-white"><Mic className="h-5 w-5" /></span>
               <span><span className="block font-semibold text-ink">Try voice-based practice</span><span className="text-sm text-muted">Tap to attempt microphone practice</span></span>
             </button>
-            {mic && <p className="mt-3 animate-fade-up rounded-2xl bg-butter p-3 text-sm text-ink">Voice-based practice is a future NeuroNest product capability. This prototype demonstrates the guided activity experience without live microphone recording or clinical speech assessment.</p>}
+            {mic && <p className="mt-3 animate-fade-up rounded-xl bg-butter p-3 text-sm text-ink">Voice-based practice is a future NeuroNest product capability. This prototype demonstrates the guided activity experience without live microphone recording or clinical speech assessment.</p>}
           </div>
         </div>
       </div>
@@ -409,7 +406,7 @@ export function Progress() {
             </div>
           </div>
           <Link to="/dashboard/rewards" className="card flex items-center gap-4 p-5 transition hover:shadow-lift">
-            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-400"><Star className="h-6 w-6 fill-white text-white" /></span>
+            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-400"><Star className="h-6 w-6 fill-white text-white" /></span>
             <div className="flex-1"><p className="font-semibold text-ink">{earned} Nest Stars earned · {streak}-day streak</p><p className="text-sm text-muted">See badges and reward goals</p></div>
             <ArrowRight className="h-5 w-5 text-purple" />
           </Link>
