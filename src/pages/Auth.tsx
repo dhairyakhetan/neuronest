@@ -1,14 +1,18 @@
-import { useState, type ReactNode } from 'react';
-import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { ArrowRight, Check, Eye, EyeOff, Loader2, MailCheck, ShieldCheck, Sparkles } from 'lucide-react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { Link, Navigate, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import type { EmailOtpType } from '@supabase/supabase-js';
+import { supabase, friendlyError } from '../lib/supabase';
+import { ArrowRight, Check, CircleAlert, Eye, EyeOff, Loader2, MailCheck, ShieldCheck, Sparkles } from 'lucide-react';
 import { DISCLAIMER, INTERESTS, LANGUAGES, ROLES } from '../data/content';
 import { useAuth, type Role } from '../lib/auth';
 import { Field, LogoMark, Wave } from '../components/ui';
 
 /* Where to go after sign-up/onboarding (e.g. back to the community). */
 const NEXT_KEY = 'nn:next';
-const setNext = (p?: string) => { try { if (p) sessionStorage.setItem(NEXT_KEY, p); } catch { /* ignore */ } };
-const takeNext = () => { try { const v = sessionStorage.getItem(NEXT_KEY); sessionStorage.removeItem(NEXT_KEY); return v; } catch { return null; } };
+const setNext = (p?: string) => { try { if (p) localStorage.setItem(NEXT_KEY, p); } catch { /* ignore */ } };
+const takeNext = () => { try { const v = localStorage.getItem(NEXT_KEY); localStorage.removeItem(NEXT_KEY); return v; } catch { return null; } };
+/** Only allow same-site paths as redirect targets. */
+const safePath = (p: string | null) => (p && p.startsWith('/') && !p.startsWith('//') ? p : null);
 
 function Shell({ children, wide = false }: { children: ReactNode; wide?: boolean }) {
   return (
@@ -108,7 +112,9 @@ export function SignUp() {
           <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-mintsoft"><MailCheck className="h-8 w-8 text-mint" /></span>
           <h1 className="mt-5 text-2xl text-ink">Check your email</h1>
           <p className="mt-2 text-muted">We sent a confirmation link to <b className="text-ink">{sentTo}</b>. Open it on this device to finish creating your account.</p>
-          <p className="mt-4 text-sm text-muted">Didn’t get it? Check spam, or <button className="font-semibold text-purple" onClick={() => setSentTo(null)}>try again</button>.</p>
+          <p className="mt-4 text-sm text-muted">Didn’t get it? Check your spam folder, wait a minute, then resend.</p>
+          <ResendConfirmation email={sentTo} />
+          <button className="mt-3 text-sm font-semibold text-muted hover:text-ink" onClick={() => setSentTo(null)}>Use a different email</button>
         </div>
       </Shell>
     );
@@ -324,6 +330,94 @@ export function Onboarding() {
             {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null} Let’s go <ArrowRight className="h-4 w-4" />
           </button>
         </div>
+      )}
+    </Shell>
+  );
+}
+
+/* ------------------------------------------------- email link landing page */
+
+function ResendConfirmation({ email: initial = '' }: { email?: string }) {
+  const [email, setEmail] = useState(initial);
+  const [state, setState] = useState<'idle' | 'busy' | 'sent'>('idle');
+  const [error, setError] = useState('');
+  if (state === 'sent') return <p className="mt-4 rounded-2xl bg-mintsoft p-3 text-sm text-ink">A new confirmation link is on its way to <b>{email}</b>.</p>;
+  return (
+    <form
+      className="mt-4 space-y-3"
+      onSubmit={async (e) => {
+        e.preventDefault();
+        setState('busy');
+        setError('');
+        const { error: err } = await supabase.auth.resend({ type: 'signup', email: email.trim(), options: { emailRedirectTo: `${window.location.origin}/onboarding` } });
+        if (err) { setError(friendlyError(err)); setState('idle'); return; }
+        setState('sent');
+      }}
+    >
+      {!initial && <input type="email" required className="input" placeholder="Your email address" value={email} onChange={(e) => setEmail(e.target.value)} aria-label="Email address" />}
+      {error && <p className="rounded-2xl bg-peach p-3 text-sm text-ink" role="alert">{error}</p>}
+      <button className="btn btn-ghost w-full" disabled={state === 'busy'}>{state === 'busy' && <Loader2 className="h-4 w-4 animate-spin" />} Resend confirmation email</button>
+    </form>
+  );
+}
+
+const OTP_TYPES: EmailOtpType[] = ['signup', 'email', 'recovery', 'invite', 'magiclink', 'email_change'];
+
+/**
+ * Every auth email links here: /auth/confirm?token_hash=…&type=…&next=…
+ * We verify the token in the app, so links work on any device and always land on NeuroNest.
+ */
+export function AuthConfirm() {
+  const [params] = useSearchParams();
+  const nav = useNavigate();
+  const [error, setError] = useState<string | null>(null);
+  const ran = useRef(false);
+  const type = params.get('type') as EmailOtpType | null;
+
+  useEffect(() => {
+    if (ran.current) return; // tokens are single-use — never verify twice
+    ran.current = true;
+    const tokenHash = params.get('token_hash');
+    if (!tokenHash || !type || !OTP_TYPES.includes(type)) {
+      setError('This link is incomplete. Please use the full link from your email.');
+      return;
+    }
+    supabase.auth.verifyOtp({ token_hash: tokenHash, type }).then(({ error: err }) => {
+      if (err) {
+        setError(/expired|invalid/i.test(err.message) ? 'This link has expired or has already been used.' : friendlyError(err));
+        return;
+      }
+      const next = safePath(params.get('next'));
+      if (type === 'recovery') nav('/reset-password', { replace: true });
+      else if (type === 'email_change') nav(next ?? '/dashboard/profile', { replace: true });
+      else nav(next ?? '/onboarding', { replace: true });
+    });
+  }, [params, type, nav]);
+
+  if (!error) {
+    return (
+      <Shell>
+        <div className="py-6 text-center">
+          <Loader2 className="mx-auto h-8 w-8 animate-spin text-purple" />
+          <p className="mt-4 font-display text-xl text-ink">{type === 'recovery' ? 'Opening password reset…' : 'Confirming your email…'}</p>
+        </div>
+      </Shell>
+    );
+  }
+  return (
+    <Shell>
+      <div className="text-center">
+        <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-peach"><CircleAlert className="h-7 w-7 text-coral" /></span>
+        <h1 className="mt-4 text-2xl text-ink">That link didn’t work</h1>
+        <p className="mt-2 text-muted">{error}</p>
+      </div>
+      {type === 'recovery' ? (
+        <Link to="/forgot-password" className="btn btn-coral mt-6 w-full">Send a new reset link</Link>
+      ) : (
+        <>
+          <p className="mt-6 text-sm text-muted">Already confirmed? <Link to="/sign-in" className="font-semibold text-purple">Sign in</Link>. Otherwise, request a fresh link:</p>
+          <ResendConfirmation />
+        </>
       )}
     </Shell>
   );

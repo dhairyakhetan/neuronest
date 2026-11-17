@@ -37,6 +37,15 @@ Accounts and the Parent Community run on the Supabase project **neuronest** (`mr
 - **Guardrails:** members can only post into circles they've joined. Connection requests can't be tampered with (only `status` is updatable, and only by the person invited). Posting is limited to 10 posts/hour and comments to 60/hour. Moderators can set `hidden = true` on posts or comments and review `post_reports` in the Supabase dashboard.
 - **Client config:** `src/lib/supabase.ts` uses the project URL and publishable key. Both are safe to ship, since RLS enforces access. Override them with `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` (see `.env.example`).
 
+**Auth emails**
+Branded email templates live in `supabase/templates/`. Every link goes to `/auth/confirm` on the site, which verifies the token in the app and routes the person onward: sign-up → onboarding, password reset → `/reset-password`, email change → profile. To change the copy or design, edit the HTML and run:
+
+```bash
+SUPABASE_ACCESS_TOKEN=<personal access token> node scripts/apply-auth-config.mjs
+```
+
+This also sets the Site URL, the allowed redirect URLs and the minimum password length.
+
 **Auth settings to check in the Supabase dashboard**
 1. *Authentication → URL Configuration*: set **Site URL** to `https://neuronest-official.vercel.app` and add `https://neuronest-official.vercel.app/**` to **Redirect URLs**.
 2. *Authentication → Sign In / Providers → Email*: Supabase's built-in email service only delivers to your own team's addresses. Either turn **Confirm email** off, or connect a custom SMTP provider (*Authentication → Emails → SMTP Settings*, e.g. Resend) so real parents receive confirmation and password-reset emails.
