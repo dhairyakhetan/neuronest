@@ -25,7 +25,6 @@ export function friendlyError(err: { message?: string; code?: string } | null | 
   const m = err.message ?? '';
   if (err.code === 'P0001') return m; // our own rate-limit messages
   if (/invalid login credentials/i.test(m)) return 'That email and password don’t match. Please try again.';
-  if (/email not confirmed/i.test(m)) return 'Please confirm your email first — check your inbox for the link we sent.';
   if (/user already registered/i.test(m)) return 'An account with this email already exists. Try signing in instead.';
   if (/password should be at least/i.test(m)) return 'Password should be at least 8 characters.';
   if (/rate limit|too many requests/i.test(m)) return 'Too many attempts right now. Please wait a minute and try again.';

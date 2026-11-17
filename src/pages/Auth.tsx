@@ -1,9 +1,7 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { Link, Navigate, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import type { EmailOtpType } from '@supabase/supabase-js';
-import { supabase, friendlyError } from '../lib/supabase';
-import { ArrowRight, Check, CircleAlert, Eye, EyeOff, Loader2, MailCheck, ShieldCheck, Sparkles } from 'lucide-react';
-import { DISCLAIMER, INTERESTS, LANGUAGES, ROLES } from '../data/content';
+import { useState, type ReactNode } from 'react';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { ArrowRight, Check, Eye, EyeOff, Loader2, ShieldCheck, Sparkles } from 'lucide-react';
+import { DISCLAIMER, EMAIL, INTERESTS, LANGUAGES, ROLES } from '../data/content';
 import { useAuth, type Role } from '../lib/auth';
 import { Field, LogoMark, Wave } from '../components/ui';
 
@@ -11,8 +9,6 @@ import { Field, LogoMark, Wave } from '../components/ui';
 const NEXT_KEY = 'nn:next';
 const setNext = (p?: string) => { try { if (p) localStorage.setItem(NEXT_KEY, p); } catch { /* ignore */ } };
 const takeNext = () => { try { const v = localStorage.getItem(NEXT_KEY); localStorage.removeItem(NEXT_KEY); return v; } catch { return null; } };
-/** Only allow same-site paths as redirect targets. */
-const safePath = (p: string | null) => (p && p.startsWith('/') && !p.startsWith('//') ? p : null);
 
 function Shell({ children, wide = false }: { children: ReactNode; wide?: boolean }) {
   return (
@@ -78,9 +74,7 @@ export function SignIn() {
       >
         <Field label="Email Address"><input type="email" required autoComplete="email" className="input" value={email} onChange={(e) => setEmail(e.target.value)} /></Field>
         <Password label="Password" value={pw} onChange={setPw} />
-        <div className="flex justify-end text-sm">
-          <Link to="/forgot-password" className="font-semibold text-purple">Forgot Password?</Link>
-        </div>
+        <p className="text-right text-xs text-muted">Forgot your password? Email <a href={`mailto:${EMAIL}`} className="font-semibold text-purple">{EMAIL}</a></p>
         {error && <p className="rounded-2xl bg-peach p-3 text-sm text-ink" role="alert">{error}</p>}
         <button className="btn btn-coral w-full" disabled={busy}>{busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null} Sign In <ArrowRight className="h-4 w-4" /></button>
       </form>
@@ -100,25 +94,9 @@ export function SignUp() {
   const [f, setF] = useState({ name: '', email: '', pw: '', pw2: '', role: ROLES[0] as Role, agree: false });
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
-  const [sentTo, setSentTo] = useState<string | null>(null);
 
   if (!ready) return <Loading />;
-  if (user && !user.demo && !sentTo) return <Navigate to={user.onboarded ? from ?? '/dashboard' : '/onboarding'} replace />;
-
-  if (sentTo) {
-    return (
-      <Shell>
-        <div className="text-center">
-          <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-mintsoft"><MailCheck className="h-8 w-8 text-mint" /></span>
-          <h1 className="mt-5 text-2xl text-ink">Check your email</h1>
-          <p className="mt-2 text-muted">We sent a confirmation link to <b className="text-ink">{sentTo}</b>. Open it on this device to finish creating your account.</p>
-          <p className="mt-4 text-sm text-muted">Didn’t get it? Check your spam folder, wait a minute, then resend.</p>
-          <ResendConfirmation email={sentTo} />
-          <button className="mt-3 text-sm font-semibold text-muted hover:text-ink" onClick={() => setSentTo(null)}>Use a different email</button>
-        </div>
-      </Shell>
-    );
-  }
+  if (user && !user.demo) return <Navigate to={user.onboarded ? from ?? '/dashboard' : '/onboarding'} replace />;
 
   return (
     <Shell>
@@ -138,8 +116,7 @@ export function SignUp() {
           const r = await signUp({ name: f.name, email: f.email, password: f.pw, role: f.role });
           setBusy(false);
           if (r.error) return setError(r.error);
-          if (r.needsConfirmation) setSentTo(f.email.trim());
-          else nav('/onboarding', { replace: true });
+          nav('/onboarding', { replace: true });
         }}
       >
         <Field label="Your name" hint="Shown to other members in the community. A first name is fine."><input required maxLength={60} autoComplete="name" className="input" value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} /></Field>
@@ -159,71 +136,6 @@ export function SignUp() {
         <button className="btn btn-coral w-full" disabled={busy}>{busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null} Create My Account <ArrowRight className="h-4 w-4" /></button>
       </form>
       <p className="mt-6 text-center text-sm text-muted">Already have an account? <Link to="/sign-in" state={loc.state} className="font-semibold text-purple">Sign In</Link></p>
-    </Shell>
-  );
-}
-
-export function ForgotPassword() {
-  const { requestPasswordReset } = useAuth();
-  const [email, setEmail] = useState('');
-  const [sent, setSent] = useState(false);
-  const [error, setError] = useState('');
-  const [busy, setBusy] = useState(false);
-  return (
-    <Shell>
-      <h1 className="text-2xl text-ink">Reset your password</h1>
-      <p className="mt-1 text-muted">Enter your email address and we'll send you a link to choose a new password.</p>
-      {sent ? (
-        <p className="mt-6 rounded-2xl bg-mintsoft p-4 text-sm text-ink">If an account exists for <b>{email}</b>, a reset link is on its way. Open it on this device.</p>
-      ) : (
-        <form className="mt-6 space-y-4" onSubmit={async (e) => {
-          e.preventDefault();
-          setBusy(true);
-          const r = await requestPasswordReset(email);
-          setBusy(false);
-          if (r.error) setError(r.error);
-          else setSent(true);
-        }}>
-          <Field label="Email Address"><input required type="email" className="input" value={email} onChange={(e) => setEmail(e.target.value)} /></Field>
-          {error && <p className="rounded-2xl bg-peach p-3 text-sm text-ink" role="alert">{error}</p>}
-          <button className="btn btn-coral w-full" disabled={busy}>Send reset link</button>
-        </form>
-      )}
-      <p className="mt-6 text-center text-sm"><Link to="/sign-in" className="font-semibold text-purple">Back to Sign In</Link></p>
-    </Shell>
-  );
-}
-
-export function ResetPassword() {
-  const { setNewPassword, isMember, ready } = useAuth();
-  const nav = useNavigate();
-  const [pw, setPw] = useState('');
-  const [pw2, setPw2] = useState('');
-  const [error, setError] = useState('');
-  const [busy, setBusy] = useState(false);
-  if (!ready) return <Loading />;
-  return (
-    <Shell>
-      <h1 className="text-2xl text-ink">Choose a new password</h1>
-      {!isMember ? (
-        <p className="mt-4 rounded-2xl bg-butter p-4 text-sm text-ink">This reset link has expired or was already used. <Link to="/forgot-password" className="font-semibold text-purple">Request a new one</Link>.</p>
-      ) : (
-        <form className="mt-6 space-y-4" onSubmit={async (e) => {
-          e.preventDefault();
-          if (pw.length < 8) return setError('Password should be at least 8 characters.');
-          if (pw !== pw2) return setError('Passwords don’t match.');
-          setBusy(true);
-          const r = await setNewPassword(pw);
-          setBusy(false);
-          if (r.error) return setError(r.error);
-          nav('/dashboard', { replace: true });
-        }}>
-          <Password label="New password" autoComplete="new-password" value={pw} onChange={setPw} />
-          <Password label="Confirm new password" autoComplete="new-password" value={pw2} onChange={setPw2} />
-          {error && <p className="rounded-2xl bg-peach p-3 text-sm text-ink" role="alert">{error}</p>}
-          <button className="btn btn-coral w-full" disabled={busy}>Save password</button>
-        </form>
-      )}
     </Shell>
   );
 }
@@ -333,114 +245,4 @@ export function Onboarding() {
       )}
     </Shell>
   );
-}
-
-/* ------------------------------------------------- email link landing page */
-
-function ResendConfirmation({ email: initial = '' }: { email?: string }) {
-  const [email, setEmail] = useState(initial);
-  const [state, setState] = useState<'idle' | 'busy' | 'sent'>('idle');
-  const [error, setError] = useState('');
-  if (state === 'sent') return <p className="mt-4 rounded-2xl bg-mintsoft p-3 text-sm text-ink">A new confirmation link is on its way to <b>{email}</b>.</p>;
-  return (
-    <form
-      className="mt-4 space-y-3"
-      onSubmit={async (e) => {
-        e.preventDefault();
-        setState('busy');
-        setError('');
-        const { error: err } = await supabase.auth.resend({ type: 'signup', email: email.trim(), options: { emailRedirectTo: `${window.location.origin}/onboarding` } });
-        if (err) { setError(friendlyError(err)); setState('idle'); return; }
-        setState('sent');
-      }}
-    >
-      {!initial && <input type="email" required className="input" placeholder="Your email address" value={email} onChange={(e) => setEmail(e.target.value)} aria-label="Email address" />}
-      {error && <p className="rounded-2xl bg-peach p-3 text-sm text-ink" role="alert">{error}</p>}
-      <button className="btn btn-ghost w-full" disabled={state === 'busy'}>{state === 'busy' && <Loader2 className="h-4 w-4 animate-spin" />} Resend confirmation email</button>
-    </form>
-  );
-}
-
-const OTP_TYPES: EmailOtpType[] = ['signup', 'email', 'recovery', 'invite', 'magiclink', 'email_change'];
-
-/**
- * Every auth email links here: /auth/confirm?token_hash=…&type=…&next=…
- * We verify the token in the app, so links work on any device and always land on NeuroNest.
- */
-export function AuthConfirm() {
-  const [params] = useSearchParams();
-  const nav = useNavigate();
-  const [error, setError] = useState<string | null>(null);
-  const ran = useRef(false);
-  const type = params.get('type') as EmailOtpType | null;
-
-  useEffect(() => {
-    if (ran.current) return; // tokens are single-use — never verify twice
-    ran.current = true;
-    const linkError = params.get('error');
-    if (linkError) {
-      setError(/expired|invalid/i.test(linkError) ? 'This link has expired or has already been used.' : linkError);
-      return;
-    }
-    const tokenHash = params.get('token_hash');
-    if (!tokenHash || !type || !OTP_TYPES.includes(type)) {
-      setError('This link is incomplete. Please use the full link from your email.');
-      return;
-    }
-    supabase.auth.verifyOtp({ token_hash: tokenHash, type }).then(({ error: err }) => {
-      if (err) {
-        setError(/expired|invalid/i.test(err.message) ? 'This link has expired or has already been used.' : friendlyError(err));
-        return;
-      }
-      const next = safePath(params.get('next'));
-      if (type === 'recovery') nav('/reset-password', { replace: true });
-      else if (type === 'email_change') nav(next ?? '/dashboard/profile', { replace: true });
-      else nav(next ?? '/onboarding', { replace: true });
-    });
-  }, [params, type, nav]);
-
-  if (!error) {
-    return (
-      <Shell>
-        <div className="py-6 text-center">
-          <Loader2 className="mx-auto h-8 w-8 animate-spin text-purple" />
-          <p className="mt-4 font-display text-xl text-ink">{type === 'recovery' ? 'Opening password reset…' : 'Confirming your email…'}</p>
-        </div>
-      </Shell>
-    );
-  }
-  return (
-    <Shell>
-      <div className="text-center">
-        <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-peach"><CircleAlert className="h-7 w-7 text-coral" /></span>
-        <h1 className="mt-4 text-2xl text-ink">That link didn’t work</h1>
-        <p className="mt-2 text-muted">{error}</p>
-      </div>
-      {type === 'recovery' ? (
-        <Link to="/forgot-password" className="btn btn-coral mt-6 w-full">Send a new reset link</Link>
-      ) : (
-        <>
-          <p className="mt-6 text-sm text-muted">Already confirmed? <Link to="/sign-in" className="font-semibold text-purple">Sign in</Link>. Otherwise, request a fresh link:</p>
-          <ResendConfirmation />
-        </>
-      )}
-    </Shell>
-  );
-}
-
-/**
- * Supabase's hosted verify links return errors in the URL hash
- * (#error_code=otp_expired…). Send those to /auth/confirm so people see a
- * clear message and a resend option instead of a silent redirect.
- */
-export function AuthHashErrors() {
-  const nav = useNavigate();
-  useEffect(() => {
-    const hash = window.location.hash.slice(1);
-    if (!hash.includes('error_code=')) return;
-    const h = new URLSearchParams(hash);
-    const type = h.get('type') === 'recovery' || window.location.pathname.startsWith('/reset-password') ? 'recovery' : 'signup';
-    nav(`/auth/confirm?type=${type}&error=${encodeURIComponent(h.get('error_description') || 'This link has expired or has already been used.')}`, { replace: true });
-  }, [nav]);
-  return null;
 }

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   Bookmark, BookmarkCheck, Check, Flag, Heart, Home, Loader2, Lock, MapPin, MessageCircle, MoreHorizontal, RefreshCw, Search, Send,
-  ShieldCheck, Sparkles, Stethoscope, Trash2, UserCheck, UserPlus, UserRoundPen, Users, UsersRound, VenetianMask, X,
+  Crown, EyeOff, ShieldCheck, Sparkles, Stethoscope, Trash2, UserCheck, UserPlus, UserRoundPen, Users, UsersRound, VenetianMask, X,
 } from 'lucide-react';
 import { GUIDELINES, REPORT_REASONS, TOPICS, TOPIC_TONE, type Topic } from '../data/community';
 import { TONE, type Tone } from '../data/content';
@@ -11,7 +11,7 @@ import { timeAgo, useStore } from '../lib/storage';
 import { useToast } from '../lib/toast';
 import {
   acceptConnection, addComment, countMyPosts, createPost, deleteComment, deletePost, fetchComments, fetchFeed, fetchMembers, fetchMyCircleIds,
-  fetchStats, joinCircle, leaveCircle, removeConnection, reportPost, requestConnection, setSaved, setSupport,
+  fetchStats, joinCircle, leaveCircle, removeConnection, reportPost, requestConnection, setPostHidden, setSaved, setSupport,
   type CircleInfo, type CommunityMember, type CommunityStats, type FeedComment, type FeedPost,
 } from '../lib/community';
 import { supabase } from '../lib/supabase';
@@ -26,6 +26,10 @@ export function ParentCommunity({ embedded = false }: { embedded?: boolean }) {
   if (!ready) return <Skeleton />;
   if (!isMember || !user?.id) return <CommunityGate demo={!!user?.demo} embedded={embedded} />;
   return <MemberCommunity me={user as User & { id: string }} embedded={embedded} />;
+}
+
+function AdminBadge() {
+  return <span className="tag ml-1.5 bg-amber-100 align-middle text-[11px] text-amber-700"><Crown className="h-3 w-3" /> Admin</span>;
 }
 
 function Skeleton() {
@@ -129,6 +133,7 @@ function Guidelines() {
 
 function MemberCommunity({ me, embedded }: { me: User & { id: string }; embedded: boolean }) {
   const toast = useToast();
+  const { isAdmin } = useAuth();
   const [tab, setTab] = useState<Tab>('feed');
   const [circleId, setCircleId] = useState<string | null>(null);
   const [topic, setTopic] = useState<Topic | 'All'>('All');
@@ -224,6 +229,13 @@ function MemberCommunity({ me, embedded }: { me: User & { id: string }; embedded
   };
 
   const [circleBusy, setCircleBusy] = useState<string | null>(null);
+  const hidePost = async (p: FeedPost) => {
+    const r = await setPostHidden(p.id, true);
+    if (r.error) return toast(r.error, 'info');
+    setPosts((ps) => ps.filter((x) => x.id !== p.id));
+    toast('Post hidden from the community — you can restore it in the Admin panel', 'info');
+  };
+
   const toggleCircle = async (c: CircleInfo) => {
     if (circleBusy) return;
     const on = myCircles.includes(c.id);
@@ -342,7 +354,7 @@ function MemberCommunity({ me, embedded }: { me: User & { id: string }; embedded
               {feedError && <div className="card p-6 text-center text-sm text-ink">{feedError} <button className="ml-2 font-semibold text-purple" onClick={loadFeed}>Try again</button></div>}
               {loading && posts.length === 0 ? <Skeleton /> : (
                 posts.map((p) => (
-                  <PostCard key={p.id} post={p} onSupport={() => toggleSupport(p)} onSave={() => toggleSave(p)} onDelete={() => removePost(p)} onAuthor={(id) => setViewing(id)} onCommentCount={(d) => patchPost(p.id, { comment_count: p.comment_count + d })} />
+                  <PostCard key={p.id} post={p} canModerate={isAdmin} onHide={() => hidePost(p)} onSupport={() => toggleSupport(p)} onSave={() => toggleSave(p)} onDelete={() => removePost(p)} onAuthor={(id) => setViewing(id)} onCommentCount={(d) => patchPost(p.id, { comment_count: p.comment_count + d })} />
                 ))
               )}
               {!loading && !feedError && posts.length === 0 && (
@@ -515,8 +527,8 @@ function Composer({ me, circles, defaultCircle, onPosted }: { me: User; circles:
 
 /* ------------------------------------------------------------- PostCard */
 
-function PostCard({ post, onSupport, onSave, onDelete, onAuthor, onCommentCount }: {
-  post: FeedPost; onSupport: () => void; onSave: () => void; onDelete: () => void; onAuthor: (id: string) => void; onCommentCount: (delta: number) => void;
+function PostCard({ post, canModerate, onHide, onSupport, onSave, onDelete, onAuthor, onCommentCount }: {
+  post: FeedPost; canModerate: boolean; onHide: () => void; onSupport: () => void; onSave: () => void; onDelete: () => void; onAuthor: (id: string) => void; onCommentCount: (delta: number) => void;
 }) {
   const toast = useToast();
   const [open, setOpen] = useState(false);
@@ -566,6 +578,7 @@ function PostCard({ post, onSupport, onSave, onDelete, onAuthor, onCommentCount 
         <div className="min-w-0 flex-1">
           <p className="font-semibold text-ink">
             {post.author_id && !post.is_mine ? <button onClick={() => onAuthor(post.author_id!)} className="hover:underline">{post.author_name}</button> : post.author_name}
+            {post.author_is_admin && <AdminBadge />}
             {post.is_mine && <span className="ml-1.5 text-xs font-normal text-muted">(you{post.is_anonymous ? ', posted anonymously' : ''})</span>}
           </p>
           <p className="text-xs text-muted">
@@ -580,7 +593,15 @@ function PostCard({ post, onSupport, onSave, onDelete, onAuthor, onCommentCount 
               {post.is_mine ? (
                 <button onClick={() => { setMenu(false); setConfirmDelete(true); }} className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-coral-dark hover:bg-soft"><Trash2 className="h-4 w-4" /> Delete post</button>
               ) : (
-                <button onClick={() => { setMenu(false); setReporting(true); }} className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-ink hover:bg-soft"><Flag className="h-4 w-4" /> Report post</button>
+                <>
+                  {canModerate && (
+                    <>
+                      <button onClick={() => { setMenu(false); onHide(); }} className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-ink hover:bg-soft"><EyeOff className="h-4 w-4" /> Hide post</button>
+                      <button onClick={() => { setMenu(false); setConfirmDelete(true); }} className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-coral-dark hover:bg-soft"><Trash2 className="h-4 w-4" /> Delete post</button>
+                    </>
+                  )}
+                  <button onClick={() => { setMenu(false); setReporting(true); }} className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-ink hover:bg-soft"><Flag className="h-4 w-4" /> Report post</button>
+                </>
               )}
             </div>
           )}
@@ -614,10 +635,10 @@ function PostCard({ post, onSupport, onSave, onDelete, onAuthor, onCommentCount 
                 <Avatar name={c.author_name} tone={toneFor(c.author_id)} size="sm" />
               )}
               <div className="min-w-0 rounded-2xl bg-soft px-3.5 py-2.5">
-                <p className="text-sm font-semibold text-ink">{c.author_name}{c.is_mine && <span className="font-normal text-muted"> (you)</span>} <span className="font-normal text-muted">· {timeAgo(new Date(c.created_at).getTime())}</span></p>
+                <p className="text-sm font-semibold text-ink">{c.author_name}{c.author_is_admin && <AdminBadge />}{c.is_mine && <span className="font-normal text-muted"> (you)</span>} <span className="font-normal text-muted">· {timeAgo(new Date(c.created_at).getTime())}</span></p>
                 <p className="whitespace-pre-line break-words text-sm text-ink">{c.body}</p>
               </div>
-              {c.is_mine && (
+              {(c.is_mine || canModerate) && (
                 <button onClick={() => removeComment(c)} className="self-center rounded-full p-1.5 text-muted opacity-0 transition hover:text-coral group-hover:opacity-100 focus:opacity-100" aria-label="Delete comment"><Trash2 className="h-3.5 w-3.5" /></button>
               )}
             </div>
@@ -639,7 +660,7 @@ function PostCard({ post, onSupport, onSave, onDelete, onAuthor, onCommentCount 
       <Modal open={confirmDelete} onClose={() => setConfirmDelete(false)} title="Delete this post?" footer={
         <div className="flex justify-end gap-2"><button className="btn btn-ghost btn-sm" onClick={() => setConfirmDelete(false)}>Cancel</button><button className="btn btn-sm bg-coral text-navy" onClick={() => { setConfirmDelete(false); onDelete(); }}>Delete post</button></div>
       }>
-        <p className="text-muted">This removes the post and all its comments for everyone. This can’t be undone.</p>
+        <p className="text-muted">{post.is_mine ? 'This removes the post and all its comments for everyone.' : 'As an admin, you’re removing another member’s post and all its comments for everyone.'} This can’t be undone.</p>
       </Modal>
       {reporting && <ReportModal postId={post.id} onClose={() => setReporting(false)} />}
     </article>
@@ -744,7 +765,7 @@ function People({ members, incoming, onSearch, onConnect, onView }: {
             <button onClick={() => onView(m.id)} className="flex items-center gap-3 text-left">
               <Avatar name={m.display_name} tone={toneFor(m.id)} />
               <div className="min-w-0 flex-1">
-                <p className="font-semibold text-ink">{m.display_name}</p>
+                <p className="font-semibold text-ink">{m.display_name}{m.is_admin && <AdminBadge />}</p>
                 <p className="text-sm text-muted">{m.context || m.role}{m.city ? ` · ${m.city}` : ''}</p>
               </div>
             </button>

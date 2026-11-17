@@ -7,6 +7,12 @@ export type Database = {
   __InternalSupabase: { PostgrestVersion: '14.18' };
   public: {
     Tables: {
+      admins: {
+        Row: { user_id: string; granted_at: string };
+        Insert: { user_id: string; granted_at?: string };
+        Update: { user_id?: string; granted_at?: string };
+        Relationships: Rel[];
+      };
       circle_members: {
         Row: { circle_id: string; joined_at: string; user_id: string };
         Insert: { circle_id: string; joined_at?: string; user_id?: string };
@@ -76,7 +82,7 @@ export type Database = {
       community_feed: {
         Args: { p_author?: string; p_before?: string; p_circle?: string; p_limit?: number; p_saved_only?: boolean; p_topic?: string };
         Returns: {
-          author_city: string | null; author_context: string | null; author_id: string | null; author_name: string; body: string; circle_id: string | null;
+          author_city: string | null; author_context: string | null; author_id: string | null; author_is_admin: boolean; author_name: string; body: string; circle_id: string | null;
           circle_name: string | null; comment_count: number; created_at: string; id: string; is_anonymous: boolean; is_mine: boolean; saved_by_me: boolean;
           support_count: number; supported_by_me: boolean; topic: string;
         }[];
@@ -85,14 +91,16 @@ export type Database = {
         Args: { p_limit?: number; p_search?: string };
         Returns: {
           bio: string | null; city: string | null; connection_status: 'pending' | 'accepted' | null; context: string | null; display_name: string; id: string;
-          languages: string[]; requested_by_me: boolean | null; role: string; shared_circles: number; tags: string[];
+          languages: string[]; requested_by_me: boolean | null; role: string; shared_circles: number; tags: string[]; is_admin: boolean;
         }[];
       };
       community_stats: { Args: never; Returns: Json };
+      admin_overview: { Args: never; Returns: Json };
+      is_admin: { Args: never; Returns: boolean };
       delete_my_account: { Args: never; Returns: undefined };
       post_comments: {
         Args: { p_post: string };
-        Returns: { author_id: string | null; author_name: string; body: string; created_at: string; id: string; is_anonymous: boolean; is_mine: boolean }[];
+        Returns: { author_id: string | null; author_is_admin: boolean; author_name: string; body: string; created_at: string; id: string; is_anonymous: boolean; is_mine: boolean }[];
       };
     };
     Enums: { [_ in never]: never };

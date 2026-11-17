@@ -15,6 +15,7 @@ NeuroNest is an AI-powered support ecosystem for neurodiverse children and their
 | **Rewards and Streaks** | `/dashboard/rewards` |
 | Dashboard | `/dashboard` — Today's Plan, Milestones, Learning Activities, Speech Coach, Progress, Care Network, Resources, Profile, Settings, Privacy |
 | Account | `/sign-in`, `/sign-up`, `/onboarding` (or **Enter Demo Experience** on sign-in) |
+| Admin | `/dashboard/admin` (admins only) |
 
 ### Development Check
 Parents enter the child's age (with preterm correction), gender and any concerns, then answer age-matched milestone questions across four areas: social and emotional, language and communication, learning and thinking, and movement. The results show how the child compares with their age group in each area, flag possible delays, recommend the right kind of specialist (linked to Therapist Connect), and suggest practice activities. Milestones are paraphrased from the CDC's public-domain *Learn the Signs. Act Early.* checklists (2022). The check is a screening, **not a diagnosis**.
@@ -31,24 +32,18 @@ Completing plan items, learning activities, speech lessons, observations and Dev
 ## Backend (Supabase)
 Accounts and the Parent Community run on the Supabase project **neuronest** (`mrtpjraipdkekibtbdzs`). The schema lives in `supabase/migrations/`.
 
-- **Auth:** email and password through Supabase Auth. A trigger creates a `profiles` row for every new user. Members can delete their own account from Dashboard → Privacy (`delete_my_account()`), which cascades to all of their content.
+- **Auth:** email and password through Supabase Auth, with no email verification. A trigger creates a `profiles` row for every new user. Members can delete their own account from Dashboard → Privacy (`delete_my_account()`), which cascades to all of their content.
 - **Tables:** `profiles`, `circles`, `circle_members`, `posts`, `comments`, `post_reactions`, `post_saves`, `post_reports` and `connections`. RLS is enabled on every table.
 - **Anonymity is enforced in the database.** Members can only read their own rows directly. Everyone else's posts and comments come through `community_feed()` and `post_comments()`, which return `author_id = null` for anonymous content. `community_members()` powers the member directory, and `community_stats()` returns only aggregates, so it's safe for logged-out visitors.
 - **Guardrails:** members can only post into circles they've joined. Connection requests can't be tampered with (only `status` is updatable, and only by the person invited). Posting is limited to 10 posts/hour and comments to 60/hour. Moderators can set `hidden = true` on posts or comments and review `post_reports` in the Supabase dashboard.
 - **Client config:** `src/lib/supabase.ts` uses the project URL and publishable key. Both are safe to ship, since RLS enforces access. Override them with `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` (see `.env.example`).
 
-**Auth emails**
-Branded email templates live in `supabase/templates/`. Every link goes to `/auth/confirm` on the site, which verifies the token in the app and routes the person onward: sign-up → onboarding, password reset → `/reset-password`, email change → profile. To change the copy or design, edit the HTML and run:
+**Auth:** email and password with no email verification (`mailer_autoconfirm` is on), so new members are signed in straight away. Forgotten passwords are handled by contacting the team.
 
-```bash
-SUPABASE_ACCESS_TOKEN=<personal access token> node scripts/apply-auth-config.mjs
-```
-
-This also sets the Site URL, the allowed redirect URLs and the minimum password length.
-
-**Auth settings to check in the Supabase dashboard**
-1. *Authentication → URL Configuration*: set **Site URL** to `https://neuronest-official.vercel.app` and add `https://neuronest-official.vercel.app/**` to **Redirect URLs**.
-2. *Authentication → Sign In / Providers → Email*: Supabase's built-in email service only delivers to your own team's addresses. Either turn **Confirm email** off, or connect a custom SMTP provider (*Authentication → Emails → SMTP Settings*, e.g. Resend) so real parents receive confirmation and password-reset emails.
+**Admins:** the `admins` table holds admin users. Emails in the private `admin_emails` table, which isn't exposed through the API, become admins automatically when they sign up. To add one in the SQL editor: `insert into admin_emails (email) values ('someone@example.com');`. If that person already has an account, also run `insert into admins (user_id) select id from auth.users where email = 'someone@example.com';`. Admins get:
+- an **Admin panel** (`/dashboard/admin`) with community stats, a reports queue, hidden posts, and a member list with emails
+- **Hide** and **Delete** on any post, and **Delete** on any comment
+- an **Admin** badge next to their name in the community
 
 ## Data that stays in the browser
 Plans, observations, Development Check results, rewards, therapist requests and the demo experience are stored only in the visitor's browser (`localStorage`, prefixed `neuronest:`). Visitors can export or clear this data from **Dashboard → Privacy**.

@@ -119,3 +119,47 @@ export const removeConnection = (otherId: string, me: string) =>
       .delete()
       .or(`and(requester_id.eq.${me},addressee_id.eq.${otherId}),and(requester_id.eq.${otherId},addressee_id.eq.${me})`),
   );
+
+/* ---------------------------------------------------------------- admin */
+
+export interface AdminMember {
+  id: string; name: string; email: string; role: string; city: string | null;
+  joined: string; last_sign_in: string | null; posts: number; is_admin: boolean;
+}
+export interface AdminOverview {
+  members: number; signups_7d: number; posts: number; hidden_posts: number; comments: number; open_reports: number;
+  member_list: AdminMember[];
+}
+export interface ModPost { id: string; body: string; topic: string; hidden: boolean; is_anonymous: boolean; created_at: string; author: { display_name: string } | null }
+export interface ReportRow { id: string; reason: string; status: string; created_at: string; post: ModPost | null }
+
+export async function fetchAdminOverview(): Promise<R<AdminOverview>> {
+  const { data, error } = await supabase.rpc('admin_overview');
+  if (error) return { error: friendlyError(error) };
+  return { data: data as unknown as AdminOverview };
+}
+
+export async function fetchReports(): Promise<R<ReportRow[]>> {
+  const { data, error } = await supabase
+    .from('post_reports')
+    .select('id, reason, status, created_at, post:posts!post_reports_post_id_fkey(id, body, topic, hidden, is_anonymous, created_at, author:profiles!posts_author_id_fkey(display_name))')
+    .eq('status', 'open')
+    .order('created_at', { ascending: false })
+    .limit(50);
+  if (error) return { error: friendlyError(error) };
+  return { data: (data ?? []) as unknown as ReportRow[] };
+}
+
+export async function fetchHiddenPosts(): Promise<R<ModPost[]>> {
+  const { data, error } = await supabase
+    .from('posts')
+    .select('id, body, topic, hidden, is_anonymous, created_at, author:profiles!posts_author_id_fkey(display_name)')
+    .eq('hidden', true)
+    .order('created_at', { ascending: false })
+    .limit(50);
+  if (error) return { error: friendlyError(error) };
+  return { data: (data ?? []) as unknown as ModPost[] };
+}
+
+export const setPostHidden = (id: string, hidden: boolean) => run(supabase.from('posts').update({ hidden }).eq('id', id));
+export const resolveReport = (id: string, status: 'reviewed' | 'actioned') => run(supabase.from('post_reports').update({ status }).eq('id', id));

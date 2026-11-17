@@ -14,7 +14,8 @@ import { Pricing } from './pages/Pricing';
 import { FAQs } from './pages/FAQs';
 import { Resources } from './pages/Resources';
 import { Contact } from './pages/Contact';
-import { AuthConfirm, AuthHashErrors, ForgotPassword, Onboarding, ResetPassword, SignIn, SignUp } from './pages/Auth';
+import { Onboarding, SignIn, SignUp } from './pages/Auth';
+import { AdminPanel } from './pages/dashboard/Admin';
 import { Legal, NotFound } from './pages/Legal';
 import { CommunityPage, DevelopmentCheckPage, TherapistsPage } from './pages/NewFeaturePages';
 import { Overview, Rewards, TodayPlan } from './pages/dashboard/Home';
@@ -33,7 +34,6 @@ export function App() {
         <ToastProvider>
           <ThemeSync />
           <ScrollToTop />
-          <AuthHashErrors />
           <Celebration />
           <Routes>
             <Route element={<PublicLayout />}>
@@ -51,9 +51,6 @@ export function App() {
               <Route path="community" element={<CommunityPage />} />
               <Route path="sign-in" element={<SignIn />} />
               <Route path="sign-up" element={<SignUp />} />
-              <Route path="forgot-password" element={<ForgotPassword />} />
-              <Route path="reset-password" element={<ResetPassword />} />
-              <Route path="auth/confirm" element={<AuthConfirm />} />
               <Route path="onboarding" element={<Onboarding />} />
               <Route path="privacy" element={<Legal doc="privacy" />} />
               <Route path="terms" element={<Legal doc="terms" />} />
@@ -76,6 +73,7 @@ export function App() {
               <Route path="profile" element={<Profile />} />
               <Route path="settings" element={<Settings />} />
               <Route path="privacy" element={<Privacy />} />
+              <Route path="admin" element={<AdminPanel />} />
             </Route>
           </Routes>
         </ToastProvider>

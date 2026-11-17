@@ -32,13 +32,13 @@ interface AuthCtx {
   ready: boolean;
   /** Signed in with a real NeuroNest (Supabase) account. */
   isMember: boolean;
-  signUp: (u: { name: string; email: string; password: string; role: Role }) => Promise<Result & { needsConfirmation?: boolean }>;
+  /** Member with the admin role (moderation + admin panel). */
+  isAdmin: boolean;
+  signUp: (u: { name: string; email: string; password: string; role: Role }) => Promise<Result>;
   signIn: (email: string, password: string) => Promise<Result>;
   enterDemo: () => void;
   signOut: () => Promise<void>;
   update: (patch: Partial<User>) => Promise<Result>;
-  requestPasswordReset: (email: string) => Promise<Result>;
-  setNewPassword: (password: string) => Promise<Result>;
   deleteAccount: () => Promise<Result>;
 }
 
@@ -94,6 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [sessionReady, setSessionReady] = useState(false);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [profileFor, setProfileFor] = useState<string | null>(null);
+  const [admin, setAdmin] = useState(false);
   const [demoSession, setDemoSession] = useStore<'demo' | null>('session', null);
   const [demo, setDemo] = useStore<User>('demo-user', DEMO);
 
@@ -133,12 +134,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!uid || !session) {
       setProfile(null);
       setProfileFor(null);
+      setAdmin(false);
       return;
     }
     let alive = true;
-    loadProfile(uid, session.user.user_metadata ?? {}, session.user.email ?? '').then((p) => {
+    Promise.all([
+      loadProfile(uid, session.user.user_metadata ?? {}, session.user.email ?? ''),
+      supabase.from('admins').select('user_id').eq('user_id', uid).maybeSingle(),
+    ]).then(([p, a]) => {
       if (!alive) return;
       setProfile(p ?? null);
+      setAdmin(!!a.data);
       setProfileFor(uid);
     });
     return () => {
@@ -155,19 +161,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user,
     ready,
     isMember: !!member,
+    isAdmin: !!member && admin,
 
     signUp: async ({ name, email, password, role }) => {
       const { data, error } = await supabase.auth.signUp({
         email: email.trim(),
         password,
-        options: { data: { display_name: name.trim(), role }, emailRedirectTo: `${window.location.origin}/onboarding` },
+        options: { data: { display_name: name.trim(), role } },
       });
       if (error) return { error: friendlyError(error) };
-      if (data.user && data.user.identities && data.user.identities.length === 0) {
-        return { error: 'An account with this email already exists. Try signing in instead.' };
-      }
+      if (!data.session) return { error: 'An account with this email may already exist. Try signing in instead.' };
       setDemoSession(null);
-      return { needsConfirmation: !data.session };
+      return {};
     },
 
     signIn: async (email, password) => {
@@ -193,16 +198,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       if (demoSession === 'demo') setDemo((d) => ({ ...d, ...patch }));
       return {};
-    },
-
-    requestPasswordReset: async (email) => {
-      const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), { redirectTo: `${window.location.origin}/reset-password` });
-      return error ? { error: friendlyError(error) } : {};
-    },
-
-    setNewPassword: async (password) => {
-      const { error } = await supabase.auth.updateUser({ password });
-      return error ? { error: friendlyError(error) } : {};
     },
 
     deleteAccount: async () => {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate, NavLink, Outlet, useLocation } from 'react-router-dom';
 import {
-  BookOpen, CalendarDays, ClipboardCheck, Flame, FolderOpen, LayoutGrid, Loader2, LogOut, Menu, MessagesSquare, Mic, Settings,
+  BookOpen, CalendarDays, ClipboardCheck, Crown, Flame, FolderOpen, LayoutGrid, Loader2, LogOut, Menu, MessagesSquare, Mic, Settings,
   Shield, Sparkles, Star, Stethoscope, Target, TrendingUp, Trophy, UserRound, Users, X,
 } from 'lucide-react';
 import { Logo, Wave } from '../components/ui';
@@ -68,7 +68,8 @@ function StarWidget() {
 }
 
 export function DashboardLayout() {
-  const { user, signOut, ready, isMember } = useAuth();
+  const { user, signOut, ready, isMember, isAdmin } = useAuth();
+  const groups = isAdmin ? [...GROUPS, { title: 'Admin', items: [{ to: '/dashboard/admin', label: 'Admin panel', icon: Crown }] }] : GROUPS;
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
 
@@ -89,10 +90,10 @@ export function DashboardLayout() {
       </div>
       <div className="flex-1 overflow-y-auto py-4">
         <StarWidget />
-        {GROUPS.map((g) => (
+        {groups.map((g) => (
           <div key={g.title} className="mt-3 px-3">
             <p className="px-3 pb-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">{g.title}</p>
-            {g.items.map(({ to, label, icon: Icon, end, isNew }) => (
+            {g.items.map(({ to, label, icon: Icon, end, isNew }: { to: string; label: string; icon: typeof Crown; end?: boolean; isNew?: boolean }) => (
               <NavLink
                 key={to}
                 to={to}

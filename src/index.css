@@ -142,3 +142,13 @@
   .no-print { display: none !important; }
   body { background: #fff !important; }
 }
+
+/* Ecosystem orbit: slow, smooth rotation; icons counter-rotate to stay upright */
+@keyframes nn-orbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes nn-orbit-rev { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
+.nn-spin { animation: nn-orbit 48s linear infinite; will-change: transform; }
+.nn-spin-rev { animation: nn-orbit-rev 48s linear infinite; will-change: transform; }
+.nn-orbit:hover .nn-spin,
+.nn-orbit:hover .nn-spin-rev,
+.nn-orbit:focus-within .nn-spin,
+.nn-orbit:focus-within .nn-spin-rev { animation-play-state: paused; }
