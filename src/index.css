@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: 252 250 245;
+    --surface: 255 255 255;
+    --soft: 248 247 254;
+    --ink: 24 36 58;
+    --muted: 91 100 120;
+    --line: 231 235 242;
+    --lav: 240 239 252;
+    --mint-soft: 229 247 239;
+    --peach: 255 240 236;
+    --butter: 254 246 220;
+    --butter-line: 245 222 150;
+    color-scheme: light;
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+  }
+  .dark {
+    --bg: 15 24 40;
+    --surface: 24 36 58;
+    --soft: 19 30 50;
+    --ink: 236 239 246;
+    --muted: 163 173 194;
+    --line: 44 58 84;
+    --lav: 42 44 82;
+    --mint-soft: 22 58 52;
+    --peach: 66 40 42;
+    --butter: 56 50 30;
+    --butter-line: 110 96 50;
+    color-scheme: dark;
+  }
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-bg font-sans text-ink;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display;
+    font-optical-sizing: auto;
+    letter-spacing: -0.01em;
+  }
+  ::selection {
+    background: rgba(108, 99, 217, 0.2);
+  }
+  :focus-visible {
+    outline: 2px solid #6C63D9;
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .container-nn {
+    @apply mx-auto w-full max-w-[1280px] px-4 sm:px-8;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full px-6 py-3 text-[15px] font-semibold transition duration-200 active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-sm {
+    @apply px-4 py-2 text-sm;
+  }
+  .btn-coral {
+    @apply bg-coral text-navy shadow-[0_8px_20px_-8px_rgba(255,138,114,0.7)] hover:bg-coral-dark;
+  }
+  .btn-navy {
+    @apply bg-navy text-white hover:bg-navy-deep dark:bg-purple dark:hover:bg-purple-dark;
+  }
+  .btn-purple {
+    @apply bg-purple text-white hover:bg-purple-dark;
+  }
+  .btn-ghost {
+    @apply border border-line bg-surface text-ink hover:border-purple/40 hover:bg-lav;
+  }
+  .btn-light {
+    @apply border border-white/25 text-white hover:bg-white/10;
+  }
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full bg-lav px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-purple-dark dark:text-purple-light;
+  }
+  .card {
+    @apply rounded-3xl border border-line bg-surface shadow-soft;
+  }
+  .link {
+    @apply inline-flex items-center gap-1 font-semibold text-purple transition hover:gap-2 hover:text-purple-dark dark:text-purple-light;
+  }
+  .input {
+    @apply w-full rounded-2xl border border-line bg-surface px-4 py-3 text-[15px] text-ink placeholder:text-muted/70 transition focus:border-purple focus:outline-none focus:ring-4 focus:ring-purple/15;
+  }
+  .label {
+    @apply mb-1.5 block text-sm font-semibold text-ink;
+  }
+  .chip {
+    @apply inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-sm font-medium text-ink transition hover:border-purple/40;
+  }
+  .chip-active {
+    @apply border-navy bg-navy text-white shadow-lift hover:border-navy dark:border-purple dark:bg-purple;
+  }
+  .tag {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold;
+  }
+  .notice {
+    @apply rounded-2xl border border-butterline bg-butter px-4 py-3 text-sm text-ink;
+  }
+  .section {
+    @apply py-16 sm:py-24;
+  }
+  .h-section {
+    @apply text-3xl text-ink sm:text-4xl;
+  }
+  .lead {
+    @apply text-lg leading-relaxed text-muted;
+  }
+}
+
+.text-gradient-hero {
+  background: linear-gradient(90deg, #6C63D9 0%, #4FC29A 55%, #FF8A72 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.dotted-bg {
+  background-image: radial-gradient(rgb(var(--line)) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff !important; }
+}

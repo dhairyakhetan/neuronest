@@ -1,0 +1,13 @@
+{
+  "name": "NeuroNest",
+  "short_name": "NeuroNest",
+  "description": "Every Mind Matters. Every Milestone Counts.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FCFAF5",
+  "theme_color": "#FCFAF5",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
