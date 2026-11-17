@@ -10,7 +10,9 @@ const DOCS = {
     title: 'Privacy at NeuroNest',
     lead: 'NeuroNest handles sensitive child and family information — so privacy is built in from day one, not bolted on later.',
     sections: [
-      ['This prototype', 'This website is a demonstration. Information you enter — accounts, observations, Development Check results, therapist requests and community posts — is stored only in your own browser (localStorage). It is never sent to a NeuroNest server. Passwords are never stored. You can export or delete everything from Dashboard → Privacy at any time.'],
+      ['What we store', 'When you create an account, we store your email, display name and the community profile details you choose to add, plus your community posts, comments, circles and connections. Passwords are handled by our authentication provider and are never visible to us. Plans, observations, Development Check results, rewards and therapist requests stay only in your own browser.'],
+      ['Members-only community', 'Community posts are visible only to signed-in members. Anonymous posts and comments never reveal their author to other members — this is enforced in the database itself, not just hidden in the app.'],
+      ['Your controls', 'You can edit your profile, delete any post or comment, and permanently delete your account (with all of your community content) from Dashboard → Privacy at any time.'],
       ['Consent first', 'In the production product, NeuroNest will ask for explicit parental consent for every category of data collected. Child data will never be sold or used for advertising.'],
       ['Data minimisation', 'We aim to collect only what is essential. You never need to enter a child’s full name, date of birth, school or photos to use NeuroNest.'],
       ['Role-based access', 'Parents, therapists and schools will each see only what is relevant and what a parent has chosen to share. Access will be logged and can be revoked at any time.'],
@@ -26,9 +28,9 @@ const DOCS = {
     sections: [
       ['Prototype status', 'NeuroNest is a startup venture currently under development. Features on this site are interactive previews and may change.'],
       ['Not medical advice', 'NeuroNest provides supportive observations, personalised guidance, and tools for organising progress. It does not provide medical diagnoses or replace qualified professionals. If you are worried about your child, talk to a paediatrician.'],
-      ['Sample content', 'Therapist profiles, community members, circles and posts shown in this prototype are illustrative samples, not real people or practitioners.'],
+      ['Sample content', 'Therapist profiles shown in Therapist Connect are illustrative samples, not real practitioners. The Parent Community is made up of real members — please treat everyone with care.'],
       ['Community conduct', 'Be kind, protect children’s privacy, share experiences rather than medical advice, and report anything that feels unsafe.'],
-      ['Your data', 'Everything you enter stays in your browser. Clearing your browser data will remove it.'],
+      ['Your account', 'You’re responsible for what you post. We may remove content or accounts that break the community guidelines. You can delete your account at any time.'],
     ],
   },
   'responsible-ai': {

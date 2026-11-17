@@ -9,6 +9,7 @@ import { clearAll, exportAll, useStore } from '../../lib/storage';
 import { useTheme, type Theme } from '../../lib/theme';
 import { useToast } from '../../lib/toast';
 import { INTERESTS, LANGUAGES, ROLES } from '../../data/content';
+import { COMMUNITY_TAGS } from '../../data/community';
 import { THERAPISTS } from '../../data/therapists';
 import { Field, IconBadge, Modal, PrototypeNote } from '../../components/ui';
 import { DashHeader } from '../NewFeaturePages';
@@ -98,21 +99,38 @@ export function CareNetwork() {
 /* ----------------------------------------------------------------- Profile */
 
 export function Profile() {
-  const { user, update } = useAuth();
+  const { user, update, isMember } = useAuth();
   const toast = useToast();
-  const [f, setF] = useState({ name: user!.name, email: user!.email, role: user!.role, language: user!.language, experience: user!.experience });
+  const [busy, setBusy] = useState(false);
+  const [f, setF] = useState({
+    name: user!.name, role: user!.role, language: user!.language, experience: user!.experience,
+    city: user!.city ?? '', context: user!.context ?? '', bio: user!.bio ?? '', tags: user!.tags ?? [], languages: user!.languages ?? [],
+  });
+  const toggle = (k: 'tags' | 'languages', v: string) => setF((x) => ({ ...x, [k]: x[k].includes(v) ? x[k].filter((y) => y !== v) : [...x[k], v].slice(0, 8) }));
+
   return (
     <div>
       <DashHeader icon={UserRound} tone="purple" title="Profile" lead="Manage your account information and preferences." />
-      <div className="card max-w-2xl p-7">
+      <div className="card max-w-3xl p-7">
         <div className="flex items-center gap-4">
           <span className="flex h-16 w-16 items-center justify-center rounded-full bg-mintsoft text-2xl font-bold text-mint-dark">{f.name[0]?.toUpperCase()}</span>
-          <div><p className="font-display text-xl text-ink">{user!.name}</p><p className="text-sm text-muted">{user!.email} · {user!.role}</p></div>
+          <div>
+            <p className="font-display text-xl text-ink">{user!.name}</p>
+            <p className="text-sm text-muted">{user!.email} · {isMember ? 'NeuroNest member' : 'Demo experience'}</p>
+          </div>
         </div>
-        <form className="mt-8 space-y-4" onSubmit={(e) => { e.preventDefault(); update(f); toast('Profile saved'); }}>
+        <form
+          className="mt-8 space-y-5"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            setBusy(true);
+            const r = await update(f);
+            setBusy(false);
+            toast(r.error ?? 'Profile saved', r.error ? 'info' : 'success');
+          }}
+        >
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Full Name"><input required className="input" value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} /></Field>
-            <Field label="Email Address"><input required type="email" className="input" value={f.email} onChange={(e) => setF({ ...f, email: e.target.value })} /></Field>
+            <Field label="Display name"><input required maxLength={60} className="input" value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} /></Field>
             <Field label="Role"><select className="input" value={f.role} onChange={(e) => setF({ ...f, role: e.target.value as Role })}>{ROLES.map((r) => <option key={r}>{r}</option>)}</select></Field>
             <Field label="Preferred Language"><select className="input" value={f.language} onChange={(e) => setF({ ...f, language: e.target.value })}>{LANGUAGES.map((l) => <option key={l}>{l}</option>)}</select></Field>
           </div>
@@ -126,7 +144,33 @@ export function Profile() {
               ))}
             </div>
           </div>
-          <button className="btn btn-coral">Save Changes</button>
+
+          {isMember && (
+            <div className="space-y-4 rounded-3xl bg-soft p-5">
+              <div>
+                <p className="flex items-center gap-2 font-display text-lg text-ink"><MessagesSquare className="h-5 w-5 text-purple" /> Community profile</p>
+                <p className="text-sm text-muted">Visible to other signed-in members. Never include your child’s name or school.</p>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="About your family"><input className="input" maxLength={80} value={f.context} onChange={(e) => setF({ ...f, context: e.target.value })} placeholder="Parent of a 4-year-old" /></Field>
+                <Field label="City"><input className="input" maxLength={60} value={f.city} onChange={(e) => setF({ ...f, city: e.target.value })} placeholder="e.g. Pune" /></Field>
+              </div>
+              <Field label="Short bio (optional)"><textarea className="input min-h-[80px]" maxLength={280} value={f.bio} onChange={(e) => setF({ ...f, bio: e.target.value })} placeholder="What you’d love to share or learn from other parents" /></Field>
+              <div>
+                <p className="label">Interests <span className="font-normal text-muted">(up to 8)</span></p>
+                <div className="flex flex-wrap gap-2">
+                  {COMMUNITY_TAGS.map((t) => <button type="button" key={t} onClick={() => toggle('tags', t)} className={`chip py-1.5 text-sm ${f.tags.includes(t) ? 'border-purple bg-lav text-purple-dark dark:text-purple-light' : ''}`}>{t}</button>)}
+                </div>
+              </div>
+              <div>
+                <p className="label">Languages you speak</p>
+                <div className="flex flex-wrap gap-2">
+                  {LANGUAGES.map((l) => <button type="button" key={l} onClick={() => toggle('languages', l)} className={`chip py-1.5 text-sm ${f.languages.includes(l) ? 'border-purple bg-lav text-purple-dark dark:text-purple-light' : ''}`}>{l}</button>)}
+                </div>
+              </div>
+            </div>
+          )}
+          <button className="btn btn-coral" disabled={busy}>Save Changes</button>
         </form>
       </div>
     </div>
@@ -171,8 +215,9 @@ export function Settings() {
 /* ----------------------------------------------------------------- Privacy */
 
 export function Privacy() {
-  const { signOut, user } = useAuth();
+  const { user, isMember, deleteAccount } = useAuth();
   const nav = useNavigate();
+  const [busy, setBusy] = useState(false);
   const toast = useToast();
   const [confirm, setConfirm] = useState<'delete' | 'clear' | null>(null);
 
@@ -190,14 +235,18 @@ export function Privacy() {
     { icon: UserRound, t: 'Profile Information', d: 'Your profile stores your name, email, role, preferred language, and experience preference. No sensitive medical or developmental information is required.', action: <Link to="/dashboard/profile" className="btn btn-ghost btn-sm">Edit Profile</Link> },
     { icon: Users, t: 'Sharing Preferences', d: 'Choose what to share, with whom, and for how long. You can revoke a therapist’s access at any time.', action: <Link to="/dashboard/care-network" className="btn btn-ghost btn-sm">View Care Network</Link> },
     { icon: Download, t: 'Data Export', d: 'Download a copy of the information stored in your browser for this prototype session.', action: <button className="btn btn-ghost btn-sm" onClick={doExport}>Export My Data</button> },
-    { icon: Trash2, t: 'Account Deletion', d: 'Permanently remove your prototype account and all locally stored information from this browser.', action: <button className="btn btn-ghost btn-sm text-coral-dark" onClick={() => setConfirm('delete')}>Delete Account</button> },
+    { icon: Trash2, t: 'Account Deletion', d: isMember ? 'Permanently delete your NeuroNest account, your community posts, comments and connections, and everything stored in this browser.' : 'Remove the demo session and all locally stored information from this browser.', action: <button className="btn btn-ghost btn-sm text-coral-dark" onClick={() => setConfirm('delete')}>Delete Account</button> },
     { icon: Shield, t: 'Prototype Data', d: 'Clear all locally stored prototype data from this browser. This includes activities, observations, checks, rewards, saved resources, and settings.', action: <button className="btn btn-ghost btn-sm" onClick={() => setConfirm('clear')}>Clear Prototype Data</button> },
   ];
 
   return (
     <div className="max-w-3xl">
       <DashHeader icon={Shield} tone="purple" title="Your Information and Controls" lead="Manage your profile information, sharing preferences, and data." />
-      <PrototypeNote className="mb-6">This website demonstration may store selected information only in your browser. Do not enter sensitive medical, developmental, or personally identifying information.</PrototypeNote>
+      <PrototypeNote className="mb-6">
+        {isMember
+          ? 'Your account and community activity are stored securely with NeuroNest. Plans, observations, Development Checks and rewards stay only in this browser. Do not enter sensitive medical or identifying information about your child.'
+          : 'The demo stores information only in this browser. Do not enter sensitive medical, developmental, or personally identifying information.'}
+      </PrototypeNote>
       <div className="space-y-3">
         {rows.map((r) => (
           <div key={r.t} className="card flex flex-col gap-4 p-6 sm:flex-row sm:items-center">
@@ -210,27 +259,40 @@ export function Privacy() {
       <Modal
         open={!!confirm}
         onClose={() => setConfirm(null)}
-        title={confirm === 'delete' ? 'Delete your prototype account?' : 'Clear prototype data?'}
+        title={confirm === 'delete' ? (isMember ? 'Delete your NeuroNest account?' : 'Remove demo data?') : 'Clear prototype data?'}
         footer={
           <div className="flex justify-end gap-2">
             <button className="btn btn-ghost btn-sm" onClick={() => setConfirm(null)}>Cancel</button>
             <button
               className="btn btn-sm bg-coral text-navy"
-              onClick={() => {
-                if (confirm === 'delete') { clearAll(['theme']); signOut(); nav('/'); }
-                else { clearAll(['theme', 'session', 'account', 'demo-user']); toast('Prototype data cleared'); }
+              disabled={busy}
+              onClick={async () => {
+                if (confirm === 'delete') {
+                  setBusy(true);
+                  const r = await deleteAccount();
+                  setBusy(false);
+                  if (r.error) { toast(r.error, 'info'); return; }
+                  setConfirm(null);
+                  toast(isMember ? 'Your account has been deleted' : 'Demo data removed', 'info');
+                  nav('/');
+                  return;
+                }
+                clearAll(['theme', 'session', 'demo-user']);
+                toast('Prototype data cleared');
                 setConfirm(null);
               }}
             >
-              {confirm === 'delete' ? 'Delete everything' : 'Clear data'}
+              {confirm === 'delete' ? (isMember ? 'Delete my account' : 'Remove demo data') : 'Clear data'}
             </button>
           </div>
         }
       >
         <p className="text-muted">
           {confirm === 'delete'
-            ? `This removes ${user?.demo ? 'the demo session' : 'your prototype account'} and everything stored in this browser — observations, checks, rewards, posts and settings. This can’t be undone.`
-            : 'This removes activities, observations, Development Checks, rewards, therapist requests, community activity and saved items from this browser. Your account stays signed in.'}
+            ? isMember
+              ? `This permanently deletes the account for ${user?.email}, including your community profile, posts, comments, circles and connections, plus everything stored in this browser. This can’t be undone.`
+              : 'This removes the demo session and everything stored in this browser — observations, checks, rewards and settings.'
+            : 'This removes activities, observations, Development Checks, rewards, therapist requests and saved items from this browser. Your account and community posts are not affected.'}
         </p>
       </Modal>
     </div>

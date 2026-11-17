@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate, NavLink, Outlet, useLocation } from 'react-router-dom';
 import {
-  BookOpen, CalendarDays, ClipboardCheck, Flame, FolderOpen, LayoutGrid, LogOut, Menu, MessagesSquare, Mic, Settings,
+  BookOpen, CalendarDays, ClipboardCheck, Flame, FolderOpen, LayoutGrid, Loader2, LogOut, Menu, MessagesSquare, Mic, Settings,
   Shield, Sparkles, Star, Stethoscope, Target, TrendingUp, Trophy, UserRound, Users, X,
 } from 'lucide-react';
 import { Logo, Wave } from '../components/ui';
@@ -68,7 +68,7 @@ function StarWidget() {
 }
 
 export function DashboardLayout() {
-  const { user, signOut } = useAuth();
+  const { user, signOut, ready, isMember } = useAuth();
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
 
@@ -77,6 +77,7 @@ export function DashboardLayout() {
     window.scrollTo({ top: 0 });
   }, [pathname]);
 
+  if (!ready) return <div className="flex min-h-screen items-center justify-center bg-bg text-muted"><Loader2 className="h-6 w-6 animate-spin" /></div>;
   if (!user) return <Navigate to="/sign-in" replace state={{ from: pathname }} />;
   if (!user.onboarded) return <Navigate to="/onboarding" replace />;
 
@@ -117,9 +118,9 @@ export function DashboardLayout() {
           <span className="flex h-9 w-9 items-center justify-center rounded-full bg-mintsoft font-bold text-mint-dark">{user.name[0]?.toUpperCase()}</span>
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-semibold text-ink">{user.name}</p>
-            <p className="truncate text-xs text-muted">{user.demo ? 'Demo experience' : user.role}</p>
+            <p className="truncate text-xs text-muted">{user.demo ? 'Demo experience' : isMember ? user.email : user.role}</p>
           </div>
-          <button onClick={signOut} className="rounded-full p-2 text-muted hover:bg-soft hover:text-ink" aria-label="Sign out" title="Sign out">
+          <button onClick={() => { void signOut(); }} className="rounded-full p-2 text-muted hover:bg-soft hover:text-ink" aria-label="Sign out" title="Sign out">
             <LogOut className="h-4 w-4" />
           </button>
         </div>
