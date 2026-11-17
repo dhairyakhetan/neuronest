@@ -14,7 +14,7 @@ import { Pricing } from './pages/Pricing';
 import { FAQs } from './pages/FAQs';
 import { Resources } from './pages/Resources';
 import { Contact } from './pages/Contact';
-import { AuthConfirm, ForgotPassword, Onboarding, ResetPassword, SignIn, SignUp } from './pages/Auth';
+import { AuthConfirm, AuthHashErrors, ForgotPassword, Onboarding, ResetPassword, SignIn, SignUp } from './pages/Auth';
 import { Legal, NotFound } from './pages/Legal';
 import { CommunityPage, DevelopmentCheckPage, TherapistsPage } from './pages/NewFeaturePages';
 import { Overview, Rewards, TodayPlan } from './pages/dashboard/Home';
@@ -33,6 +33,7 @@ export function App() {
         <ToastProvider>
           <ThemeSync />
           <ScrollToTop />
+          <AuthHashErrors />
           <Celebration />
           <Routes>
             <Route element={<PublicLayout />}>

@@ -377,6 +377,11 @@ export function AuthConfirm() {
   useEffect(() => {
     if (ran.current) return; // tokens are single-use — never verify twice
     ran.current = true;
+    const linkError = params.get('error');
+    if (linkError) {
+      setError(/expired|invalid/i.test(linkError) ? 'This link has expired or has already been used.' : linkError);
+      return;
+    }
     const tokenHash = params.get('token_hash');
     if (!tokenHash || !type || !OTP_TYPES.includes(type)) {
       setError('This link is incomplete. Please use the full link from your email.');
@@ -421,4 +426,21 @@ export function AuthConfirm() {
       )}
     </Shell>
   );
+}
+
+/**
+ * Supabase's hosted verify links return errors in the URL hash
+ * (#error_code=otp_expired…). Send those to /auth/confirm so people see a
+ * clear message and a resend option instead of a silent redirect.
+ */
+export function AuthHashErrors() {
+  const nav = useNavigate();
+  useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    if (!hash.includes('error_code=')) return;
+    const h = new URLSearchParams(hash);
+    const type = h.get('type') === 'recovery' || window.location.pathname.startsWith('/reset-password') ? 'recovery' : 'signup';
+    nav(`/auth/confirm?type=${type}&error=${encodeURIComponent(h.get('error_description') || 'This link has expired or has already been used.')}`, { replace: true });
+  }, [nav]);
+  return null;
 }
