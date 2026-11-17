@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowRight, BookOpen, CalendarDays, Check, ClipboardCheck, Compass, FolderOpen, GraduationCap, MessagesSquare, NotebookPen, Sparkles, Stethoscope, UserPlus, Users } from 'lucide-react';
+import { BookOpen, CalendarDays, Check, ClipboardCheck, Compass, FolderOpen, GraduationCap, MessagesSquare, NotebookPen, Sparkles, Stethoscope, UserPlus, Users } from 'lucide-react';
 import { INTERESTS, JOURNEY, ROLES } from '../data/content';
-import { CTABand, IconBadge, PageHero } from '../components/ui';
+import { AccountCTA, CTABand, IconBadge, PageHero } from '../components/ui';
+import { useAuth } from '../lib/auth';
 
 const COLORS = ['bg-purple', 'bg-mint', 'bg-coral', 'bg-purple', 'bg-mint'];
 const ICONS = [UserPlus, Sparkles, BookOpen, NotebookPen, Users];
@@ -38,6 +38,7 @@ function Preview({ step }: { step: number }) {
 }
 
 export function HowItWorks() {
+  const { user } = useAuth();
   const [step, setStep] = useState(0);
   const s = JOURNEY[step]!;
   const Icon = ICONS[step]!;
@@ -47,7 +48,7 @@ export function HowItWorks() {
       <section className="container-nn pb-24">
         <div className="grid gap-3 md:grid-cols-5">
           {JOURNEY.map((j, i) => (
-            <button key={j.title} onClick={() => setStep(i)} className={`flex items-center gap-3 rounded-2xl border p-4 text-left transition ${i === step ? 'border-purple/40 bg-lav' : 'border-line bg-surface hover:border-purple/30'}`}>
+            <button key={j.title} onClick={() => setStep(i)} className={`group flex items-center gap-3 rounded-2xl border p-4 text-left transition duration-300 hover:-translate-y-0.5 hover:shadow-soft ${i === step ? 'border-purple/40 bg-lav' : 'border-line bg-surface hover:border-purple/30'}`}>
               <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white ${COLORS[i]}`}>{i + 1}</span>
               <span className="text-sm font-medium text-ink">{j.title}</span>
             </button>
@@ -63,7 +64,7 @@ export function HowItWorks() {
               {step < 4 ? (
                 <button className="btn btn-navy" onClick={() => setStep(step + 1)}>Next Step</button>
               ) : (
-                <Link to="/sign-up" className="btn btn-coral">Get started <ArrowRight className="h-4 w-4" /></Link>
+                <AccountCTA label="Get started" />
               )}
             </div>
           </div>
@@ -73,8 +74,8 @@ export function HowItWorks() {
           </div>
         </div>
       </section>
-      <CTABand title="Ready to begin?" text="Create your prototype account and explore the journey for yourself.">
-        <Link to="/sign-up" className="btn btn-coral">Create Your Account <ArrowRight className="h-4 w-4" /></Link>
+      <CTABand title={user ? 'You’re on your way' : 'Ready to begin?'} text={user ? 'Jump back into your dashboard and keep exploring.' : 'Create your free account and explore the journey for yourself.'}>
+        <AccountCTA />
       </CTABand>
     </>
   );

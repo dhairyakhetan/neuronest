@@ -31,12 +31,12 @@ export function ResourceLibrary() {
           <button key={c} onClick={() => setCat(c)} className={`chip py-1.5 text-sm ${cat === c ? 'chip-active' : ''}`}>{c}</button>
         ))}
       </div>
-      <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div key={`${cat}-${onlySaved}-${term}`} className="stagger mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {list.map((r) => (
-          <article key={r.id} className="card flex flex-col p-6">
+          <article key={r.id} className="card card-hover group flex cursor-pointer flex-col p-6" onClick={() => setOpen(r)}>
             <div className="flex items-start justify-between gap-2">
               <span className="tag bg-lav text-purple-dark dark:text-purple-light">{r.category}</span>
-              <button onClick={() => toggle(r.id)} aria-label={saved.includes(r.id) ? 'Unsave' : 'Save'} className="text-muted hover:text-purple">
+              <button onClick={(e) => { e.stopPropagation(); toggle(r.id); }} aria-label={saved.includes(r.id) ? 'Unsave' : 'Save'} className="text-muted hover:text-purple">
                 {saved.includes(r.id) ? <BookmarkCheck className="h-5 w-5 text-purple" /> : <Bookmark className="h-5 w-5" />}
               </button>
             </div>
@@ -44,7 +44,7 @@ export function ResourceLibrary() {
             <p className="mt-2 flex-1 text-[15px] text-muted">{r.desc}</p>
             <div className="mt-5 flex items-center justify-between text-sm">
               <span className="flex items-center gap-1.5 text-muted"><Clock className="h-4 w-4" />{r.mins} min read</span>
-              <button className="font-semibold text-purple" onClick={() => setOpen(r)}>Open →</button>
+              <span className="link">Open <span className="transition-transform duration-300 group-hover:translate-x-1">→</span></span>
             </div>
           </article>
         ))}

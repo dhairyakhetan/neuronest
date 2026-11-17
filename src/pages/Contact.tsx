@@ -10,11 +10,11 @@ export function Contact() {
       <PageHero eyebrow="Contact" icon={MessageSquare} title="Get in touch with NeuroNest" lead="Have a question, idea, or just want to say hello? The NeuroNest team would love to hear from you." />
       <section className="container-nn grid gap-8 pb-24 lg:grid-cols-[1fr_1.4fr]">
         <div className="space-y-4">
-          <a href={`mailto:${EMAIL}`} className="card flex items-center gap-4 p-6 transition hover:shadow-lift">
+          <a href={`mailto:${EMAIL}`} className="card card-hover group flex items-center gap-4 p-6">
             <IconBadge icon={Mail} tone="purple" />
             <div><p className="font-semibold text-ink">Email</p><p className="text-muted">{EMAIL}</p></div>
           </a>
-          <a href="https://instagram.com/neuronest__official" target="_blank" rel="noreferrer" className="card flex items-center gap-4 p-6 transition hover:shadow-lift">
+          <a href="https://instagram.com/neuronest__official" target="_blank" rel="noreferrer" className="card card-hover group flex items-center gap-4 p-6">
             <IconBadge icon={Instagram} tone="coral" />
             <div><p className="font-semibold text-ink">Instagram</p><p className="text-muted">{INSTAGRAM}</p></div>
           </a>

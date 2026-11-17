@@ -69,7 +69,7 @@ export function CompanionChat({ compact = false, onNavigate }: { compact?: boole
         <div ref={end} />
       </div>
       <div className="border-t border-line bg-surface p-3">
-        <div className={`mb-3 flex gap-2 ${compact ? 'flex-wrap' : 'overflow-x-auto pb-1'}`}>
+        <div className={`mb-3 flex gap-2 ${compact ? 'flex-wrap' : 'no-scrollbar overflow-x-auto'}`}>
           {COMPANION_PROMPTS.map((p) => (
             <button key={p.label} onClick={() => send(p.label)} className="shrink-0 rounded-full border border-purple/20 bg-lav px-3 py-1.5 text-xs font-medium text-purple-dark transition hover:border-purple/50 dark:text-purple-light">
               {p.label}

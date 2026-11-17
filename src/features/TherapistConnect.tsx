@@ -87,7 +87,7 @@ export function TherapistConnect({ embedded = false }: { embedded?: boolean }) {
           { icon: ShieldCheck, tone: 'mint' as const, t: 'Request and share — with consent', d: 'Choose exactly what to share: a Development Check, observations, or nothing at all.' },
           { icon: NotebookPen, tone: 'coral' as const, t: 'Collaborate on goals', d: 'Therapists share goals, notes and home practice through their secure portal.' },
         ].map((s) => (
-          <div key={s.t} className="card flex gap-4 p-5">
+          <div key={s.t} className="card card-hover group flex gap-4 p-5">
             <IconBadge icon={s.icon} tone={s.tone} />
             <div>
               <p className="font-semibold text-ink">{s.t}</p>
@@ -157,13 +157,11 @@ export function TherapistConnect({ embedded = false }: { embedded?: boolean }) {
           <p className="text-sm text-muted">{list.length} therapist{list.length === 1 ? '' : 's'}</p>
         </div>
 
-        <div className="-mx-4 mt-5 overflow-x-auto px-4 pb-1">
-          <div className="flex gap-2">
-            <button className={`chip shrink-0 ${spec === 'all' ? 'chip-active' : ''}`} onClick={() => setSpec('all')}>All specialties</button>
-            {SPECIALTIES.map((s) => (
-              <button key={s.id} className={`chip shrink-0 ${spec === s.id ? 'chip-active' : ''}`} onClick={() => setSpec(s.id)}>{s.label}</button>
-            ))}
-          </div>
+        <div className="mt-5 flex flex-wrap gap-2">
+          <button className={`chip ${spec === 'all' ? 'chip-active' : ''}`} onClick={() => setSpec('all')}>All specialties</button>
+          {SPECIALTIES.map((s) => (
+            <button key={s.id} className={`chip ${spec === s.id ? 'chip-active' : ''}`} onClick={() => setSpec(s.id)}>{s.label}</button>
+          ))}
         </div>
         {spec !== 'all' && (
           <p className="mt-3 text-sm text-muted"><b className="text-ink">{specialty(spec).label}</b> helps with: {specialty(spec).helpsWith}</p>
@@ -198,11 +196,11 @@ export function TherapistConnect({ embedded = false }: { embedded?: boolean }) {
           </button>
         )}
 
-        <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <div key={`${spec}-${mode}-${lang}-${city}-${sort}`} className="stagger mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {list.map(({ t, next }) => {
             const s0 = specialty(t.specialties[0]!);
             return (
-              <article key={t.id} className="card flex flex-col p-6 transition hover:-translate-y-0.5 hover:shadow-lift">
+              <article key={t.id} className="card card-hover group flex flex-col p-6">
                 <div className="flex items-start gap-3">
                   <Avatar name={t.name} tone={s0.tone} size="lg" />
                   <div className="min-w-0 flex-1">

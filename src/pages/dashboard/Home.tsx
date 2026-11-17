@@ -70,11 +70,11 @@ export function Overview() {
         </Link>
       </div>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="stagger mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {CARDS.map((c) => (
-          <Link key={c.title} to={c.to} className={`group rounded-3xl border border-line p-6 transition hover:-translate-y-0.5 hover:shadow-lift ${TONE[c.tone].bg}`}>
+          <Link key={c.title} to={c.to} className={`card-hover group rounded-3xl border border-line p-6 transition duration-300 ${TONE[c.tone].bg}`}>
             <div className="flex items-start justify-between">
-              <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-surface shadow-soft"><c.icon className={`h-5 w-5 ${TONE[c.tone].icon}`} /></span>
+              <span className="group-icon inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-surface shadow-soft"><c.icon className={`h-5 w-5 ${TONE[c.tone].icon}`} /></span>
               {c.isNew && <NewBadge />}
             </div>
             <p className="mt-5 font-display text-lg font-semibold text-ink">{c.title}</p>
@@ -140,7 +140,7 @@ export function TodayPlan() {
       ) : (
         <ul className="space-y-3">
           {items.map((it) => (
-            <li key={it.id} className={`card flex items-center gap-4 p-4 transition ${it.done ? 'opacity-70' : ''}`}>
+            <li key={it.id} className={`card flex items-center gap-4 p-4 hover:-translate-y-0.5 ${it.done ? 'opacity-70' : ''}`}>
               <button onClick={() => toggle(it)} className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 transition ${it.done ? 'border-mint bg-mint text-white' : 'border-line hover:border-mint'}`} aria-label={it.done ? 'Mark not done' : 'Mark done'}>
                 {it.done && <Check className="h-4 w-4" />}
               </button>
@@ -246,10 +246,10 @@ export function Rewards() {
 
       <div>
         <h2 className="text-2xl text-ink">Badges</h2>
-        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+        <div className="stagger mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {r.badges.map((b) => (
-            <div key={b.id} className={`rounded-3xl border p-5 text-center transition ${b.earned ? 'border-amber-300/60 bg-butter' : 'border-line bg-surface opacity-70'}`}>
-              <span className={`mx-auto flex h-14 w-14 items-center justify-center rounded-full ${b.earned ? 'bg-amber-400 text-white shadow-[0_8px_20px_-8px_rgba(245,196,81,0.9)]' : 'bg-soft text-muted'}`}>
+            <div key={b.id} className={`group rounded-3xl border p-5 text-center transition duration-300 hover:-translate-y-1 hover:shadow-lift ${b.earned ? 'border-amber-300/60 bg-butter' : 'border-line bg-surface opacity-70'}`}>
+              <span className={`group-icon mx-auto flex h-14 w-14 items-center justify-center rounded-full ${b.earned ? 'bg-amber-400 text-white shadow-[0_8px_20px_-8px_rgba(245,196,81,0.9)]' : 'bg-soft text-muted'}`}>
                 {b.earned ? <b.icon className="h-6 w-6" /> : <Lock className="h-5 w-5" />}
               </span>
               <p className="mt-3 font-semibold text-ink">{b.name}</p>

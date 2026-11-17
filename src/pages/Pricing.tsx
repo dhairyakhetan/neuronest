@@ -12,9 +12,9 @@ export function Pricing() {
     <>
       <PageHero eyebrow="Pricing" icon={Tag} title="Flexible Support for Every Journey" lead="NeuroNest is developing accessible ways to bring personalised guidance, learning support, progress organisation, and care connections together." />
       <section className="container-nn pb-16">
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="stagger grid gap-6 lg:grid-cols-3">
           {PLANS.map((p) => (
-            <div key={p.name} className="card flex flex-col p-8">
+            <div key={p.name} className="card card-hover group flex flex-col p-8">
               <span className={`tag w-fit uppercase tracking-[0.1em] ${TONE[p.tone].bg} ${TONE[p.tone].text}`}>{p.name}</span>
               <p className="mt-5 text-muted">{p.desc}</p>
               <p className="mt-6 font-display text-2xl text-ink">Pricing to be announced</p>

@@ -68,19 +68,22 @@
     @apply mx-auto w-full max-w-[1280px] px-4 sm:px-8;
   }
   .btn {
-    @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full px-6 py-3 text-[15px] font-semibold transition duration-200 active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full px-6 py-3 text-[15px] font-semibold transition duration-300 hover:-translate-y-0.5 active:translate-y-0 active:scale-[.97] disabled:pointer-events-none disabled:opacity-50;
+    transition-timing-function: cubic-bezier(.2, .8, .2, 1);
   }
+  .btn svg { @apply transition-transform duration-300; }
+  .btn:hover svg:last-child:not(:first-child) { transform: translateX(3px); }
   .btn-sm {
     @apply px-4 py-2 text-sm;
   }
   .btn-coral {
-    @apply bg-coral text-navy shadow-[0_8px_20px_-8px_rgba(255,138,114,0.7)] hover:bg-coral-dark;
+    @apply bg-coral text-navy shadow-[0_8px_20px_-8px_rgba(255,138,114,0.7)] hover:bg-coral-dark hover:shadow-[0_14px_28px_-10px_rgba(255,138,114,0.85)];
   }
   .btn-navy {
     @apply bg-navy text-white hover:bg-navy-deep dark:bg-purple dark:hover:bg-purple-dark;
   }
   .btn-purple {
-    @apply bg-purple text-white hover:bg-purple-dark;
+    @apply bg-purple text-white hover:bg-purple-dark hover:shadow-glow;
   }
   .btn-ghost {
     @apply border border-line bg-surface text-ink hover:border-purple/40 hover:bg-lav;
@@ -92,8 +95,18 @@
     @apply inline-flex items-center gap-2 rounded-full bg-lav px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-purple-dark dark:text-purple-light;
   }
   .card {
-    @apply rounded-3xl border border-line bg-surface shadow-soft;
+    @apply rounded-3xl border border-line bg-surface shadow-soft transition-[box-shadow,border-color,transform] duration-300 hover:border-purple/20 hover:shadow-lift;
+    transition-timing-function: cubic-bezier(.2, .8, .2, 1);
   }
+  /* interactive cards: lift + glow, icons inside animate (use with `group`) */
+  .card-hover {
+    @apply hover:-translate-y-1.5 hover:border-purple/30 hover:shadow-[0_2px_4px_rgba(24,36,58,0.05),0_24px_48px_-20px_rgba(108,99,217,0.35)] active:translate-y-0;
+  }
+  .group-icon {
+    @apply transition-transform duration-500;
+    transition-timing-function: cubic-bezier(.34, 1.56, .64, 1);
+  }
+  .group:hover .group-icon { transform: scale(1.12) rotate(-8deg); }
   .link {
     @apply inline-flex items-center gap-1 font-semibold text-purple transition hover:gap-2 hover:text-purple-dark dark:text-purple-light;
   }
@@ -104,7 +117,7 @@
     @apply mb-1.5 block text-sm font-semibold text-ink;
   }
   .chip {
-    @apply inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-sm font-medium text-ink transition hover:border-purple/40;
+    @apply inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-sm font-medium text-ink transition duration-300 hover:-translate-y-0.5 hover:border-purple/40 hover:shadow-soft active:translate-y-0 active:scale-[.97];
   }
   .chip-active {
     @apply border-navy bg-navy text-white shadow-lift hover:border-navy dark:border-purple dark:bg-purple;
@@ -137,6 +150,22 @@
   background-image: radial-gradient(rgb(var(--line)) 1px, transparent 1px);
   background-size: 28px 28px;
 }
+
+/* hide scrollbars on rows that scroll sideways (touch-friendly, no ugly bar) */
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* staggered entrance for grids and lists */
+.stagger > * { animation: nn-rise .55s cubic-bezier(.2, .8, .2, 1) both; }
+.stagger > *:nth-child(2) { animation-delay: 50ms; }
+.stagger > *:nth-child(3) { animation-delay: 100ms; }
+.stagger > *:nth-child(4) { animation-delay: 150ms; }
+.stagger > *:nth-child(5) { animation-delay: 200ms; }
+.stagger > *:nth-child(6) { animation-delay: 250ms; }
+.stagger > *:nth-child(7) { animation-delay: 300ms; }
+.stagger > *:nth-child(8) { animation-delay: 350ms; }
+.stagger > *:nth-child(n + 9) { animation-delay: 400ms; }
+@keyframes nn-rise { from { opacity: 0; transform: translateY(14px) scale(.985); } to { opacity: 1; transform: none; } }
 
 @media print {
   .no-print { display: none !important; }

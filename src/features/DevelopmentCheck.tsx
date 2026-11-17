@@ -269,7 +269,7 @@ export function DevelopmentCheck({ embedded = false }: { embedded?: boolean }) {
             {checks.map((c) => {
               const flagged = c.results.filter((r) => r.status === 'flag').length;
               return (
-                <div key={c.id} className="card flex items-center gap-4 p-4">
+                <div key={c.id} className="card card-hover group flex items-center gap-4 p-4">
                   <IconBadge icon={ClipboardCheck} tone={c.overall === 'onpar' ? 'mint' : c.overall === 'watch' ? 'butter' : 'coral'} />
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-semibold text-ink">{c.child.name || 'Child'} · {ageLabel(c.child.months)}</p>

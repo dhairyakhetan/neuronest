@@ -22,16 +22,16 @@ export function Features() {
           ))}
         </div>
         <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_440px]">
-          <div key={cat.id} className="grid animate-fade-up gap-5 sm:grid-cols-2">
+          <div key={cat.id} className="stagger grid gap-5 sm:grid-cols-2">
             {cat.features.map((f) => (
-              <div key={f.title} className="card flex flex-col p-6">
+              <div key={f.title} className="card card-hover group flex cursor-pointer flex-col p-6" onClick={() => setDetail(f)}>
                 <div className="flex items-start justify-between">
                   <IconBadge icon={f.icon} tone={f.tone} />
                   {f.isNew && <NewBadge />}
                 </div>
                 <h3 className="mt-5 font-display text-lg font-semibold text-ink">{f.title}</h3>
                 <p className="mt-2 flex-1 text-[15px] text-muted">{f.short}</p>
-                <button onClick={() => setDetail(f)} className="link mt-4 text-sm">Details <ArrowRight className="h-4 w-4" /></button>
+                <span className="link mt-4 text-sm">Details <ArrowRight className="h-4 w-4" /></span>
               </div>
             ))}
           </div>
@@ -43,7 +43,7 @@ export function Features() {
             <p className="mt-1 text-muted">{cat.features.length} features in this category</p>
             <div className="mt-6 space-y-2">
               {cat.features.map((f) => (
-                <button key={f.title} onClick={() => setDetail(f)} className="flex w-full items-center gap-3 rounded-2xl bg-surface/80 px-3 py-3 text-left text-[15px] text-ink transition hover:bg-surface">
+                <button key={f.title} onClick={() => setDetail(f)} className="group flex w-full items-center gap-3 rounded-2xl bg-surface/80 px-3 py-3 text-left text-[15px] text-ink transition duration-300 hover:translate-x-1 hover:bg-surface hover:shadow-soft">
                   <IconBadge icon={f.icon} tone={f.tone} size="sm" />
                   <span className="flex-1">{f.title}</span>
                   {f.isNew && <NewBadge />}

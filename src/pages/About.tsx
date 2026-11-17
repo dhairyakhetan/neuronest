@@ -24,7 +24,7 @@ export function About() {
           </div>
           <div className="card grid grid-cols-2 gap-3 p-6">
             {PIECES.map((p) => (
-              <div key={p} className="rounded-2xl border border-line bg-surface px-4 py-4 text-center font-semibold text-ink shadow-soft">{p}</div>
+              <div key={p} className="rounded-2xl border border-line bg-surface px-4 py-4 text-center font-semibold text-ink shadow-soft transition duration-300 hover:-translate-y-1 hover:border-purple/30 hover:shadow-lift">{p}</div>
             ))}
             <div className="col-span-2 rounded-2xl bg-navy px-4 py-4 text-center font-display text-lg text-white">One connected ecosystem</div>
           </div>
@@ -34,13 +34,13 @@ export function About() {
       <section className="section">
         <div className="container-nn">
           <SectionHeading eyebrow="The NeuroNest approach" icon={Sparkles} title="Technology That Connects Support" lead="NeuroNest brings guidance, learning tools, progress organisation, practical resources, and support networks into one accessible ecosystem." />
-          <div className="mt-12 grid gap-5 md:grid-cols-3">
+          <div className="stagger mt-12 grid gap-5 md:grid-cols-3">
             {[
               { icon: Sparkles, tone: 'purple' as const, t: 'Personalised Guidance', d: 'AI-powered support that adapts to each family’s routines and goals.' },
               { icon: HeartHandshake, tone: 'mint' as const, t: 'Human-Centred Design', d: 'Warm, calm, and approachable — never clinical or cold.' },
               { icon: Globe, tone: 'coral' as const, t: 'Accessible to Many', d: 'Designed with multilingual support and inclusive language at its core.' },
             ].map((c) => (
-              <div key={c.t} className="card p-7">
+              <div key={c.t} className="card card-hover group p-7">
                 <IconBadge icon={c.icon} tone={c.tone} />
                 <h3 className="mt-5 text-xl text-ink">{c.t}</h3>
                 <p className="mt-2 text-muted">{c.d}</p>

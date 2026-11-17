@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Instagram, Mail } from 'lucide-react';
 import { Logo, Wave } from './ui';
 import { EMAIL, INSTAGRAM, TAGLINE } from '../data/content';
+import { useAuth } from '../lib/auth';
 
 const NAV = [
   ['/', 'Home'], ['/about', 'About'], ['/features', 'Features'], ['/how-it-works', 'How It Works'], ['/companion', 'Companion'],
@@ -9,6 +10,7 @@ const NAV = [
 ];
 const NEW = [['/development-check', 'Development Check'], ['/therapists', 'Therapist Connect'], ['/community', 'Parent Community'], ['/dashboard/rewards', 'Rewards and Streaks']];
 const ACCOUNT = [['/sign-in', 'Sign In'], ['/sign-up', 'Create Account'], ['/privacy', 'Privacy'], ['/terms', 'Terms'], ['/responsible-ai', 'Responsible AI']];
+const ACCOUNT_IN = [['/dashboard', 'My Dashboard'], ['/dashboard/profile', 'Profile'], ['/privacy', 'Privacy'], ['/terms', 'Terms'], ['/responsible-ai', 'Responsible AI']];
 
 function Col({ title, links }: { title: string; links: string[][] }) {
   return (
@@ -17,7 +19,7 @@ function Col({ title, links }: { title: string; links: string[][] }) {
       <ul className="mt-4 space-y-2.5">
         {links.map(([to, label]) => (
           <li key={to}>
-            <Link to={to!} className="text-[15px] text-white/75 transition hover:text-white">{label}</Link>
+            <Link to={to!} className="inline-block text-[15px] text-white/75 transition duration-300 hover:translate-x-1 hover:text-white">{label}</Link>
           </li>
         ))}
       </ul>
@@ -26,6 +28,7 @@ function Col({ title, links }: { title: string; links: string[][] }) {
 }
 
 export function Footer() {
+  const { user } = useAuth();
   return (
     <footer className="no-print relative overflow-hidden bg-navy text-white">
       <Wave className="absolute inset-x-0 top-3 h-10 w-full" subtle />
@@ -42,7 +45,7 @@ export function Footer() {
         </div>
         <Col title="Navigation" links={NAV} />
         <Col title="New" links={NEW} />
-        <Col title="Account" links={ACCOUNT} />
+        <Col title="Account" links={user ? ACCOUNT_IN : ACCOUNT} />
         <div>
           <p className="font-display text-sm font-semibold uppercase tracking-[0.12em] text-white">About NeuroNest</p>
           <p className="mt-4 text-[15px] text-white/75">NeuroNest is a startup venture currently under development.</p>

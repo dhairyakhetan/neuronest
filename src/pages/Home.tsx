@@ -2,7 +2,8 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, ClipboardCheck, Compass, MessagesSquare, Sparkles, Stethoscope, Trophy } from 'lucide-react';
 import { FEATURE_CATEGORIES, JOURNEY, TONE, type Tone } from '../data/content';
 import { Orbit } from '../components/Orbit';
-import { CTABand, Eyebrow, IconBadge, NewBadge, ResponsibleAI, SectionHeading, Wave } from '../components/ui';
+import { AccountCTA, CTABand, Eyebrow, IconBadge, NewBadge, ResponsibleAI, SectionHeading, Wave } from '../components/ui';
+import { useAuth } from '../lib/auth';
 import { FaqList } from './FAQs';
 import { FAQS } from '../data/content';
 
@@ -26,6 +27,7 @@ const NEW_FEATURES: { title: string; tagline: string; icon: typeof Trophy; tone:
 ];
 
 export function Home() {
+  const { user } = useAuth();
   return (
     <>
       {/* hero */}
@@ -44,7 +46,7 @@ export function Home() {
               NeuroNest is an AI-powered companion designed to help neurodiverse families access personalised guidance, support everyday learning and routines, organise developmental observations, and discover relevant care and education resources.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/sign-up" className="btn btn-coral">Create Your Account <ArrowRight className="h-4 w-4" /></Link>
+              <AccountCTA />
               <Link to="/development-check" className="btn btn-ghost">Check Your Child’s Development</Link>
             </div>
             <p className="mt-5 text-sm text-muted">NeuroNest is a startup venture currently under development.</p>
@@ -59,9 +61,9 @@ export function Home() {
       <section className="section bg-soft">
         <div className="container-nn">
           <SectionHeading eyebrow="New in NeuroNest" icon={Sparkles} title="One app. Complete support." lead="Check development, connect with therapists, find your community, and celebrate every small win — all in one place." />
-          <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          <div className="stagger mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
             {NEW_FEATURES.map((f) => (
-              <Link key={f.title} to={f.to} className="card group flex flex-col p-7 transition hover:-translate-y-1 hover:shadow-lift">
+              <Link key={f.title} to={f.to} className="card card-hover group flex flex-col p-7">
                 <div className="flex items-start justify-between">
                   <IconBadge icon={f.icon} tone={f.tone} size="lg" />
                   <NewBadge />
@@ -98,10 +100,10 @@ export function Home() {
       <section className="section bg-soft">
         <div className="container-nn">
           <SectionHeading eyebrow="Five ways to explore" icon={Sparkles} title="Features That Grow With You" lead="NeuroNest organises its tools into five connected categories — each designed to support a different part of the journey." />
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="stagger mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {FEATURE_CATEGORIES.map((c) => (
-              <Link key={c.id} to={`/features?category=${c.id}`} className={`group rounded-3xl border border-line p-7 transition hover:-translate-y-1 hover:shadow-lift ${TONE[c.tone].bg}`}>
-                <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-surface shadow-soft">
+              <Link key={c.id} to={`/features?category=${c.id}`} className={`card-hover group rounded-3xl border border-line p-7 transition duration-300 ${TONE[c.tone].bg}`}>
+                <span className="group-icon inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-surface shadow-soft">
                   <c.icon className={`h-5 w-5 ${TONE[c.tone].icon}`} />
                 </span>
                 <h3 className="mt-5 text-xl text-ink">{c.name}</h3>
@@ -109,9 +111,9 @@ export function Home() {
                 <span className="link mt-4 text-sm">Explore <ArrowRight className="h-4 w-4" /></span>
               </Link>
             ))}
-            <Link to="/features" className="flex flex-col items-center justify-center rounded-3xl bg-navy p-7 text-white transition hover:-translate-y-1 hover:shadow-lift">
+            <Link to="/features" className="card-hover group flex flex-col items-center justify-center rounded-3xl bg-navy p-7 text-white transition duration-300">
               <p className="font-display text-xl">See all features</p>
-              <ArrowRight className="mt-3 h-5 w-5" />
+              <ArrowRight className="mt-3 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1.5" />
             </Link>
           </div>
         </div>
@@ -121,10 +123,10 @@ export function Home() {
       <section className="section bg-mintsoft/40">
         <div className="container-nn">
           <SectionHeading eyebrow="How it works" icon={Compass} title="A Gentle Five-Step Journey" />
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="stagger mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {JOURNEY.map((s, i) => (
-              <div key={s.title} className="card p-6">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-lav text-sm font-bold text-purple">{i + 1}</span>
+              <div key={s.title} className="card card-hover group p-6">
+                <span className="group-icon flex h-9 w-9 items-center justify-center rounded-full bg-lav text-sm font-bold text-purple">{i + 1}</span>
                 <p className="mt-4 font-display text-lg leading-snug text-ink">{s.title}</p>
                 <p className="mt-2 text-sm text-muted">{s.short}</p>
               </div>
@@ -150,8 +152,11 @@ export function Home() {
         </div>
       </section>
 
-      <CTABand title="Start Your NeuroNest Journey" text="Create a prototype account, check your child’s development, connect with therapists and other parents, and discover how guidance, learning, and care could come together for your family.">
-        <Link to="/sign-up" className="btn btn-coral">Create Your Account <ArrowRight className="h-4 w-4" /></Link>
+      <CTABand
+        title={user ? `Welcome back${user.demo ? '' : `, ${user.name.split(' ')[0]}`}` : 'Start Your NeuroNest Journey'}
+        text={user ? 'Pick up where you left off — check development, keep your streak going, and catch up with other parents.' : 'Create a free account, check your child’s development, connect with therapists and other parents, and discover how guidance, learning, and care come together for your family.'}
+      >
+        <AccountCTA />
         <Link to="/companion" className="btn btn-light">Meet the Companion</Link>
       </CTABand>
     </>

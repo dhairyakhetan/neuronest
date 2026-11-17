@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, HeartHandshake, Info, X, type LucideIcon } from 'lucide-react';
+import { ArrowRight, HeartHandshake, Info, LayoutDashboard, X, type LucideIcon } from 'lucide-react';
+import { useAuth } from '../lib/auth';
 import { DISCLAIMER, TONE, type Tone } from '../data/content';
 
 /* ---------------------------------------------------------------- Logo */
@@ -66,7 +67,7 @@ export function IconBadge({ icon: Icon, tone = 'purple', size = 'md' }: { icon: 
   const s = size === 'sm' ? 'h-9 w-9 rounded-xl' : size === 'lg' ? 'h-14 w-14 rounded-2xl' : 'h-11 w-11 rounded-2xl';
   const i = size === 'sm' ? 'h-4 w-4' : size === 'lg' ? 'h-6 w-6' : 'h-5 w-5';
   return (
-    <span className={`inline-flex shrink-0 items-center justify-center ${s} ${TONE[tone].bg}`}>
+    <span className={`group-icon inline-flex shrink-0 items-center justify-center ${s} ${TONE[tone].bg}`}>
       <Icon className={`${i} ${TONE[tone].icon}`} />
     </span>
   );
@@ -244,5 +245,17 @@ export function Field({ label, children, hint }: { label: string; children: Reac
       {children}
       {hint && <span className="mt-1 block text-xs text-muted">{hint}</span>}
     </label>
+  );
+}
+
+/* ---------------------------------------------------------- Account CTA */
+
+/** "Create Your Account" for visitors, "Go to My Dashboard" for signed-in users. */
+export function AccountCTA({ className = 'btn btn-coral', label = 'Create Your Account' }: { className?: string; label?: string }) {
+  const { user } = useAuth();
+  return user ? (
+    <Link to="/dashboard" className={className}><LayoutDashboard className="h-4 w-4" /> Go to My Dashboard <ArrowRight className="h-4 w-4" /></Link>
+  ) : (
+    <Link to="/sign-up" className={className}>{label} <ArrowRight className="h-4 w-4" /></Link>
   );
 }

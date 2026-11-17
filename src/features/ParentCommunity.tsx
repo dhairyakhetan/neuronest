@@ -92,8 +92,8 @@ function CommunityGate({ demo, embedded }: { demo: boolean; embedded: boolean })
           <p className="mt-1 text-muted">Smaller groups built around shared experiences, languages and journeys.</p>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             {(stats?.circles ?? []).map((c) => (
-              <div key={c.id} className="card p-5">
-                <div className={`mb-4 h-2 w-12 rounded-full ${TONE[c.tone].solid}`} />
+              <div key={c.id} className="card card-hover group p-5">
+                <div className={`mb-4 h-2 w-12 rounded-full transition-all duration-500 group-hover:w-20 ${TONE[c.tone].solid}`} />
                 <p className="font-display text-lg leading-snug text-ink">{c.name}</p>
                 <p className="mt-1 text-sm text-muted">{c.description}</p>
                 <p className="mt-3 text-xs text-muted">{c.member_count} member{c.member_count === 1 ? '' : 's'}</p>
@@ -273,7 +273,7 @@ function MemberCommunity({ me, embedded }: { me: User & { id: string }; embedded
 
   return (
     <div className="space-y-6">
-      <div className="flex gap-2 overflow-x-auto lg:hidden">
+      <div className="no-scrollbar flex gap-2 overflow-x-auto lg:hidden">
         {(['feed', 'circles', 'people'] as Tab[]).map((t) => (
           <button key={t} onClick={() => setTab(t)} className={`chip shrink-0 capitalize ${tab === t ? 'chip-active' : ''}`}>
             {t === 'people' ? `Parents${incoming.length ? ` (${incoming.length})` : ''}` : t}
@@ -341,7 +341,7 @@ function MemberCommunity({ me, embedded }: { me: User & { id: string }; embedded
                 </div>
               )}
               <div className="flex items-center gap-2">
-                <div className="-mx-1 flex flex-1 gap-2 overflow-x-auto px-1 pb-1">
+                <div className="flex flex-1 flex-wrap gap-2">
                   {(['All', ...TOPICS] as const).map((t) => (
                     <button key={t} onClick={() => setTopic(t)} className={`chip shrink-0 py-1.5 text-xs ${topic === t ? 'chip-active' : ''}`}>{t}</button>
                   ))}
@@ -379,8 +379,8 @@ function MemberCommunity({ me, embedded }: { me: User & { id: string }; embedded
                 {circles.map((c) => {
                   const on = myCircles.includes(c.id);
                   return (
-                    <div key={c.id} className="card flex flex-col p-5">
-                      <div className={`mb-4 h-2 w-12 rounded-full ${TONE[c.tone].solid}`} />
+                    <div key={c.id} className="card card-hover group flex flex-col p-5">
+                      <div className={`mb-4 h-2 w-12 rounded-full transition-all duration-500 group-hover:w-20 ${TONE[c.tone].solid}`} />
                       <p className="font-display text-lg leading-snug text-ink">{c.name}</p>
                       <p className="mt-1 flex-1 text-sm text-muted">{c.description}</p>
                       <p className="mt-3 text-xs text-muted">{c.member_count} member{c.member_count === 1 ? '' : 's'}</p>
@@ -761,7 +761,7 @@ function People({ members, incoming, onSearch, onConnect, onView }: {
       </div>
       <div className="mt-5 grid gap-4 sm:grid-cols-2">
         {list.map((m) => (
-          <div key={m.id} className="card flex flex-col p-5">
+          <div key={m.id} className="card card-hover group flex flex-col p-5">
             <button onClick={() => onView(m.id)} className="flex items-center gap-3 text-left">
               <Avatar name={m.display_name} tone={toneFor(m.id)} />
               <div className="min-w-0 flex-1">

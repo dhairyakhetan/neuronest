@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import {
   ArrowRight, Bookmark, BookmarkCheck, BookOpen, CalendarDays, Check, CheckCircle2, ClipboardCheck, Clock, Mic, Plus, RotateCcw, Star,
-  Target, Trash2, TrendingUp, Trophy,
+  Footprints, HeartHandshake, MessageCircle, Palette, Sparkles, Sun, Target, Trash2, TrendingUp, Trophy, type LucideIcon,
 } from 'lucide-react';
-import { ACTIVITIES, ACTIVITY_CATEGORIES, DISCLAIMER, OBSERVATION_CATEGORIES, SPEECH } from '../../data/content';
+import { ACTIVITIES, ACTIVITY_CATEGORIES, DISCLAIMER, OBSERVATION_CATEGORIES, SPEECH, TONE, type Tone } from '../../data/content';
 import { DOMAINS, ageLabel, type CheckRecord } from '../../data/milestones';
 import { useStore, uid } from '../../lib/storage';
 import { award, today, useRewards, POINTS } from '../../lib/rewards';
@@ -113,6 +113,16 @@ export function Milestones() {
 
 type Activity = (typeof ACTIVITIES)[number];
 
+const CAT_META: Record<string, { icon: LucideIcon; tone: Tone }> = {
+  Communication: { icon: MessageCircle, tone: 'purple' },
+  'Attention and Focus': { icon: Target, tone: 'mint' },
+  'Everyday Routines': { icon: Sun, tone: 'butter' },
+  'Motor Development': { icon: Footprints, tone: 'coral' },
+  'Social Interaction': { icon: HeartHandshake, tone: 'purple' },
+  'Creative Learning': { icon: Palette, tone: 'coral' },
+};
+const meta = (c: string) => CAT_META[c] ?? { icon: BookOpen, tone: 'purple' as Tone };
+
 export function Learning() {
   const [params, setParams] = useSearchParams();
   const cat = params.get('category') ?? 'All';
@@ -120,38 +130,92 @@ export function Learning() {
   const [completed, setCompleted] = useStore<Record<string, string[]>>('completed-activities', {});
   const [open, setOpen] = useState<Activity | null>(null);
   const list = ACTIVITIES.filter((a) => cat === 'All' || a.category === cat || (cat === 'Saved' && saved.includes(a.id)));
-  const doneToday = (id: string) => completed[id]?.includes(today());
+  const doneToday = (id: string) => !!completed[id]?.includes(today());
+  const doneCount = ACTIVITIES.filter((a) => doneToday(a.id)).length;
 
   const complete = (a: Activity) => {
     setCompleted((c) => ({ ...c, [a.id]: Array.from(new Set([...(c[a.id] ?? []), today()])) }));
     award(`activity:${a.id}:${today()}`, 'activity', a.title, a.category);
   };
+  const toggleSave = (id: string) => setSaved((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]));
+  const filters: { key: string; label: string; icon: LucideIcon; count: number }[] = [
+    { key: 'All', label: 'All', icon: BookOpen, count: ACTIVITIES.length },
+    ...ACTIVITY_CATEGORIES.map((c) => ({ key: c, label: c, icon: meta(c).icon, count: ACTIVITIES.filter((a) => a.category === c).length })),
+    { key: 'Saved', label: 'Saved', icon: Bookmark, count: saved.length },
+  ];
+  const om = open ? meta(open.category) : null;
 
   return (
     <div>
-      <DashHeader icon={BookOpen} tone="purple" title="Learning Activities" lead={`Browse practical, adaptive activities. Save them or mark as completed — each completion earns ${POINTS.activity} Nest Stars.`} />
-      <div className="mb-6 flex flex-wrap gap-2">
-        {['All', ...ACTIVITY_CATEGORIES, 'Saved'].map((c) => (
-          <button key={c} onClick={() => setParams(c === 'All' ? {} : { category: c }, { replace: true })} className={`chip py-1.5 text-sm ${cat === c ? 'chip-active' : ''}`}>{c}{c === 'Saved' && ` (${saved.length})`}</button>
+      <DashHeader icon={BookOpen} tone="purple" title="Learning Activities" lead={`Short, playful activities for everyday moments. Each one you complete earns ${POINTS.activity} Nest Stars.`} />
+
+      <div className="mb-6 grid grid-cols-3 gap-3 sm:max-w-xl">
+        {[
+          { n: doneCount, l: 'done today', icon: CheckCircle2, cls: 'text-mint' },
+          { n: saved.length, l: 'saved', icon: BookmarkCheck, cls: 'text-purple' },
+          { n: doneCount * POINTS.activity, l: 'stars today', icon: Star, cls: 'text-amber-500' },
+        ].map((x) => (
+          <div key={x.l} className="card flex items-center gap-3 px-4 py-3">
+            <x.icon className={`h-5 w-5 ${x.cls}`} />
+            <div><p className="font-display text-xl font-semibold leading-none text-ink">{x.n}</p><p className="text-xs text-muted">{x.l}</p></div>
+          </div>
         ))}
       </div>
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {list.map((a) => (
-          <article key={a.id} className="card flex flex-col p-6">
-            <div className="flex items-start justify-between gap-2">
-              <span className="tag bg-lav text-purple-dark dark:text-purple-light">{a.category}</span>
-              <button onClick={() => setSaved((s) => (s.includes(a.id) ? s.filter((x) => x !== a.id) : [...s, a.id]))} className="text-muted hover:text-purple" aria-label={saved.includes(a.id) ? 'Unsave' : 'Save'}>
-                {saved.includes(a.id) ? <BookmarkCheck className="h-5 w-5 text-purple" /> : <Bookmark className="h-5 w-5" />}
-              </button>
-            </div>
-            <h3 className="mt-4 font-display text-lg font-semibold text-ink">{a.title}</h3>
-            <p className="mt-2 line-clamp-3 flex-1 text-[15px] text-muted">{a.instructions}</p>
-            <div className="mt-5 flex items-center justify-between text-sm">
-              <span className="flex items-center gap-1.5 text-muted"><Clock className="h-4 w-4" />{a.duration}</span>
-              {doneToday(a.id) ? <span className="flex items-center gap-1 font-semibold text-mint-dark dark:text-mint-light"><CheckCircle2 className="h-4 w-4" /> Done today</span> : <button className="font-semibold text-purple" onClick={() => setOpen(a)}>Open →</button>}
-            </div>
-          </article>
+
+      <div className="mb-8 flex flex-wrap gap-2">
+        {filters.map((f) => (
+          <button key={f.key} onClick={() => setParams(f.key === 'All' ? {} : { category: f.key }, { replace: true })} className={`chip py-1.5 text-sm ${cat === f.key ? 'chip-active' : ''}`} aria-pressed={cat === f.key}>
+            <f.icon className="h-4 w-4" /> {f.label} <span className={`text-xs ${cat === f.key ? 'text-white/70' : 'text-muted'}`}>{f.count}</span>
+          </button>
         ))}
+      </div>
+
+      <div key={cat} className="stagger grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        {list.map((a) => {
+          const m = meta(a.category);
+          const done = doneToday(a.id);
+          return (
+            <article
+              key={a.id}
+              role="button"
+              tabIndex={0}
+              onClick={() => setOpen(a)}
+              onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), setOpen(a))}
+              className="card card-hover group flex cursor-pointer flex-col overflow-hidden"
+              aria-label={`${a.title}, ${a.duration}${done ? ', done today' : ''}`}
+            >
+              <div className={`relative h-32 overflow-hidden ${TONE[m.tone].bg}`}>
+                <span className={`absolute -right-8 -top-10 h-32 w-32 rounded-full opacity-20 transition-transform duration-700 ease-out group-hover:-translate-x-3 group-hover:scale-125 ${TONE[m.tone].solid}`} />
+                <span className={`absolute -bottom-12 left-16 h-24 w-24 rounded-full opacity-10 transition-transform duration-700 ease-out group-hover:translate-x-8 ${TONE[m.tone].solid}`} />
+                <span className="group-icon absolute left-5 top-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-surface shadow-soft">
+                  <m.icon className={`h-7 w-7 ${TONE[m.tone].icon}`} />
+                </span>
+                <button
+                  onClick={(e) => { e.stopPropagation(); toggleSave(a.id); }}
+                  className="absolute right-4 top-4 rounded-full bg-surface/85 p-2 text-muted shadow-soft transition duration-300 hover:scale-110 hover:text-purple"
+                  aria-label={saved.includes(a.id) ? `Unsave ${a.title}` : `Save ${a.title}`}
+                >
+                  {saved.includes(a.id) ? <BookmarkCheck className="h-4 w-4 text-purple" /> : <Bookmark className="h-4 w-4" />}
+                </button>
+                <span className="tag absolute bottom-4 left-5 bg-surface/90 text-ink"><Clock className="h-3 w-3" /> {a.duration}</span>
+                {done && <span className="tag absolute bottom-4 right-4 animate-pop-in bg-mint text-white"><Check className="h-3 w-3" /> Done today</span>}
+              </div>
+              <div className="flex flex-1 flex-col p-5">
+                <p className={`text-xs font-semibold uppercase tracking-[0.08em] ${TONE[m.tone].text}`}>{a.category}</p>
+                <h3 className="mt-1.5 font-display text-lg font-semibold text-ink">{a.title}</h3>
+                <p className="mt-2 line-clamp-2 flex-1 text-sm text-muted">{a.instructions}</p>
+                <div className="mt-5 flex items-center justify-between border-t border-line pt-4">
+                  <span className={`flex items-center gap-1 text-sm font-semibold ${done ? 'text-muted' : 'text-amber-600 dark:text-amber-300'}`}>
+                    <Star className={`h-4 w-4 ${done ? '' : 'fill-current'}`} /> {done ? 'Earned today' : `+${POINTS.activity} stars`}
+                  </span>
+                  <span className="flex items-center gap-1.5 text-sm font-semibold text-purple dark:text-purple-light">
+                    {done ? 'Open' : 'Start'} <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1.5" />
+                  </span>
+                </div>
+              </div>
+            </article>
+          );
+        })}
       </div>
       {list.length === 0 && <EmptyState icon={Bookmark} title="No saved activities yet." text="Tap the bookmark on any activity to save it here." />}
       <p className="mt-8 text-center text-xs text-muted">Activities are general suggestions, not tailored prescriptions. No completion percentages or comparisons between children are shown.</p>
@@ -159,20 +223,29 @@ export function Learning() {
       <Modal
         open={!!open}
         onClose={() => setOpen(null)}
-        title={open?.title}
+        title={open && om && (
+          <span className="flex items-center gap-3">
+            <span className={`flex h-10 w-10 items-center justify-center rounded-xl ${TONE[om.tone].bg}`}><om.icon className={`h-5 w-5 ${TONE[om.tone].icon}`} /></span>
+            {open.title}
+          </span>
+        )}
         footer={open && (
           <div className="flex items-center justify-between gap-3">
             <span className="text-sm text-muted">{completed[open.id]?.length ? `Completed ${completed[open.id]!.length} time${completed[open.id]!.length > 1 ? 's' : ''}` : 'Not completed yet'}</span>
             {doneToday(open.id) ? (
               <span className="flex items-center gap-1 text-sm font-semibold text-mint-dark"><CheckCircle2 className="h-4 w-4" /> Done today</span>
             ) : (
-              <button className="btn btn-coral btn-sm" onClick={() => { complete(open); setOpen(null); }}><Check className="h-4 w-4" /> Mark as completed (+{POINTS.activity})</button>
+              <button className="btn btn-coral btn-sm" onClick={() => { complete(open); setOpen(null); }}><Check className="h-4 w-4" /> We did it! (+{POINTS.activity})</button>
             )}
           </div>
         )}
       >
-        <div className="flex gap-2"><span className="tag bg-lav text-purple-dark dark:text-purple-light">{open?.category}</span><span className="tag bg-soft text-muted"><Clock className="h-3 w-3" /> {open?.duration}</span></div>
-        <p className="mt-4 text-[17px] leading-relaxed text-ink">{open?.instructions}</p>
+        <div className="flex flex-wrap gap-2">
+          <span className={`tag ${om ? `${TONE[om.tone].bg} ${TONE[om.tone].text}` : ''}`}>{open?.category}</span>
+          <span className="tag bg-soft text-muted"><Clock className="h-3 w-3" /> {open?.duration}</span>
+        </div>
+        <p className="mt-5 text-[17px] leading-relaxed text-ink">{open?.instructions}</p>
+        <p className="mt-5 rounded-2xl bg-soft p-4 text-sm text-muted"><Sparkles className="mr-1 inline h-4 w-4 text-purple" />Celebrate the effort, not just the result — every try counts.</p>
       </Modal>
     </div>
   );
